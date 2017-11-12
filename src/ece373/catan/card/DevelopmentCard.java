@@ -7,7 +7,7 @@ public abstract class DevelopmentCard extends Card {
 	private String description;
 	public DevelopmentCard() {
 		title = "Development Card";
-		description = "";
+		description = "Default development card description";
 	}
 	
 	public abstract void playCard(Player player);
