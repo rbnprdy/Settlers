@@ -24,20 +24,40 @@ public class Player {
 		}
 		
 		public void buildRoad(Board board, int edge_index) {
-			Road new_road = new Road(this);
-			board.getEdges().get(edge_index).setRoad(new_road);
+			if(board.getEdges().get(edge_index).getRoad() == null) {
+				Road new_road = new Road(this);
+				board.getEdges().get(edge_index).setRoad(new_road);
+			}
+			else {
+				System.out.println("A road is already built on this edge");
+			}
 			return;
 		}
 		
 		public void buildSettlement(Board board, int node_index) {
-			Settlement new_settlement = new Settlement(this);
-			board.getNodes().get(node_index).setSettlement(new_settlement);
+			if(board.getNodes().get(node_index).getSettlement() == null) {
+				Settlement new_settlement = new Settlement(this);
+				board.getNodes().get(node_index).setSettlement(new_settlement);
+			}
+			else {
+				System.out.println("A Settlement is already built on this node");
+			}
 			return;
 		}
 		
 		public void buildCity(Board board, int node_index) {
-			City new_city = new City(this);
-			board.getNodes().get(node_index).setCity(new_city);
+			if(board.getNodes().get(node_index).getSettlement() != null) {
+				if(board.getNodes().get(node_index).getSettlement().getPlayer() == this) {
+					City new_city = new City(this);
+					board.getNodes().get(node_index).setCity(new_city);
+				}
+				else {
+					System.out.print("This is another player's settlement");
+				}
+			}
+			else {
+				System.out.print("There is no settlement at this node");
+			}
 			return;
 		}
 		
