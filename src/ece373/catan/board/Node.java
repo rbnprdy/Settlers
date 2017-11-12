@@ -2,6 +2,8 @@ package ece373.catan.board;
 
 import java.util.ArrayList;
 
+import ece373.catan.player.*;
+
 public class Node {
 
 	private ArrayList<Edge> edges;
@@ -28,6 +30,36 @@ public class Node {
 	
 	public Settlement getSettlement() {
 		return settlement;
+	}
+	
+	public Player getPlayer() {
+		if (city != null) {
+			return city.getPlayer();
+		} else if (settlement != null) {
+			return settlement.getPlayer();
+		} else {
+			return null;
+		}
+	}
+	
+	public boolean canBeBuiltOnBy(Player player) {
+		
+		if (getPlayer() != null) {
+			return false;
+		}
+		
+		boolean connectedRoad = false;
+		
+		for (Edge e: edges) {
+			if (e.getRoad() != null && e.getRoad().getPlayer() == player) {
+				connectedRoad = true;
+			}
+			if (e.getNode1().getPlayer() != null || e.getNode2().getPlayer() != null) {
+				return false;
+			}
+		}
+		
+		return connectedRoad;
 	}
 
 	/**
