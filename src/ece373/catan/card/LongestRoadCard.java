@@ -13,6 +13,7 @@ public class LongestRoadCard {
 	}
 	
 	public void CalculateLongestRoad(Board board) {
-		
+		//TODO
+		return;
 	}
 }

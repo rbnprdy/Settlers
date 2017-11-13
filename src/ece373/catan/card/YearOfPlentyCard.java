@@ -1,5 +1,11 @@
 package ece373.catan.card;
 
-public class YearOfPlentyCard {
+import ece373.catan.player.*;
 
+public class YearOfPlentyCard extends DevelopmentCard{
+	
+	public void playCard(Player p) {
+		
+		return;
+	}
 }

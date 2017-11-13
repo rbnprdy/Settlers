@@ -7,14 +7,8 @@ public class MonopolyCard extends DevelopmentCard{
 		
 	}
 	
-	public void playCard() {
-		
-		return;
-	}
-
-	@Override
 	public void playCard(Player player) {
 		// TODO Auto-generated method stub
-		
+		return;
 	}
 }

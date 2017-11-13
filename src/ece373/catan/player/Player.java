@@ -7,7 +7,7 @@ import ece373.catan.card.*;
 
 
 public class Player {
-		private String player_name;
+		private String playerName;
 		private ArrayList<ResourceCard> resourceCards;
 		private ArrayList<DevelopmentCard> developmentCards;
 		private LargestArmyCard largestArmyCard;
@@ -15,7 +15,7 @@ public class Player {
 		private int victoryPoints;
 		
 		public Player(String new_player_name) {
-			player_name = new_player_name;
+			playerName = new_player_name;
 			resourceCards = new ArrayList<ResourceCard>();
 			developmentCards = new ArrayList<DevelopmentCard>();
 			largestArmyCard = null;
