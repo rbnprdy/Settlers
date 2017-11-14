@@ -12,6 +12,9 @@ public class Player {
 		private ArrayList<DevelopmentCard> developmentCards;
 		private LargestArmyCard largestArmyCard;
 		private LongestRoadCard longestRoadCard;
+		private ArrayList<Settlement> settlements;
+		private ArrayList<City> cities;
+		private ArrayList<Road> roads;
 		private int victoryPoints;
 		
 		public Player(String new_player_name) {
@@ -20,6 +23,9 @@ public class Player {
 			developmentCards = new ArrayList<DevelopmentCard>();
 			largestArmyCard = null;
 			longestRoadCard = null;
+			settlements = new ArrayList<Settlement>();
+			cities = new ArrayList<City>();
+			roads = new ArrayList<Road>();
 			victoryPoints = 0;
 		}
 		
@@ -80,6 +86,30 @@ public class Player {
 		
 		public LargestArmyCard getLargestArmyCard() {
 			return largestArmyCard;
+		}
+		
+		public void addSettlement(Settlement newSettle) {
+			settlements.add(newSettle);
+		}
+		
+		public void addCity(City newCity) {
+			cities.add(newCity);
+		}
+		
+		public void addRoad(Road newRoad) {
+			roads.add(newRoad);
+		}
+		
+		public ArrayList<Settlement> getSettlements(){
+			return this.settlements;
+		}
+		
+		public ArrayList<City> getCities(){
+			return this.cities;
+		}
+		
+		public ArrayList<Road> getRoads(){
+			return this.roads;
 		}
 		
 		public void makeTrade(Player player, ArrayList<ResourceCard> my_offered_cards, ArrayList<ResourceCard> their_offered_cards) {
