@@ -5,7 +5,7 @@ public class CardGUITest {
 		
 		CardGUI newGUI;
 		ResourceCard rc1 = new ResourceCard();
-		rc1.setType(ResourceType.SHEEP);
+		rc1.setType(ResourceType.BRICK);
 		
 		newGUI = new CardGUI(rc1);
 	

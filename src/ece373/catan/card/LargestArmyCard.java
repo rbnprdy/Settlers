@@ -3,7 +3,7 @@ import ece373.catan.player.*;
 import ece373.catan.game.*;
 import ece373.catan.board.*;
 
-public class LargestArmyCard {
+public class LargestArmyCard extends Card {
 	private String title;
 	private String description;
 	
