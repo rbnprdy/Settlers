@@ -2,7 +2,7 @@ package ece373.catan.card;
 import ece373.catan.player.*;
 import ece373.catan.board.*;
 
-public class LongestRoadCard {
+public class LongestRoadCard extends Card{
 	private String title;
 	private String description;
 	
