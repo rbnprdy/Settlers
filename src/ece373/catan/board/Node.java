@@ -9,11 +9,21 @@ public class Node {
 	private ArrayList<Edge> edges;
 	private Settlement settlement;
 	private City city;
+	private NodeGUI gui;
 	
 	public Node() {
 		edges = new ArrayList<Edge>();
 		settlement = null;
 		city = null;
+		gui = null;
+	}
+	
+	public void setGUI(NodeGUI g) {
+		gui = g;
+	}
+	
+	public NodeGUI getGUI() {
+		return gui;
 	}
 	
 	public void addEdge(Edge e) {
