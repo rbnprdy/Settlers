@@ -1,6 +1,9 @@
 package ece373.catan.board;
 
 import javax.swing.*;
+
+import ece373.catan.player.*;
+
 import java.util.ArrayList;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
@@ -10,34 +13,74 @@ public class BoardGUI extends JPanel {
 	
 	private final int WIDTH = 1200;
     private final int HEIGHT = 800;
+    private final int edgeThickness = 8; 
     
     private final int tileRadius = 90;
     private final double circleRadiusScalingFactor = 1.5;
     
     private ArrayList<NodeGUI> nodeGUIs;
+    private ArrayList<EdgeGUI> edgeGUIs;
     
     private ArrayList<Tile> tiles;
     
     private Board b;
     
+    private ArrayList<Node> availableNodes;
+    private boolean displayAvailableNodes;
+    
+    private double xIncrement;
+    private double yIncrement;
+    
     public BoardGUI() {
-        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        
+    	setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        
         tiles = new ArrayList<Tile>();
         nodeGUIs = new ArrayList<NodeGUI>();
+        edgeGUIs = new ArrayList<EdgeGUI>();
+        availableNodes = new ArrayList<Node>();
+        displayAvailableNodes = false;
+        
         b = new Board();
+        
+        xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
+        yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
+        
+        setupNodes();
+        setupEdges();
+        
     }
 
     public static void main(String[] args) {
     		JFrame frame = new JFrame();
         
-        BoardGUI b = new BoardGUI();
+        BoardGUI bGUI = new BoardGUI();
 
-        frame.setContentPane(b);
+        frame.setContentPane(bGUI);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.setLayout(null);
+        
+        Board b = bGUI.getBoard();
+        
+        Player p = new Player("test");
+        b.getNodes().get(18).setSettlement(new Settlement(p));
+		b.getNodes().get(47).setCity(new City(p));
+		b.getNodes().get(8).setCity(new City(p));
+		b.getNodes().get(19).setCity(new City(p));
+		b.getNodes().get(20).setCity(new City(p));
+		
+		b.getEdges().get(62).setRoad(new Road(p));
+		b.getEdges().get(55).setRoad(new Road(p));
+		b.getEdges().get(50).setRoad(new Road(p));
+		
+		bGUI.showAvailableNodes(b.getAvailableNodesForSettlementsFor(p));
+    }
+    
+    public Board getBoard() {
+    		return b;
     }
     
     @Override
@@ -47,9 +90,6 @@ public class BoardGUI extends JPanel {
         Point origin = new Point(WIDTH / 2, HEIGHT / 2);
         		
         g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        
-        double xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
-        double yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
         
         origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
         for (int i = 0; i < 3; i++) {
@@ -198,22 +238,39 @@ public class BoardGUI extends JPanel {
 	        origin.setLocation(2*xIncrement+ origin.getX(), origin.getY()); 
         }
         
-        
-        setupNodes();
-
-        g2d.setColor(Color.white);
-        for (Node n: b.getNodes()) {
-        		if (n.getGUI() != null) {
-        			g2d.fill(n.getGUI().getCircle());
+        for (NodeGUI n: nodeGUIs) {
+        		if (n.getNode().getSettlement() != null) {
+        			// FIXME: set color of g2d based on player
+        			g2d.fill(n.getCircle());
+        		} else if (n.getNode().getCity() != null) {
+        			// FIXME: make this a square and set color
+        			g2d.fill(n.getSquare());
         		}
         }
         
+        if (displayAvailableNodes) {
+        		g2d.setColor(Color.white);
+        		for (Node n: availableNodes) {
+        			if (n.getGUI() != null) {
+        				g2d.fill(n.getGUI().getCircle());
+        			}
+        		}
+        }
+        
+        g2d.setStroke(new BasicStroke(edgeThickness));
+        for (EdgeGUI e: edgeGUIs) {
+        		g2d.drawLine((int) e.getP1().getX(), (int) e.getP1().getY(), (int) e.getP2().getX(), (int) e.getP2().getY());
+        }
+    }
+    
+    public void showAvailableNodes(ArrayList<Node> nodes) {
+    		availableNodes = nodes;
+    		displayAvailableNodes = true;
+    		this.repaint();
     }
     
     private void setupNodes() {
     		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
-    		double xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
-        double yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
             
     		origin.setLocation(WIDTH / 2 - 2*xIncrement + 5, HEIGHT / 2 - 8*yIncrement + 5);
         for (int i = 0; i < 3; i++) {
@@ -283,7 +340,7 @@ public class BoardGUI extends JPanel {
         for (int i = 38; i < 43; i++) {
 	    		Point p = new Point((int) origin.getX(), (int) origin.getY());
 	    		NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
-	    		
+	    		nodeGUIs.add(n);
 	    		origin.translate((int) (2*xIncrement), 0);
         }
         
@@ -310,5 +367,13 @@ public class BoardGUI extends JPanel {
 	    		nodeGUIs.add(n);
 	    		origin.translate((int) (2*xIncrement), 0);
         }
+    }
+    
+    private void setupEdges() {
+		NodeGUI n1 = nodeGUIs.get(0);
+		NodeGUI n2 = nodeGUIs.get(4);
+		Edge e = new Edge(n1.getNode(), n2.getNode());
+		EdgeGUI eg = new EdgeGUI(e, n1.getCenter(), n2.getCenter());
+		edgeGUIs.add(eg);
     }
 }
