@@ -1,6 +1,7 @@
 package ece373.catan.player;
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import ece373.catan.board.*;
 import ece373.catan.card.*;
@@ -16,9 +17,11 @@ public class Player {
 		private ArrayList<City> cities;
 		private ArrayList<Road> roads;
 		private int victoryPoints;
+		private Color color;
 		
-		public Player(String new_player_name) {
+		public Player(String new_player_name, Color color) {
 			playerName = new_player_name;
+			this.color = color;
 			resourceCards = new ArrayList<ResourceCard>();
 			developmentCards = new ArrayList<DevelopmentCard>();
 			largestArmyCard = null;
@@ -27,6 +30,10 @@ public class Player {
 			cities = new ArrayList<City>();
 			roads = new ArrayList<Road>();
 			victoryPoints = 0;
+		}
+		
+		public Color getColor() {
+			return this.color;
 		}
 		
 		public void buildRoad(Board board, int edge_index) {
