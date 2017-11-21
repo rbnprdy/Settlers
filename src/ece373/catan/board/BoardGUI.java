@@ -2,6 +2,7 @@ package ece373.catan.board;
 
 import javax.swing.*;
 
+import ece373.catan.game.*;
 import ece373.catan.player.*;
 
 import java.util.ArrayList;
@@ -19,6 +20,8 @@ public class BoardGUI extends JPanel {
 
 	private final int tileRadius = 90;
 	private final double circleRadiusScalingFactor = 1.5;
+	
+	private Game game;
 
 	private ArrayList<NodeGUI> nodeGUIs;
 	private ArrayList<EdgeGUI> edgeGUIs;
@@ -35,8 +38,10 @@ public class BoardGUI extends JPanel {
 	private double xIncrement;
 	private double yIncrement;
 
-	public BoardGUI() {
+	public BoardGUI(Game g) {
 
+		this.game = g;
+		
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
 		tiles = new ArrayList<Tile>();
@@ -59,7 +64,8 @@ public class BoardGUI extends JPanel {
 	public static void main(String[] args) {
 		JFrame frame = new JFrame();
 
-		BoardGUI bGUI = new BoardGUI();
+		Game g = new Game();
+		BoardGUI bGUI = new BoardGUI(g);
 
 		frame.setContentPane(bGUI);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,18 +76,19 @@ public class BoardGUI extends JPanel {
 
 		Board b = bGUI.getBoard();
 
-		Player p = new Player("test");
+		Player p = new Player("test", Color.blue);
+		g.setCurrentPlayer(p);
 		b.getNodes().get(18).setSettlement(new Settlement(p));
-		b.getNodes().get(47).setCity(new City(p));
+		b.getNodes().get(47).setSettlement(new Settlement(p));
 		b.getNodes().get(8).setCity(new City(p));
-		b.getNodes().get(19).setCity(new City(p));
+		b.getNodes().get(19).setSettlement(new Settlement(p));
 		b.getNodes().get(20).setCity(new City(p));
 
 		b.getEdges().get(62).setRoad(new Road(p));
 		b.getEdges().get(55).setRoad(new Road(p));
 		b.getEdges().get(50).setRoad(new Road(p));
 
-		bGUI.showAvailableNodes(b.getAvailableNodesForSettlementsFor(p));
+		bGUI.showAvailableNodes(b.getAvailableNodesForCitiesFor(p));
 	}
 
 	public Board getBoard() {
@@ -247,10 +254,10 @@ public class BoardGUI extends JPanel {
 		// Paint the node GUIs if they are populated
 		for (NodeGUI n: nodeGUIs) {
 			if (n.getNode().getSettlement() != null) {
-				// FIXME: set color of g2d based on player
+				g2d.setColor(n.getNode().getPlayer().getColor());
 				g2d.fill(n.getCircle());
 			} else if (n.getNode().getCity() != null) {
-				// FIXME: make this a square and set color
+				g2d.setColor(n.getNode().getPlayer().getColor());
 				g2d.fill(n.getSquare());
 			}
 		}
@@ -262,8 +269,9 @@ public class BoardGUI extends JPanel {
 					JButton b1 = new JButton();
 					b1.setLayout(null);
 					b1.setBounds(n.getGUI().getCircle().getBounds());
-					b1.addActionListener(new ButtonListener());
+					b1.addActionListener(new NodeButtonListener(n));
 					add(b1);
+					buttons.add(b1);
 					n.getGUI().setButton(b1);
 				}
 			}
@@ -393,23 +401,39 @@ public class BoardGUI extends JPanel {
 		edgeGUIs.add(eg);
 	}
 	
-	private class ButtonListener implements ActionListener {
+	private class NodeButtonListener implements ActionListener {
+		
+		private final Node n;
+		
+		public NodeButtonListener(Node n) {
+			this.n = n;
+		}
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			System.out.println("button pressed");
-			JButton source = (JButton) e.getSource();
-			for (NodeGUI n : nodeGUIs) {
-				if (n.getButton() == source) {
-					// if there is no settlement, build a settlement
-					if (n.getNode().getSettlement() == null) {
-						
-					// otherwise, build a city
-					} else {
-						
-					}
-				}
+			
+			// if there is no settlement, build a settlement
+			if (n.getSettlement() == null) {
+				n.setSettlement(new Settlement(game.getCurrentPlayer()));
+				
+			// otherwise, build a city
+			} else {
+				n.setCity(new City(game.getCurrentPlayer()));
 			}
+			
+			// clear out all the availableNodes and buttons
+			availableNodes = null;
+			displayAvailableNodes = false;
+			for (JButton b: buttons) {
+				BoardGUI.this.remove(b);
+				b = null;
+			}
+			
+			buttons.clear();
+			
+			// repaint
+			BoardGUI.this.repaint();
+			
 		}
 		
 	}

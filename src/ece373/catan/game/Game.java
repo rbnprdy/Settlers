@@ -3,6 +3,8 @@ package ece373.catan.game;
 import ece373.catan.player.*;
 import ece373.catan.board.*;
 import ece373.catan.card.*;
+
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
@@ -21,7 +23,7 @@ public class Game {
 		players = new ArrayList<Player>();
 		board = new Board();
 		developmentCards = new ArrayList<DevelopmentCard>();
-		currentPlayer = new Player(" ");
+		currentPlayer = null;
 		playerNumber = 0;
 		numPlayers = 0;
 	}
@@ -59,7 +61,7 @@ public class Game {
 	}
 	
 	public Player checkForWinner() { //needs to be made
-		Player winner = new Player("temp");
+		Player winner = new Player("temp", Color.black);
 		
 		return winner;
 	}
