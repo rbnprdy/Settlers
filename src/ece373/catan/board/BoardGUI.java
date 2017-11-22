@@ -34,6 +34,9 @@ public class BoardGUI extends JPanel {
 
 	private ArrayList<Node> availableNodes;
 	private boolean displayAvailableNodes;
+	
+	private ArrayList<Edge> availableEdges;
+	private boolean displayAvailableEdges;
 
 	private double xIncrement;
 	private double yIncrement;
@@ -48,8 +51,12 @@ public class BoardGUI extends JPanel {
 		nodeGUIs = new ArrayList<NodeGUI>();
 		edgeGUIs = new ArrayList<EdgeGUI>();
 		buttons = new ArrayList<JButton>();
+		
 		availableNodes = new ArrayList<Node>();
 		displayAvailableNodes = false;
+		
+		availableEdges = new ArrayList<Edge>();
+		displayAvailableEdges = false;
 
 		b = new Board();
 
@@ -89,11 +96,25 @@ public class BoardGUI extends JPanel {
 		b.getEdges().get(55).setRoad(new Road(p));
 		b.getEdges().get(50).setRoad(new Road(p));
 
-		bGUI.showAvailableNodes(b.getAvailableNodesForCitiesFor(p));
+		//bGUI.showAvailableNodes(b.getAvailableNodesForSettlementsFor(p));
+		//bGUI.showAvailableNodes(b.getAvailableNodesForCitiesFor(p));
+		bGUI.showAvailableEdges(b.getAvailableEdgesFor(p));
 	}
 
 	public Board getBoard() {
 		return b;
+	}
+	
+	public void showAvailableNodes(ArrayList<Node> nodes) {
+		availableNodes = nodes;
+		displayAvailableNodes = true;
+		this.repaint();
+	}
+	
+	public void showAvailableEdges(ArrayList<Edge> edges) {
+		availableEdges = edges;
+		displayAvailableEdges = true;
+		this.repaint();
 	}
 
 	@Override
@@ -137,8 +158,17 @@ public class BoardGUI extends JPanel {
 				g2d.fill(n.getSquare());
 			}
 		}
+		
+		// Paint the edge GUIs if they are populated
+		g2d.setStroke(new BasicStroke(edgeThickness));
+		for (EdgeGUI e: edgeGUIs) {
+			if (e.getEdge().getRoad() != null) {
+				g2d.setColor(e.getEdge().getPlayer().getColor());
+				g2d.drawLine((int) e.getP1().getX(), (int) e.getP1().getY(), (int) e.getP2().getX(), (int) e.getP2().getY());
+			}
+		}
 
-		//Display available nodes if applicable
+		// Display available nodes if applicable
 		if (displayAvailableNodes) {
 			for (Node n: availableNodes) {
 				if (n.getGUI() != null) {
@@ -148,25 +178,23 @@ public class BoardGUI extends JPanel {
 					b1.addActionListener(new NodeButtonListener(n));
 					add(b1);
 					buttons.add(b1);
-					n.getGUI().setButton(b1);
 				}
 			}
 		}
 
-		g2d.setStroke(new BasicStroke(edgeThickness));
-		for (EdgeGUI e: edgeGUIs) {
-			if (e.getEdge().getRoad() != null) {
-				g2d.setColor(e.getEdge().getPlayer().getColor());
-				g2d.drawLine((int) e.getP1().getX(), (int) e.getP1().getY(), (int) e.getP2().getX(), (int) e.getP2().getY());
+		// Display available edges if applicable
+		if (displayAvailableEdges) {
+			for (Edge e: availableEdges) {
+				if (e.getGUI() != null) {
+					JButton b1 = new JButton();
+					b1.setLayout(null);
+					b1.setBounds((int) e.getGUI().getCenter().getX() - 10, (int) e.getGUI().getCenter().getY() - 10, 20, 20);
+					b1.addActionListener(new EdgeButtonListener(e));
+					add(b1);
+					buttons.add(b1);
+				}
 			}
-			
 		}
-	}
-
-	public void showAvailableNodes(ArrayList<Node> nodes) {
-		availableNodes = nodes;
-		displayAvailableNodes = true;
-		this.repaint();
 	}
 	
 	// Gives the tiles the correct coordinates so that they can be drawn when necessary
@@ -491,9 +519,38 @@ public class BoardGUI extends JPanel {
 			buttons.clear();
 			
 			// repaint
-			BoardGUI.this.repaint();
-			
+			BoardGUI.this.repaint();	
+		}	
+	}
+	
+	private class EdgeButtonListener implements ActionListener {
+		
+		private final Edge edge;
+		
+		public EdgeButtonListener(Edge edge) {
+			this.edge = edge;
 		}
 		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			// if there is no settlement, build a settlement
+			if (edge.getRoad() == null) {
+				edge.setRoad(new Road(game.getCurrentPlayer()));
+			}
+			
+			// clear out all the availableNodes and buttons
+			availableEdges = null;
+			displayAvailableEdges = false;
+			for (JButton b: buttons) {
+				BoardGUI.this.remove(b);
+				b = null;
+			}
+			
+			buttons.clear();
+			
+			// repaint
+			BoardGUI.this.repaint();	
+		}
 	}
 }

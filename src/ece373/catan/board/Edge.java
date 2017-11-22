@@ -14,9 +14,13 @@ public class Edge {
 	
 	private Node node1, node2;
 	
+	private EdgeGUI gui;
+	
 	private Road road;
 	
 	public Edge(Node n1, Node n2) {
+		gui = null;
+		
 		node1 = n1;
 		node2 = n2;
 		n1.addEdge(this);
@@ -37,6 +41,14 @@ public class Edge {
 	
 	public void setRoad(Road r) {
 		this.road = r;
+	}
+	
+	public EdgeGUI getGUI() {
+		return gui;
+	}
+	
+	public void setGUI(EdgeGUI gui) {
+		this.gui = gui;
 	}
 	
 	public Player getPlayer() {
