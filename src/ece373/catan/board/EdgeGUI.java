@@ -2,8 +2,6 @@ package ece373.catan.board;
 
 import java.awt.*;
 
-import ece373.catan.player.*;
-
 @SuppressWarnings("serial")
 public class EdgeGUI extends Polygon {
 
@@ -18,6 +16,7 @@ public class EdgeGUI extends Polygon {
 	public EdgeGUI(Edge e, Point p1, Point p2) {
 		
 		this.e = e;
+		e.setGUI(this);
 		
 		// get xCoord 1/4 and 3/4 down the line
 		double p1X = numerator*p1.getX()/denominator + (denominator-numerator)*p2.getX()/denominator;
@@ -37,6 +36,12 @@ public class EdgeGUI extends Polygon {
 	
 	public Point getP2() {
 		return p2;
+	}
+	
+	public Point getCenter() {
+		int x = (int) (p1.getX() + p2.getX()) / 2;
+		int y = (int) (p1.getY() + p2.getY()) / 2;
+		return new Point(x, y);
 	}
 	
 	public Edge getEdge() {
