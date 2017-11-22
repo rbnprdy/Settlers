@@ -1,41 +1,28 @@
 package ece373.catan.board;
 
-import javax.imageio.ImageIO;
+import ece373.catan.card.ResourceType;
+
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.io.File;
-import java.io.IOException;
 
 @SuppressWarnings("serial")
 public class Tile extends Polygon {
 	
 	private final int angle = 60;
 	private final double circleRadiusScalingFactor = 1.5;
+	
+	private ResourceType resourceType;
 
 	private Point center = new Point(0,0);
 	private int radius;
 	private Integer number;
-	private Image i;
 	
 	private Node[] nodes = new Node[6];
 	
-	public Tile(Point center, int radius, int number) {
+	public Tile(Point center, int radius, int number, ResourceType resourceType) {
+		this.resourceType = resourceType;
 		this.center = (Point) center.clone();
-		//this.center = center;
 		this.radius = radius;
 		this.number = number;
-		
-		// Draw the image background
-		String source = "images/board/test.jpg";
-		File imageFile = new File(source);
-        i = null;
-        try {
-			i = ImageIO.read(imageFile);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}  
-        
-        i = i.getScaledInstance(radius*2, radius*2, Image.SCALE_DEFAULT);
 		
 		setupPoints();
 	}
@@ -55,6 +42,10 @@ public class Tile extends Polygon {
 		}
 		
 		return points;
+	}
+	
+	public ResourceType getResourceType() {
+		return resourceType;
 	}
 	
 	public Integer getNumber() {
@@ -102,33 +93,5 @@ public class Tile extends Polygon {
 
 		xpoints[5] = (int) (center.getX() - xDist);
 		ypoints[5] = (int) (center.getY() - yDist);
-	}
-	
-	public void drawShape(Graphics2D g) {
-		// Draw the polygon
-
-		g.setColor(new Color(0x000000));		
-		g.fillPolygon(xpoints, ypoints, npoints);
-		
-        g.setClip(this);
-	
-		g.drawImage(i,(int) center.getX() - radius,(int) center.getY() - radius,null);
-		
-		g.drawPolygon(xpoints, ypoints, npoints);
-		
-		// Draw the circle
-		Ellipse2D circle = new Ellipse2D.Double(center.getX() - radius / (circleRadiusScalingFactor*2), center.getY() - radius / (circleRadiusScalingFactor*2), radius / circleRadiusScalingFactor, radius / circleRadiusScalingFactor);
-		g.setColor(new Color(0xead4b8));
-		
-		g.fill(circle);
-		
-		// Draw then number
-		g.setFont(new Font("TimesRoman", Font.PLAIN, (int) (radius / (circleRadiusScalingFactor * 2))));
-		// Center the number
-	    FontMetrics metrics = g.getFontMetrics(g.getFont());
-	    int stringX = (int) (circle.getX() + (circle.getWidth() - metrics.stringWidth(number.toString())) / 2);
-	    int stringY = (int) (circle.getY() + ((circle.getHeight() - metrics.getHeight()) / 2) + metrics.getAscent());
-
-		g.drawString(number.toString(), stringX, stringY);
 	}
 }

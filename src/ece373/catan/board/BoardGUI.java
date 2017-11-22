@@ -2,10 +2,13 @@ package ece373.catan.board;
 
 import javax.swing.*;
 
+import ece373.catan.card.ResourceType;
 import ece373.catan.game.*;
 import ece373.catan.player.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,10 +43,26 @@ public class BoardGUI extends JPanel {
 
 	private double xIncrement;
 	private double yIncrement;
+	
+	private ArrayList<Integer> numberTokens;
+	private ArrayList<ResourceType> resourceTokens;
 
 	public BoardGUI(Game g) {
 
 		this.game = g;
+		
+		numberTokens = new ArrayList<Integer>(Arrays.asList(0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12));
+		Collections.shuffle(numberTokens);
+		
+		resourceTokens = new ArrayList<ResourceType>(Arrays.asList(
+				ResourceType.BRICK, ResourceType.BRICK, ResourceType.BRICK,
+				ResourceType.STONE, ResourceType.STONE, ResourceType.STONE,
+				ResourceType.WHEAT, ResourceType.WHEAT, ResourceType.WHEAT, ResourceType.WHEAT,
+				ResourceType.SHEEP, ResourceType.SHEEP, ResourceType.SHEEP, ResourceType.SHEEP,
+				ResourceType.WOOD, ResourceType.WOOD, ResourceType.WOOD, ResourceType.WOOD,
+				null
+				));
+		Collections.shuffle(resourceTokens);
 		
 		setPreferredSize(new Dimension(WIDTH, HEIGHT));
 
@@ -125,7 +144,31 @@ public class BoardGUI extends JPanel {
 
 		// Paint the tiles
 		for (Tile t: tiles) {
-			g2d.setColor(Color.green);
+			if (t.getResourceType() == null) {
+				g2d.setColor(new Color(0xeec867));
+			} else {
+				switch (t.getResourceType()) {
+					case BRICK:
+						g2d.setColor(new Color(0xb75e1f));
+						break;
+					case SHEEP:
+						g2d.setColor(new Color(0xbbd666));
+						break;
+					case STONE:
+						g2d.setColor(new Color(0x929a89));
+						break;
+					case WHEAT:
+						g2d.setColor(new Color(0xeba237));
+						break;
+					case WOOD:
+						g2d.setColor(new Color(0x117645));
+						break;
+					default:
+						g2d.setColor(Color.black);
+						break;
+				}
+			}
+
 			g2d.fill(t);
 			g2d.setColor(Color.black);
 			g2d.draw(t);
@@ -199,6 +242,9 @@ public class BoardGUI extends JPanel {
 	
 	// Gives the tiles the correct coordinates so that they can be drawn when necessary
 	private void setupTiles() {
+		
+		int tokenNumber = 0;
+		
 		tiles.clear();
 
 		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
@@ -207,7 +253,8 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
 		for (int i = 0; i < 3; i++) {
 
-			Tile t = new Tile(origin, tileRadius, 1);
+			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
+			tokenNumber++;
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -216,7 +263,8 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 - 3*yIncrement);
 		for (int i = 0; i < 4; i++) {
 
-			Tile t = new Tile(origin, tileRadius, 1);
+			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
+			tokenNumber++;
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -225,7 +273,8 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 4*xIncrement, HEIGHT / 2);
 		for (int i = 0; i < 5; i++) {
 
-			Tile t = new Tile(origin, tileRadius, 1);
+			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
+			tokenNumber++;
 			tiles.add(t);
 			
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -234,7 +283,8 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 + 3*yIncrement);
 		for (int i = 0; i < 4; i++) {
 
-			Tile t = new Tile(origin, tileRadius, 1);
+			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
+			tokenNumber++;
 			tiles.add(t);
 			
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -243,7 +293,8 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 + 6*yIncrement);
 		for (int i = 0; i < 3; i++) {
 
-			Tile t = new Tile(origin, tileRadius, 1);
+			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
+			tokenNumber++;
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY()); 
