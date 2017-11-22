@@ -2,10 +2,12 @@ package ece373.catan.board;
 
 import java.awt.*;
 
+import ece373.catan.player.*;
+
 @SuppressWarnings("serial")
 public class EdgeGUI extends Polygon {
 
-	private final double numerator = 3.5;
+	private final double numerator = 3;
 	private final double denominator = 4;
 	
 	private Point p1;
@@ -35,5 +37,9 @@ public class EdgeGUI extends Polygon {
 	
 	public Point getP2() {
 		return p2;
+	}
+	
+	public Edge getEdge() {
+		return e;
 	}
 }
