@@ -56,6 +56,7 @@ public class BoardGUI extends JPanel {
 		xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
 		yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
 
+		setupTiles();
 		setupNodes();
 		setupEdges();
 
@@ -99,23 +100,17 @@ public class BoardGUI extends JPanel {
 	public void paintComponent(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
-		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
-
 		g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 
-		// Paint the tiles row by row
-		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
-		for (int i = 0; i < 3; i++) {
-			// Draw the tile
-			Tile t = new Tile(origin, tileRadius, 1);
-			tiles.add(t);
+		// Paint the tiles
+		for (Tile t: tiles) {
 			g2d.setColor(Color.green);
 			g2d.fill(t);
 			g2d.setColor(Color.black);
 			g2d.draw(t);
 
 			// Draw the circle
-			Ellipse2D circle = new Ellipse2D.Double(origin.getX() - tileRadius / (circleRadiusScalingFactor*2), origin.getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
+			Ellipse2D circle = new Ellipse2D.Double(t.getCenter().getX() - tileRadius / (circleRadiusScalingFactor*2), t.getCenter().getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
 			g2d.setColor(new Color(0xead4b8));
 
 			g2d.fill(circle);
@@ -130,125 +125,6 @@ public class BoardGUI extends JPanel {
 
 			g2d.drawString(t.getNumber().toString(), stringX, stringY);
 
-			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
-		}
-
-		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 - 3*yIncrement);
-		for (int i = 0; i < 4; i++) {
-
-			// Draw the tile
-			Tile t = new Tile(origin, tileRadius, 1);
-			tiles.add(t);
-			g2d.setColor(Color.green);
-			g2d.fill(t);
-			g2d.setColor(Color.black);
-			g2d.draw(t);
-
-			// Draw the circle
-			Ellipse2D circle = new Ellipse2D.Double(origin.getX() - tileRadius / (circleRadiusScalingFactor*2), origin.getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
-			g2d.setColor(new Color(0xead4b8));
-
-			g2d.fill(circle);
-
-			// Draw then number
-			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) (tileRadius / (circleRadiusScalingFactor * 2))));
-			g2d.setColor(Color.black);
-			// Center the number
-			FontMetrics metrics = g2d.getFontMetrics(g.getFont());
-			int stringX = (int) (circle.getX() + (circle.getWidth() - metrics.stringWidth(t.getNumber().toString())) / 2);
-			int stringY = (int) (circle.getY() + ((circle.getHeight() - metrics.getHeight()) / 2) + metrics.getAscent());
-
-			g2d.drawString(t.getNumber().toString(), stringX, stringY);
-
-			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
-		}
-
-		origin.setLocation(WIDTH / 2 - 4*xIncrement, HEIGHT / 2);
-		for (int i = 0; i < 5; i++) {
-
-			// Draw the tile
-			Tile t = new Tile(origin, tileRadius, 1);
-			tiles.add(t);
-			g2d.setColor(Color.green);
-			g2d.fill(t);
-			g2d.setColor(Color.black);
-			g2d.draw(t);
-
-			// Draw the circle
-			Ellipse2D circle = new Ellipse2D.Double(origin.getX() - tileRadius / (circleRadiusScalingFactor*2), origin.getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
-			g2d.setColor(new Color(0xead4b8));
-
-			g2d.fill(circle);
-
-			// Draw then number
-			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) (tileRadius / (circleRadiusScalingFactor * 2))));
-			g2d.setColor(Color.black);
-			// Center the number
-			FontMetrics metrics = g2d.getFontMetrics(g.getFont());
-			int stringX = (int) (circle.getX() + (circle.getWidth() - metrics.stringWidth(t.getNumber().toString())) / 2);
-			int stringY = (int) (circle.getY() + ((circle.getHeight() - metrics.getHeight()) / 2) + metrics.getAscent());
-
-			g2d.drawString(t.getNumber().toString(), stringX, stringY);
-
-			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
-		}
-
-		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 + 3*yIncrement);
-		for (int i = 0; i < 4; i++) {
-			// Draw the tile
-			Tile t = new Tile(origin, tileRadius, 1);
-			tiles.add(t);
-			g2d.setColor(Color.green);
-			g2d.fill(t);
-			g2d.setColor(Color.black);
-			g2d.draw(t);
-
-			// Draw the circle
-			Ellipse2D circle = new Ellipse2D.Double(origin.getX() - tileRadius / (circleRadiusScalingFactor*2), origin.getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
-			g2d.setColor(new Color(0xead4b8));
-
-			g2d.fill(circle);
-
-			// Draw then number
-			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) (tileRadius / (circleRadiusScalingFactor * 2))));
-			g2d.setColor(Color.black);
-			// Center the number
-			FontMetrics metrics = g2d.getFontMetrics(g.getFont());
-			int stringX = (int) (circle.getX() + (circle.getWidth() - metrics.stringWidth(t.getNumber().toString())) / 2);
-			int stringY = (int) (circle.getY() + ((circle.getHeight() - metrics.getHeight()) / 2) + metrics.getAscent());
-
-			g2d.drawString(t.getNumber().toString(), stringX, stringY);
-
-			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
-		}
-
-		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 + 6*yIncrement);
-		for (int i = 0; i < 3; i++) {
-			// Draw the tile
-			Tile t = new Tile(origin, tileRadius, 1);
-			tiles.add(t);
-			g2d.setColor(Color.green);
-			g2d.fill(t);
-			g2d.setColor(Color.black);
-			g2d.draw(t);
-
-			// Draw the circle
-			Ellipse2D circle = new Ellipse2D.Double(origin.getX() - tileRadius / (circleRadiusScalingFactor*2), origin.getY() - tileRadius / (circleRadiusScalingFactor*2), tileRadius / circleRadiusScalingFactor, tileRadius / circleRadiusScalingFactor);
-			g2d.setColor(new Color(0xead4b8));
-
-			g2d.fill(circle);
-
-			// Draw then number
-			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) (tileRadius / (circleRadiusScalingFactor * 2))));
-			g2d.setColor(Color.black);
-			// Center the number
-			FontMetrics metrics = g2d.getFontMetrics(g.getFont());
-			int stringX = (int) (circle.getX() + (circle.getWidth() - metrics.stringWidth(t.getNumber().toString())) / 2);
-			int stringY = (int) (circle.getY() + ((circle.getHeight() - metrics.getHeight()) / 2) + metrics.getAscent());
-
-			g2d.drawString(t.getNumber().toString(), stringX, stringY);
-
-			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY()); 
 		}
 
 		// Paint the node GUIs if they are populated
@@ -279,7 +155,11 @@ public class BoardGUI extends JPanel {
 
 		g2d.setStroke(new BasicStroke(edgeThickness));
 		for (EdgeGUI e: edgeGUIs) {
-			g2d.drawLine((int) e.getP1().getX(), (int) e.getP1().getY(), (int) e.getP2().getX(), (int) e.getP2().getY());
+			if (e.getEdge().getRoad() != null) {
+				g2d.setColor(e.getEdge().getPlayer().getColor());
+				g2d.drawLine((int) e.getP1().getX(), (int) e.getP1().getY(), (int) e.getP2().getX(), (int) e.getP2().getY());
+			}
+			
 		}
 	}
 
@@ -288,117 +168,296 @@ public class BoardGUI extends JPanel {
 		displayAvailableNodes = true;
 		this.repaint();
 	}
+	
+	// Gives the tiles the correct coordinates so that they can be drawn when necessary
+	private void setupTiles() {
+		tiles.clear();
+
+		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
+
+		// Paint the tiles row by row
+		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
+		for (int i = 0; i < 3; i++) {
+
+			Tile t = new Tile(origin, tileRadius, 1);
+			tiles.add(t);
+
+			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
+		}
+
+		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 - 3*yIncrement);
+		for (int i = 0; i < 4; i++) {
+
+			Tile t = new Tile(origin, tileRadius, 1);
+			tiles.add(t);
+
+			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
+		}
+
+		origin.setLocation(WIDTH / 2 - 4*xIncrement, HEIGHT / 2);
+		for (int i = 0; i < 5; i++) {
+
+			Tile t = new Tile(origin, tileRadius, 1);
+			tiles.add(t);
+			
+			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
+		}
+
+		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 + 3*yIncrement);
+		for (int i = 0; i < 4; i++) {
+
+			Tile t = new Tile(origin, tileRadius, 1);
+			tiles.add(t);
+			
+			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
+		}
+
+		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 + 6*yIncrement);
+		for (int i = 0; i < 3; i++) {
+
+			Tile t = new Tile(origin, tileRadius, 1);
+			tiles.add(t);
+
+			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY()); 
+		}
+
+	}
 
 	// Gives the nodes the correct coordinates so that they can be drawn when necessary
 	private void setupNodes() {
-		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
-
-		origin.setLocation(WIDTH / 2 - 2*xIncrement + 5, HEIGHT / 2 - 8*yIncrement + 5);
-		for (int i = 0; i < 3; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
-			nodeGUIs.add(n);
-			
-			origin.translate((int) (2*xIncrement), 0);
+		nodeGUIs.clear();
 		
-		}
-
-		origin.setLocation(WIDTH / 2 - 3*xIncrement + 5, HEIGHT / 2 - 7*yIncrement + 5);
-		for (int i = 3; i < 7; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		// Row 1
+		for (int i = 0; i < 3; i++) {
+			Point p = tiles.get(i).getPoints()[0];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i).setNode(0, n.getNode());
 		}
 
-		origin.setLocation(WIDTH / 2 - 3*xIncrement + 5, HEIGHT / 2 - 5*yIncrement + 5);
-		for (int i = 7; i < 11; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		// Row 2
+		Point p3 = tiles.get(0).getPoints()[5];
+		NodeGUI n3 = new NodeGUI(b.getNodes().get(3), p3);
+		nodeGUIs.add(n3);
+		tiles.get(0).setNode(5, n3.getNode());
+		
+		for (int i = 4; i < 6; i++) {
+			Point p = tiles.get(i - 4).getPoints()[1];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 4).setNode(1, n.getNode());
+			tiles.get(i - 3).setNode(5, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 4*xIncrement + 5, HEIGHT / 2 - 4*yIncrement + 5);
-		for (int i = 11; i < 16; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p6 = tiles.get(2).getPoints()[1];
+		NodeGUI n6 = new NodeGUI(b.getNodes().get(6), p6);
+		nodeGUIs.add(n6);
+		tiles.get(2).setNode(1, n6.getNode());
+		
+		// Row 3
+		Point p7 = tiles.get(0).getPoints()[4];
+		NodeGUI n7 = new NodeGUI(b.getNodes().get(7), p7);
+		nodeGUIs.add(n7);
+		tiles.get(0).setNode(4, n7.getNode());
+		tiles.get(3).setNode(0, n7.getNode());
+		
+		for (int i = 8; i < 10; i++) {
+			Point p = tiles.get(i - 8).getPoints()[2];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 8).setNode(2, n.getNode());
+			tiles.get(i - 7).setNode(4, n.getNode());
+			tiles.get(i - 4).setNode(0, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 4*xIncrement + 5, HEIGHT / 2 - 2*yIncrement + 5);
-		for (int i = 16; i < 21; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p10 = tiles.get(2).getPoints()[2];
+		NodeGUI n10 = new NodeGUI(b.getNodes().get(10), p10);
+		nodeGUIs.add(n10);
+		tiles.get(2).setNode(2, n10.getNode());
+		tiles.get(6).setNode(0, n10.getNode());
+		
+		// Row 4
+		Point p11 = tiles.get(3).getPoints()[5];
+		NodeGUI n11 = new NodeGUI(b.getNodes().get(11), p11);
+		nodeGUIs.add(n11);
+		tiles.get(3).setNode(5, n11.getNode());
+		
+		for (int i = 12; i < 15; i++) {
+			Point p = tiles.get(i - 9).getPoints()[1];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 12).setNode(3, n.getNode());
+			tiles.get(i - 9).setNode(1, n.getNode());
+			tiles.get(i - 8).setNode(5, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 5*xIncrement + 5, HEIGHT / 2 - 1*yIncrement + 5);
-		for (int i = 21; i < 27; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p15 = tiles.get(6).getPoints()[1];
+		NodeGUI n15 = new NodeGUI(b.getNodes().get(15), p15);
+		nodeGUIs.add(n15);
+		tiles.get(6).setNode(1, n15.getNode());
+		
+		// Row 5
+		Point p16 = tiles.get(3).getPoints()[4];
+		NodeGUI n16 = new NodeGUI(b.getNodes().get(16), p16);
+		nodeGUIs.add(n16);
+		tiles.get(3).setNode(4, n16.getNode());
+		tiles.get(7).setNode(0, n16.getNode());
+		
+		for (int i = 17; i < 20; i++) {
+			Point p = tiles.get(i - 14).getPoints()[2];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 14).setNode(2, n.getNode());
+			tiles.get(i - 13).setNode(4, n.getNode());
+			tiles.get(i - 9).setNode(0, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 5*xIncrement + 5, HEIGHT / 2 + 1*yIncrement + 5);
-		for (int i = 27; i < 33; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p20 = tiles.get(6).getPoints()[2];
+		NodeGUI n20 = new NodeGUI(b.getNodes().get(20), p20);
+		nodeGUIs.add(n20);
+		tiles.get(6).setNode(2, n20.getNode());
+		tiles.get(11).setNode(0, n20.getNode());
+		
+		// Row 6
+		Point p21 = tiles.get(7).getPoints()[5];
+		NodeGUI n21 = new NodeGUI(b.getNodes().get(21), p21);
+		nodeGUIs.add(n21);
+		tiles.get(7).setNode(5, n21.getNode());
+		
+		for (int i = 22; i < 26; i++) {
+			Point p = tiles.get(i - 15).getPoints()[1];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 15).setNode(1, n.getNode());
+			tiles.get(i - 14).setNode(5, n.getNode());
+			tiles.get(i - 19).setNode(3, n.getNode());
 		}
+		
+		Point p26 = tiles.get(11).getPoints()[1];
+		NodeGUI n26 = new NodeGUI(b.getNodes().get(26), p26);
+		nodeGUIs.add(n26);
+		tiles.get(11).setNode(1, n26.getNode());
 
-		origin.setLocation(WIDTH / 2 - 4*xIncrement + 5, HEIGHT / 2 + 2*yIncrement + 5);
-		for (int i = 33; i < 38; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		// Row 7
+		Point p27 = tiles.get(7).getPoints()[4];
+		NodeGUI n27 = new NodeGUI(b.getNodes().get(27), p27);
+		nodeGUIs.add(n27);
+		tiles.get(7).setNode(4, n27.getNode());
+		
+		for (int i = 28; i < 32; i++) {
+			Point p = tiles.get(i - 21).getPoints()[2];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 21).setNode(2, n.getNode());
+			tiles.get(i - 20).setNode(4, n.getNode());
+			tiles.get(i - 16).setNode(0, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 4*xIncrement + 5, HEIGHT / 2 + 4*yIncrement + 5);
-		for (int i = 38; i < 43; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p32 = tiles.get(11).getPoints()[2];
+		NodeGUI n32 = new NodeGUI(b.getNodes().get(32), p32);
+		nodeGUIs.add(n32);
+		tiles.get(11).setNode(2, n32.getNode());
+		
+		// Row 8
+		Point p33 = tiles.get(12).getPoints()[5];
+		NodeGUI n33 = new NodeGUI(b.getNodes().get(33), p33);
+		nodeGUIs.add(n33);
+		tiles.get(12).setNode(5, n33.getNode());
+		tiles.get(7).setNode(3, n33.getNode());
+		
+		for (int i = 34; i < 37; i++) {
+			Point p = tiles.get(i - 22).getPoints()[1];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 26).setNode(3, n.getNode());
+			tiles.get(i - 22).setNode(1, n.getNode());
+			tiles.get(i - 21).setNode(5, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 3*xIncrement + 5, HEIGHT / 2 + 5*yIncrement + 5);
-		for (int i = 43; i < 47; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		
+		Point p37 = tiles.get(11).getPoints()[3];
+		NodeGUI n37 = new NodeGUI(b.getNodes().get(37), p37);
+		nodeGUIs.add(n37);
+		tiles.get(11).setNode(3, n37.getNode());
+		tiles.get(15).setNode(1, n37.getNode());
+		
+		// row 9
+		Point p38 = tiles.get(12).getPoints()[4];
+		NodeGUI n38 = new NodeGUI(b.getNodes().get(38), p38);
+		nodeGUIs.add(n38);
+		tiles.get(11).setNode(4, n38.getNode());
+		
+		for (int i = 39; i < 42; i++) {
+			Point p = tiles.get(i - 27).getPoints()[2];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 27).setNode(2, n.getNode());
+			tiles.get(i - 26).setNode(4, n.getNode());
+			tiles.get(i - 23).setNode(0, n.getNode());
 		}
 
-		origin.setLocation(WIDTH / 2 - 3*xIncrement + 5, HEIGHT / 2 + 7*yIncrement + 5);
-		for (int i = 47; i < 51; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+		Point p42 = tiles.get(15).getPoints()[2];
+		NodeGUI n42 = new NodeGUI(b.getNodes().get(42), p42);
+		nodeGUIs.add(n42);
+		tiles.get(15).setNode(2, n42.getNode());
+		
+		// row 10
+		Point p43 = tiles.get(12).getPoints()[3];
+		NodeGUI n43 = new NodeGUI(b.getNodes().get(43), p43);
+		nodeGUIs.add(n43);
+		tiles.get(11).setNode(3, n43.getNode());
+		tiles.get(16).setNode(5, n43.getNode());
+		
+		for (int i = 44; i < 46; i++) {
+			Point p = tiles.get(i - 28).getPoints()[1];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 28).setNode(1, n.getNode());
+			tiles.get(i - 31).setNode(3, n.getNode());
+			tiles.get(i - 27).setNode(5, n.getNode());
 		}
-
-		origin.setLocation(WIDTH / 2 - 2*xIncrement + 5, HEIGHT / 2 + 8*yIncrement + 5);
+		
+		Point p46 = tiles.get(15).getPoints()[3];
+		NodeGUI n46 = new NodeGUI(b.getNodes().get(46), p46);
+		nodeGUIs.add(n46);
+		tiles.get(15).setNode(3, n46.getNode());
+		tiles.get(18).setNode(1, n46.getNode());
+		
+		// row 11
+		Point p47 = tiles.get(16).getPoints()[4];
+		NodeGUI n47 = new NodeGUI(b.getNodes().get(47), p47);
+		nodeGUIs.add(n47);
+		tiles.get(16).setNode(4, n47.getNode());
+		
+		for (int i = 48; i < 50; i++) {
+			Point p = tiles.get(i - 32).getPoints()[2];
+			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			nodeGUIs.add(n);
+			tiles.get(i - 32).setNode(2, n.getNode());
+			tiles.get(i - 31).setNode(4, n.getNode());
+		}
+		
+		Point p50 = tiles.get(18).getPoints()[2];
+		NodeGUI n50 = new NodeGUI(b.getNodes().get(50), p50);
+		nodeGUIs.add(n50);
+		tiles.get(18).setNode(2, n50.getNode());
+		
+		// row 12
 		for (int i = 51; i < 54; i++) {
-			Point p = new Point((int) origin.getX(), (int) origin.getY());
+			Point p = tiles.get(i - 35).getPoints()[3];
 			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
 			nodeGUIs.add(n);
-			origin.translate((int) (2*xIncrement), 0);
+			tiles.get(i - 35).setNode(3, n.getNode());
 		}
 	}
 
 	// Gives the edges the correct coordinates so that they can be drawn when necessary
 	private void setupEdges() {
-		NodeGUI n1 = nodeGUIs.get(0);
-		NodeGUI n2 = nodeGUIs.get(4);
-		Edge e = new Edge(n1.getNode(), n2.getNode());
-		EdgeGUI eg = new EdgeGUI(e, n1.getCenter(), n2.getCenter());
-		edgeGUIs.add(eg);
+		edgeGUIs.clear();
+		
+		for (Edge e: b.getEdges()) {
+			EdgeGUI eg = new EdgeGUI(e, e.getNode1().getGUI().getCenter(), e.getNode2().getGUI().getCenter());
+			edgeGUIs.add(eg);
+		}
 	}
 	
 	private class NodeButtonListener implements ActionListener {

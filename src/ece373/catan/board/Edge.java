@@ -39,6 +39,14 @@ public class Edge {
 		this.road = r;
 	}
 	
+	public Player getPlayer() {
+		if (road != null) {
+			return road.getPlayer();
+		} else {
+			return null;
+		}
+	}
+	
 	public boolean canBeBuiltOnBy(Player player) {
 		
 		// If this is already built on

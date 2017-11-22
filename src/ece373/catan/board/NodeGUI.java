@@ -23,8 +23,8 @@ public class NodeGUI {
 		this.center = center;
 		this.button = null;
 		
-		circle = new Ellipse2D.Double(center.getX() - diameter + 7, center.getY() - diameter + 5, diameter, diameter);
-		square = new Rectangle((int) (center.getX() - (diameter/2+10)), (int) (center.getY() - (diameter/2+5)), diameter+5, diameter+5);
+		circle = new Ellipse2D.Double(center.getX() - diameter/2, center.getY() - diameter/2, diameter, diameter);
+		square = new Rectangle((int) (center.getX() - (diameter/2)), (int) (center.getY() - (diameter/2)), diameter, diameter);
 	}
 	
 	public JButton getButton() {

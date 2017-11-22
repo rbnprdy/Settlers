@@ -17,9 +17,11 @@ public class Tile extends Polygon {
 	private Integer number;
 	private Image i;
 	
+	private Node[] nodes = new Node[6];
+	
 	public Tile(Point center, int radius, int number) {
-		
-		this.center = center;
+		this.center = (Point) center.clone();
+		//this.center = center;
 		this.radius = radius;
 		this.number = number;
 		
@@ -38,6 +40,14 @@ public class Tile extends Polygon {
 		setupPoints();
 	}
 	
+	public void setNode(int num, Node node) {
+		if (num > 5) {
+			System.out.println("num is too large when adding node");
+		} else {
+			nodes[num] = node;
+		}	
+	}
+	
 	public Point[] getPoints() {
 		Point[] points = new Point[6];
 		for (int i = 0; i < 6; i++) {
@@ -49,6 +59,10 @@ public class Tile extends Polygon {
 	
 	public Integer getNumber() {
 		return number;
+	}
+	
+	public Point getCenter() {
+		return center;
 	}
 	
 	public int getRadius() {
@@ -67,7 +81,7 @@ public class Tile extends Polygon {
 		
 		// Starting from top point, going clockwise
 		xpoints[0] = (int) center.getX(); 
-		ypoints[0] = (int) (center.getY() + radius);
+		ypoints[0] = (int) (center.getY() - radius);
 		
 		// Find xDist from center
 		double xDist = Math.sin((angle*Math.PI)/180)*radius;
@@ -75,19 +89,19 @@ public class Tile extends Polygon {
 		double yDist = Math.cos((angle*Math.PI)/180)*radius;
 		
 		xpoints[1] = (int) (center.getX() + xDist);
-		ypoints[1] = (int) (center.getY() + yDist);
+		ypoints[1] = (int) (center.getY() - yDist);
 		
 		xpoints[2] = (int) (center.getX() + xDist);
-		ypoints[2] = (int) (center.getY() - yDist);
+		ypoints[2] = (int) (center.getY() + yDist);
 		
 		xpoints[3] = (int) center.getX();
-		ypoints[3] = (int) (center.getY() - radius);
+		ypoints[3] = (int) (center.getY() + radius);
 		
 		xpoints[4] = (int) (center.getX() - xDist);
-		ypoints[4] = (int) (center.getY() - yDist);
+		ypoints[4] = (int) (center.getY() + yDist);
 
 		xpoints[5] = (int) (center.getX() - xDist);
-		ypoints[5] = (int) (center.getY() + yDist);
+		ypoints[5] = (int) (center.getY() - yDist);
 	}
 	
 	public void drawShape(Graphics2D g) {
