@@ -51,7 +51,7 @@ public class BoardGUI extends JPanel {
 
 		this.game = g;
 		
-		numberTokens = new ArrayList<Integer>(Arrays.asList(0, 2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12));
+		numberTokens = new ArrayList<Integer>(Arrays.asList(2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12));
 		Collections.shuffle(numberTokens);
 		
 		resourceTokens = new ArrayList<ResourceType>(Arrays.asList(
@@ -114,6 +114,11 @@ public class BoardGUI extends JPanel {
 		b.getEdges().get(62).setRoad(new Road(p));
 		b.getEdges().get(55).setRoad(new Road(p));
 		b.getEdges().get(50).setRoad(new Road(p));
+		
+		Player p2 = new Player("test2", Color.red);
+		b.getNodes().get(30).setSettlement(new Settlement(p2));
+		b.getEdges().get(36).setRoad(new Road(p2));
+		b.getEdges().get(44).setRoad(new Road(p2));
 
 		//bGUI.showAvailableNodes(b.getAvailableNodesForSettlementsFor(p));
 		//bGUI.showAvailableNodes(b.getAvailableNodesForCitiesFor(p));
@@ -244,17 +249,27 @@ public class BoardGUI extends JPanel {
 	private void setupTiles() {
 		
 		int tokenNumber = 0;
+		int resourceNumber = 0;
 		
 		tiles.clear();
 
 		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
 
-		// Paint the tiles row by row
+		// Set up the coordinates for the tiles row by row
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
 		for (int i = 0; i < 3; i++) {
 
-			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
-			tokenNumber++;
+			Tile t;
+			// If this is the sand token, number is zero
+			if (resourceTokens.get(resourceNumber) == null) {
+				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				resourceNumber++;
+			} else {
+				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
+				tokenNumber++;
+				resourceNumber++;
+			}
+			
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -263,8 +278,17 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 - 3*yIncrement);
 		for (int i = 0; i < 4; i++) {
 
-			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
-			tokenNumber++;
+			Tile t;
+			// If this is the sand token, number is zero
+			if (resourceTokens.get(resourceNumber) == null) {
+				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				resourceNumber++;
+			} else {
+				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
+				tokenNumber++;
+				resourceNumber++;
+			}
+			
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -273,8 +297,17 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 4*xIncrement, HEIGHT / 2);
 		for (int i = 0; i < 5; i++) {
 
-			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
-			tokenNumber++;
+			Tile t;
+			// If this is the sand token, number is zero
+			if (resourceTokens.get(resourceNumber) == null) {
+				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				resourceNumber++;
+			} else {
+				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
+				tokenNumber++;
+				resourceNumber++;
+			}
+			
 			tiles.add(t);
 			
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -283,8 +316,17 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 3*xIncrement, HEIGHT / 2 + 3*yIncrement);
 		for (int i = 0; i < 4; i++) {
 
-			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
-			tokenNumber++;
+			Tile t;
+			// If this is the sand token, number is zero
+			if (resourceTokens.get(resourceNumber) == null) {
+				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				resourceNumber++;
+			} else {
+				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
+				tokenNumber++;
+				resourceNumber++;
+			}
+			
 			tiles.add(t);
 			
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY());
@@ -293,8 +335,17 @@ public class BoardGUI extends JPanel {
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 + 6*yIncrement);
 		for (int i = 0; i < 3; i++) {
 
-			Tile t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(tokenNumber));
-			tokenNumber++;
+			Tile t;
+			// If this is the sand token, number is zero
+			if (resourceTokens.get(resourceNumber) == null) {
+				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				resourceNumber++;
+			} else {
+				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
+				tokenNumber++;
+				resourceNumber++;
+			}
+			
 			tiles.add(t);
 
 			origin.setLocation(2*xIncrement+ origin.getX(), origin.getY()); 
