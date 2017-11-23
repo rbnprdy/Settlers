@@ -83,6 +83,10 @@ public class Player {
 			return resourceCards;
 		}
 		
+		public void addResourceCardOfType(ResourceType type) {
+			resourceCards.add(new ResourceCard(type));
+		}
+		
 		public ArrayList<DevelopmentCard> getDevelopmentCards(){
 			return developmentCards;
 		}

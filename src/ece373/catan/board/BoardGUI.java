@@ -140,6 +140,26 @@ public class BoardGUI extends JPanel {
 		displayAvailableEdges = true;
 		this.repaint();
 	}
+	
+	public void dealResourceCardsForRoll(int roll) {
+		for(Tile t: tiles) {
+			// if this tile is matching the roll
+			if (t.getNumber() == roll) {
+				// for each node surrounding the tile
+				for (Node n: t.getNodes()) {
+					// if a player has built on this node
+					if (n.getPlayer() != null) {
+						// deal card
+						n.getPlayer().addResourceCardOfType(t.getResourceType());
+						// if the building is a city, deal another card
+						if (n.getCity() != null) {
+							n.getPlayer().addResourceCardOfType(t.getResourceType());
+						}
+					}
+				}
+			}
+		}
+	}
 
 	@Override
 	public void paintComponent(Graphics g) {

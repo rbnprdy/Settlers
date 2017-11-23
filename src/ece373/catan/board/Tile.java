@@ -27,6 +27,10 @@ public class Tile extends Polygon {
 		setupPoints();
 	}
 	
+	public Node[] getNodes() {
+		return nodes;
+	}
+	
 	public void setNode(int num, Node node) {
 		if (num > 5) {
 			System.out.println("num is too large when adding node");
