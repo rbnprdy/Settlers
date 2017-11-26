@@ -71,6 +71,21 @@ public class Node {
 		
 		return connectedRoad;
 	}
+	
+	public boolean canBeBuiltOnAtStart() {
+		
+		if (getPlayer() != null) {
+			return false;
+		}
+		
+		for (Edge e: edges) {
+			if (e.getNode1().getPlayer() != null || e.getNode2().getPlayer() != null) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
 
 	/**
 	 * Sets this node's city to c, and returns the node's settlement to null.
