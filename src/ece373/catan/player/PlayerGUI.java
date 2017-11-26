@@ -7,16 +7,24 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.*;
 
 import javax.swing.BoxLayout;
 import ece373.catan.card.*;
+import ece373.catan.game.*;
 
 public class PlayerGUI extends JPanel {
+	private Game game;
 	private Player player;	
+	private JButton doneButton;
+	private JButton buildButton;
+	private JButton tradeButton;
+	private JButton developmentCardButton;
+	private Font font1 = new Font("SansSerif", Font.BOLD,30);
 	
-	public PlayerGUI(Player p){
+	public PlayerGUI(Game g,Player p){
 		player = p;
-		
+		game = g;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		buildGUI();
@@ -28,8 +36,6 @@ public class PlayerGUI extends JPanel {
 		int i = 0;
 		
 		JPanel topPanel = new JPanel();
-		
-		Font font1 = new Font("SansSerif", Font.BOLD,30);
 		
 		JPanel infoPanel = new JPanel();
 		
@@ -52,7 +58,7 @@ public class PlayerGUI extends JPanel {
 		victoryPointsLabel.setFont(font1);
 		victoryPointsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		JButton doneButton = new JButton("Done");
+		doneButton = new JButton("Done");
 		doneButton.setFont(font1);
 		doneButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -78,11 +84,11 @@ public class PlayerGUI extends JPanel {
 		cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.X_AXIS));
 		
 		Dimension buttonDim = new Dimension(200, 200);
-		JButton buildButton = new JButton("Build");
-		JButton tradeButton = new JButton("Trade");
+		buildButton = new JButton("Build");
+		tradeButton = new JButton("Trade");
 		buildButton.setFont(font1);
 		tradeButton.setFont(font1);
-		JButton developmentCardButton = new JButton();
+		developmentCardButton = new JButton();
 		ImageIcon devImg = new ImageIcon(this.getClass().getResource("/player/devicon.png"));
 		developmentCardButton.setIcon(devImg);
 		buildButton.setPreferredSize(buttonDim);
@@ -100,6 +106,8 @@ public class PlayerGUI extends JPanel {
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			CardGUI cardGUI = new CardGUI(dc);
 			devCards.add(cardGUI);
+			cardGUI.setLocation(0 + i*150, 0);
+			i = i + 1;
 			
 		}
 		
@@ -107,7 +115,7 @@ public class PlayerGUI extends JPanel {
 			CardGUI cardGUI = new CardGUI(player.getLargestArmyCard());
 			largestArmyPanel.add(cardGUI);
 		}
-		
+		i = 0;
 		for(ResourceCard rc: player.getResourceCards()) { // POPULATING SHEEP CARDS
 			if(rc.getType() == ResourceType.SHEEP) {
 				CardGUI cardGUI = new CardGUI(rc);
@@ -136,7 +144,7 @@ public class PlayerGUI extends JPanel {
 				i = i + 1;
 			}
 		}
-		i = 0;
+		i = 0;;
 		
 		for(ResourceCard rc: player.getResourceCards()) { // POPULATING WHEAT CARDS
 			if(rc.getType() == ResourceType.WHEAT) {
@@ -169,5 +177,74 @@ public class PlayerGUI extends JPanel {
 		this.add(infoPanel);	
 		this.add(devCardPanel);
 		this.add(cardPanel);
+	}
+	
+	private class ButtonListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton)(e.getSource());
+			
+			if(source.equals(doneButton)) {
+				handleDone();
+			}
+			if(source.equals(buildButton)) {
+				handleBuild();
+			}
+			if(source.equals(tradeButton)) {
+				handleTrade();
+			}
+			if(source.equals(developmentCardButton)) {
+				//handleDevelopmentCard;
+			}
+		}
+		
+		public void handleDone(){
+			game.beginNextTurn();
+		}
+		
+		public void handleBuild() {
+			buildBuildGUI();
+		}
+		
+		public void handleTrade() {
+			//buildTradeGUI();
+		}
+		
+		public void handleDevelopmentCard() {
+			//buildDevelopmentCardGUI();
+		}
+	}
+	
+	public void buildBuildGUI() {
+		JPanel buildPanel = new JPanel();
+		buildPanel.setLayout(new BoxLayout(buildPanel, BoxLayout.Y_AXIS));
+		
+		JLabel buildName = new JLabel("Building Costs");
+		buildName.setFont(font1);
+		
+		JLabel roadResourceLabel = new JLabel();
+		JLabel settlementResourceLabel = new JLabel();
+		JLabel cityResourceLabel = new JLabel();
+		JLabel developmentCardResourceLabel = new JLabel();
+		
+		ImageIcon roadCosts = new ImageIcon(this.getClass().getResource("/player/roadcosts.png"));
+		ImageIcon settlementCosts = new ImageIcon(this.getClass().getResource("/player/settlementcosts.png"));
+		ImageIcon cityCosts = new ImageIcon(this.getClass().getResource("/player/citycosts.png"));
+		ImageIcon developmentCardCosts = new ImageIcon(this.getClass().getResource("/player/developmentcardcosts.png"));
+		
+		roadResourceLabel.setIcon(roadCosts);
+		settlementResourceLabel.setIcon(settlementCosts);
+		cityResourceLabel.setIcon(cityCosts);
+		developmentCardResourceLabel.setIcon(developmentCardCosts);
+		
+		buildPanel.add(buildName);
+		buildPanel.add(roadResourceLabel);
+		buildPanel.add(settlementResourceLabel);
+		buildPanel.add(cityResourceLabel);
+		buildPanel.add(developmentCardResourceLabel);
+		
+		buildPanel.setVisible(true);
+		
+		
 	}
 }
