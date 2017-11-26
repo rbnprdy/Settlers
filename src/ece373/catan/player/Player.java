@@ -35,6 +35,27 @@ public class Player {
 	public Color getColor() {
 		return this.color;
 	}
+	
+	public void calculateVictoryPoints() {
+		int newVictoryPoints = 0;
+		for(Settlement s: settlements) {
+			newVictoryPoints++;
+		}
+		for(City c: cities) {
+			newVictoryPoints = newVictoryPoints + 2;
+		}
+		for(DevelopmentCard d: developmentCards) {
+			if(d instanceof VictoryPointCard) {
+				newVictoryPoints++;
+			}
+		}
+		if(largestArmyCard != null) {
+			newVictoryPoints = newVictoryPoints + 2;
+		}
+		
+		victoryPoints = newVictoryPoints;
+		return;
+	}
 		
 		public void addCard(ResourceCard rc) {
 			resourceCards.add(rc);
@@ -56,14 +77,11 @@ public class Player {
 			return;
 		}
 		
-		public Color getColor() {
-			return this.color;
-		}
-		
 		public void buildRoad(Board board, int edge_index) {
 			if(board.getEdges().get(edge_index).getRoad() == null) {
 				Road new_road = new Road(this);
 				board.getEdges().get(edge_index).setRoad(new_road);
+				roads.add(new_road);
 			}
 			else {
 				System.out.println("A road is already built on this edge");
@@ -75,6 +93,7 @@ public class Player {
 			if(board.getNodes().get(node_index).getSettlement() == null) {
 				Settlement new_settlement = new Settlement(this);
 				board.getNodes().get(node_index).setSettlement(new_settlement);
+				settlements.add(new_settlement);
 			}
 			else {
 				System.out.println("A Settlement is already built on this node");
@@ -85,8 +104,10 @@ public class Player {
 		public void buildCity(Board board, int node_index) {
 			if(board.getNodes().get(node_index).getSettlement() != null) {
 				if(board.getNodes().get(node_index).getSettlement().getPlayer() == this) {
+					settlements.remove(board.getNodes().get(node_index).getSettlement());
 					City new_city = new City(this);
 					board.getNodes().get(node_index).setCity(new_city);
+					cities.add(new_city);
 				}
 				else {
 					System.out.print("This is another player's settlement");

@@ -57,11 +57,16 @@ public class PlayerGUI extends JPanel {
 		doneButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.setPreferredSize(new Dimension(1000, 400));
+		infoPanel.setPreferredSize(new Dimension(1000, 200));
 		infoPanel.add(playerNameAndColor);
 		infoPanel.add(victoryPointsLabel);
 		infoPanel.add(doneButton);
 		
+		JPanel devCardPanel = new JPanel();
+		JLayeredPane devCards = new JLayeredPane();
+		JPanel largestArmyPanel = new JPanel();
+		devCardPanel.setPreferredSize(new Dimension(1000, 300));
+		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
 		
 		JPanel cardPanel = new JPanel();
 		JLayeredPane sheepPanel = new JLayeredPane();
@@ -90,14 +95,24 @@ public class PlayerGUI extends JPanel {
 		topPanel.add(buildButton);
 		topPanel.add(tradeButton);
 		topPanel.add(developmentCardButton);
-
 		
+		i = 0;
+		for(DevelopmentCard dc: player.getDevelopmentCards()) {
+			CardGUI cardGUI = new CardGUI(dc);
+			devCards.add(cardGUI);
+			
+		}
+		
+		if(player.getLargestArmyCard() != null) {
+			CardGUI cardGUI = new CardGUI(player.getLargestArmyCard());
+			largestArmyPanel.add(cardGUI);
+		}
 		
 		for(ResourceCard rc: player.getResourceCards()) { // POPULATING SHEEP CARDS
 			if(rc.getType() == ResourceType.SHEEP) {
 				CardGUI cardGUI = new CardGUI(rc);
 				sheepPanel.add(cardGUI);
-				cardGUI.setLocation(25, 275 - 50*(i));
+				cardGUI.setLocation(25, 0 - 50*(i));
 				i = i + 1;
 			}
 		}
@@ -107,7 +122,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.BRICK) {
 				CardGUI cardGUI = new CardGUI(rc);
 				brickPanel.add(cardGUI);
-				cardGUI.setLocation(25, 275 - 50*(i));				
+				cardGUI.setLocation(25, 0 - 50*(i));				
 				i = i + 1;
 			}
 		}
@@ -117,7 +132,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.STONE) {
 				CardGUI cardGUI = new CardGUI(rc);
 				stonePanel.add(cardGUI);
-				cardGUI.setLocation(25, 275 - 50*(i));		
+				cardGUI.setLocation(25, 0 - 50*(i));		
 				i = i + 1;
 			}
 		}
@@ -127,7 +142,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.WHEAT) {
 				CardGUI cardGUI = new CardGUI(rc);
 				wheatPanel.add(cardGUI);
-				cardGUI.setLocation(25, 275 - 50*(i));		
+				cardGUI.setLocation(25,  0 - 50*(i));		
 				i = i + 1;
 			}
 		}
@@ -137,7 +152,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.WOOD) {
 				CardGUI cardGUI = new CardGUI(rc);
 				woodPanel.add(cardGUI);
-				cardGUI.setLocation(25, 275 - 50*(i));		
+				cardGUI.setLocation(25, 0 - 50*(i));		
 				i = i + 1;
 			}
 		}	
@@ -147,9 +162,12 @@ public class PlayerGUI extends JPanel {
 		cardPanel.add(stonePanel);
 		cardPanel.add(wheatPanel);
 		cardPanel.add(woodPanel);
+		devCardPanel.add(devCards);
+		devCardPanel.add(largestArmyPanel);
 		
 		this.add(topPanel);
 		this.add(infoPanel);	
+		this.add(devCardPanel);
 		this.add(cardPanel);
 	}
 }

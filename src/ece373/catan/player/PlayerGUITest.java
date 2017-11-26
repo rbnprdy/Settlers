@@ -14,6 +14,9 @@ public class PlayerGUITest {
 		ResourceCard stonecard = new ResourceCard(ResourceType.STONE);
 		ResourceCard wheatcard = new ResourceCard(ResourceType.WHEAT);
 		ResourceCard  woodcard = new  ResourceCard(ResourceType.WOOD);
+		VictoryPointCard vCard = new VictoryPointCard();
+		YearOfPlentyCard yopCard = new YearOfPlentyCard();
+		LargestArmyCard lac = new LargestArmyCard();
 		
 		JFrame frame = new JFrame();
 		PlayerGUI newGUI;
@@ -25,6 +28,9 @@ public class PlayerGUITest {
 		//p1.addCard(stonecard);
 		p1.addCard(wheatcard);
 		p1.addCard(woodcard);
+		p1.addCard(yopCard);
+		p1.addCard(vCard);
+		p1.addCard(lac);
 		
 		newGUI = new PlayerGUI(p1);
 		frame.add(newGUI);

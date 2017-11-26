@@ -44,9 +44,6 @@ public class CardGUI extends JPanel {
 			if(card instanceof KnightCard) {
 				img = new ImageIcon(this.getClass().getResource("/card/knightcard.png")).getImage();
 			}
-			else if(card instanceof MonopolyCard) {
-				img = new ImageIcon(this.getClass().getResource("/card/monopolycard.png")).getImage();
-			}
 			else if(card instanceof RoadBuildingCard) {
 				img = new ImageIcon(this.getClass().getResource("/card/roadbuildingcard.png")).getImage();
 			}
