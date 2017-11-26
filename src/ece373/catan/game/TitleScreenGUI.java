@@ -105,6 +105,12 @@ public class TitleScreenGUI {
 			    for (Player p: players) {
 			    		g.addPlayer(p);
 			    }
+			    
+			    g.setCurrentPlayer(players.get(0));
+			    
+			    GameGUI gui = new GameGUI(g);
+			    gui.setVisible(true);
+			    
 			} else {
 			    System.out.println("Login canceled");
 			}

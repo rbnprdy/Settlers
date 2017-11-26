@@ -42,6 +42,8 @@ public class BoardGUI extends JPanel {
 	private boolean displayAvailableEdges;
 	
 	private boolean displayAvailableTilesForRobber;
+	
+	private boolean takeResources;
 
 	private double xIncrement;
 	private double yIncrement;
@@ -81,6 +83,8 @@ public class BoardGUI extends JPanel {
 		displayAvailableEdges = false;
 		
 		displayAvailableTilesForRobber = false;
+		
+		takeResources = true;
 
 		xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
 		yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
@@ -127,12 +131,16 @@ public class BoardGUI extends JPanel {
 
 		g.setCurrentPlayer(p2);
 		//b.moveRobber();
-		b.buildRoadWithPlayer(p2);
+		b.buildSettlementAtStart();
 		
 	}
 
 	public Board getBoard() {
 		return board;
+	}
+	
+	public void setTakeResources(boolean b) {
+		takeResources = b;
 	}
 	
 	public void showAvailableNodes(ArrayList<Node> nodes) {
@@ -676,7 +684,11 @@ public class BoardGUI extends JPanel {
 			
 			buttons.clear();
 			
-			removeResourceCardsAfterBuilding();
+			if (takeResources) {
+				removeResourceCardsAfterBuilding();
+				takeResources = true;
+			}
+			
 			
 			// repaint
 			BoardGUI.this.repaint();	
@@ -728,7 +740,10 @@ public class BoardGUI extends JPanel {
 			
 			buttons.clear();
 			
-			removeResourceCardsAfterBuilding();
+			if (takeResources) {
+				removeResourceCardsAfterBuilding();
+				takeResources = true;
+			}
 			
 			// repaint
 			BoardGUI.this.repaint();	
