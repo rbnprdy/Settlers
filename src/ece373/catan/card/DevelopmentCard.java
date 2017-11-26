@@ -1,6 +1,7 @@
 package ece373.catan.card;
 import ece373.catan.player.*;
 import ece373.catan.board.*;
+import ece373.catan.game.*;
 
 public abstract class DevelopmentCard extends Card {
 	private String title;
@@ -10,7 +11,7 @@ public abstract class DevelopmentCard extends Card {
 		description = "Default development card description";
 	}
 	
-	public abstract void playCard(Player player);
+	public abstract void playCard(Game g, Player p);
 	
 	public String getTitle() {
 		return title;
