@@ -3,6 +3,7 @@ package ece373.catan.player;
 import javax.swing.*;
 import java.awt.Color;
 import ece373.catan.card.*;
+import ece373.catan.game.*;
 
 public class PlayerGUITest {
 	public static void main(String[] args) {
@@ -18,6 +19,7 @@ public class PlayerGUITest {
 		YearOfPlentyCard yopCard = new YearOfPlentyCard();
 		LargestArmyCard lac = new LargestArmyCard();
 		
+		Game g1 = new Game();
 		JFrame frame = new JFrame();
 		PlayerGUI newGUI;
 		Player p1 = new Player("Ruben", new Color(0xFF0000));
@@ -32,7 +34,7 @@ public class PlayerGUITest {
 		p1.addCard(vCard);
 		p1.addCard(lac);
 		
-		newGUI = new PlayerGUI(p1);
+		newGUI = new PlayerGUI(g1, p1);
 		frame.add(newGUI);
 		frame.setSize(newGUI.getWidth(), newGUI.getHeight());
 		frame.setLocationRelativeTo(null);
