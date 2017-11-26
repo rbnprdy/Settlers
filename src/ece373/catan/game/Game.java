@@ -21,7 +21,7 @@ public class Game {
 
 	public Game() {
 		players = new ArrayList<Player>();
-		board = new Board();
+		board = new Board(this);
 		developmentCards = new ArrayList<DevelopmentCard>();
 		currentPlayer = null;
 		playerNumber = 0;

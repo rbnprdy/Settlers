@@ -8,6 +8,7 @@ public class City {
 	
 	public City(Player p) {
 		player = p;
+		p.addCity(this);
 	}
 	
 	public Player getPlayer() {
