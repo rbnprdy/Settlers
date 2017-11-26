@@ -26,7 +26,7 @@ public class GameGUI extends JFrame {
 		players = new ArrayList<PlayerGUI>();
 		board = new BoardGUI(game.getBoard(),game);
 		
-		temp = new PlayerGUI(game.getCurrentPlayer());
+		temp = new PlayerGUI(game, game.getCurrentPlayer());
 		
 		window = new JSplitPane();
 		
