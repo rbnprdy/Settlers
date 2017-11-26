@@ -2,7 +2,7 @@ package ece373.catan.board;
 
 import javax.swing.*;
 
-import ece373.catan.card.ResourceType;
+import ece373.catan.card.*;
 import ece373.catan.game.*;
 import ece373.catan.player.*;
 
@@ -118,12 +118,17 @@ public class BoardGUI extends JPanel {
 		b.getEdges().get(50).setRoad(new Road(p));
 		
 		Player p2 = new Player("test2", Color.red);
+		p2.addResourceCardOfType(ResourceType.BRICK);
+		p2.addResourceCardOfType(ResourceType.BRICK);
+		p2.addResourceCardOfType(ResourceType.WOOD);
 		b.getNodes().get(30).setSettlement(new Settlement(p2));
 		b.getEdges().get(36).setRoad(new Road(p2));
 		b.getEdges().get(44).setRoad(new Road(p2));
 
 		g.setCurrentPlayer(p2);
-		b.moveRobber();
+		//b.moveRobber();
+		b.buildRoadWithPlayer(p2);
+		
 	}
 
 	public Board getBoard() {
@@ -671,9 +676,30 @@ public class BoardGUI extends JPanel {
 			
 			buttons.clear();
 			
+			removeResourceCardsAfterBuilding();
+			
 			// repaint
 			BoardGUI.this.repaint();	
-		}	
+		}
+		
+		private void removeResourceCardsAfterBuilding() {
+			Player p = BoardGUI.this.game.getCurrentPlayer();
+			
+			if (n.getCity() == null) {
+				// Remove resources for settlement
+				p.removeResourceCardOfType(ResourceType.BRICK);
+				p.removeResourceCardOfType(ResourceType.WHEAT);
+				p.removeResourceCardOfType(ResourceType.SHEEP);
+				p.removeResourceCardOfType(ResourceType.WOOD);
+			} else {
+				// Remove resources for city
+				p.removeResourceCardOfType(ResourceType.WHEAT);
+				p.removeResourceCardOfType(ResourceType.WHEAT);
+				p.removeResourceCardOfType(ResourceType.STONE);
+				p.removeResourceCardOfType(ResourceType.STONE);
+				p.removeResourceCardOfType(ResourceType.STONE);
+			}
+		}
 	}
 	
 	private class EdgeButtonListener implements ActionListener {
@@ -702,8 +728,16 @@ public class BoardGUI extends JPanel {
 			
 			buttons.clear();
 			
+			removeResourceCardsAfterBuilding();
+			
 			// repaint
 			BoardGUI.this.repaint();	
+		}
+		
+		private void removeResourceCardsAfterBuilding() {
+			Player p = BoardGUI.this.game.getCurrentPlayer();
+			p.removeResourceCardOfType(ResourceType.BRICK);
+			p.removeResourceCardOfType(ResourceType.WOOD);
 		}
 	}
 
