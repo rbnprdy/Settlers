@@ -1,32 +1,59 @@
 package ece373.catan.player;
 
 
+import java.awt.Color;
 import java.util.ArrayList;
 import ece373.catan.board.*;
 import ece373.catan.card.*;
 
 
 public class Player {
-		private String playerName;
-		private ArrayList<ResourceCard> resourceCards;
-		private ArrayList<DevelopmentCard> developmentCards;
-		private LargestArmyCard largestArmyCard;
-		private LongestRoadCard longestRoadCard;
-		private ArrayList<Settlement> settlements;
-		private ArrayList<City> cities;
-		private ArrayList<Road> roads;
-		private int victoryPoints;
+	private String playerName;
+	private ArrayList<ResourceCard> resourceCards;
+	private ArrayList<DevelopmentCard> developmentCards;
+	private LargestArmyCard largestArmyCard;
+	private LongestRoadCard longestRoadCard;
+	private ArrayList<Settlement> settlements;
+	private ArrayList<City> cities;
+	private ArrayList<Road> roads;
+	private int victoryPoints;
+	private Color color;
+	
+	public Player(String new_player_name, Color color) {
+		playerName = new_player_name;
+		this.color = color;
+		resourceCards = new ArrayList<ResourceCard>();
+		developmentCards = new ArrayList<DevelopmentCard>();
+		largestArmyCard = null;
+		longestRoadCard = null;
+		settlements = new ArrayList<Settlement>();
+		cities = new ArrayList<City>();
+		roads = new ArrayList<Road>();
+		victoryPoints = 0;
+	}
+	
+	public Color getColor() {
+		return this.color;
+	}
 		
-		public Player(String new_player_name) {
-			playerName = new_player_name;
-			resourceCards = new ArrayList<ResourceCard>();
-			developmentCards = new ArrayList<DevelopmentCard>();
-			largestArmyCard = null;
-			longestRoadCard = null;
-			settlements = new ArrayList<Settlement>();
-			cities = new ArrayList<City>();
-			roads = new ArrayList<Road>();
-			victoryPoints = 0;
+		public void addCard(ResourceCard rc) {
+			resourceCards.add(rc);
+			return;
+		}
+		
+		public void addCard(DevelopmentCard dc) {
+			developmentCards.add(dc);
+			return;
+		}
+		
+		public void addCard(LongestRoadCard lrc) {
+			longestRoadCard = lrc;
+			return;
+		}
+		
+		public void addCard(LargestArmyCard lac) {
+			largestArmyCard = lac;
+			return;
 		}
 		
 		public void buildRoad(Board board, int edge_index) {
@@ -110,6 +137,14 @@ public class Player {
 		
 		public ArrayList<Road> getRoads(){
 			return this.roads;
+		}
+		
+		public String getName() {
+			return playerName;
+		}
+		
+		public int getVictoryPoints() {
+			return victoryPoints;
 		}
 		
 		public void makeTrade(Player player, ArrayList<ResourceCard> my_offered_cards, ArrayList<ResourceCard> their_offered_cards) {

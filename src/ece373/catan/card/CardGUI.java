@@ -6,26 +6,24 @@ import java.awt.event.ActionEvent;
 import java.awt.Image;
 import javax.swing.*;
 
-public class CardGUI extends JFrame {
+public class CardGUI extends JPanel {
 	private Card card;
 	private JLabel faceImageLabel;
+	private Dimension cardSize = new Dimension(150, 230);
 	
 	public CardGUI(Card new_card) {
 		card = new_card;
 		setLayout(new FlowLayout(FlowLayout.CENTER));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		buildGUI();	
 		setVisible(true);
-		setLocationRelativeTo(null);
 	}
 	
 	public void buildGUI() {
-		this.setSize(new Dimension(300,460));
-		this.setUndecorated(true);		//REMOVING TOOLBAR
+		this.setSize(cardSize);
 		faceImageLabel = new JLabel();
 		Image img; 
 		Image scaled_img;
-		faceImageLabel.setSize(new Dimension(300,460));
+		faceImageLabel.setSize(cardSize);
 		if(card instanceof ResourceCard) {
 			switch(((ResourceCard) card).getType()){
 			case BRICK: img = new ImageIcon(this.getClass().getResource("/card/brickcard.png")).getImage();
@@ -74,8 +72,11 @@ public class CardGUI extends JFrame {
 		
 		scaled_img = img.getScaledInstance(faceImageLabel.getWidth(), faceImageLabel.getHeight(), Image.SCALE_SMOOTH);
 		faceImageLabel.setIcon(new ImageIcon(scaled_img));
-		this.getContentPane().add(faceImageLabel);
+		this.add(faceImageLabel);
 		
 		
 	}
+	
+
 }
+
