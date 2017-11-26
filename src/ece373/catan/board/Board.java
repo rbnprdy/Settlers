@@ -1,5 +1,6 @@
 package ece373.catan.board;
 
+import ece373.catan.game.*;
 import ece373.catan.player.*;
 import java.util.ArrayList;
 
@@ -9,12 +10,20 @@ public class Board {
 	private ArrayList<Node> nodes;
 	private ArrayList<Edge> edges;
 	
-	public Board() {
+	private BoardGUI gui;
+	
+	private Game game;
+	
+	public Board(Game g) {
 		nodes = new ArrayList<Node>();
 		edges = new ArrayList<Edge>();
 		
+		this.game = g;
+		
 		setupNodes();
 		setupEdges();
+		
+		this.gui = new BoardGUI(this, g);
 	}
 	
 	private void setupNodes() {
@@ -131,6 +140,10 @@ public class Board {
 		edges.add(e);
 	}
 	
+	public BoardGUI getGUI() {
+		return gui;
+	}
+	
 	public ArrayList<Edge> getEdges() {
 		return edges;
 	}
@@ -171,5 +184,20 @@ public class Board {
 		return availableNodes;
 	}
 	
+	public void buildRoadWithPlayer(Player p) {
+		gui.showAvailableEdges(this.getAvailableEdgesFor(p));
+	}
+	
+	public void buildSettlementWithPlayer(Player p) {
+		gui.showAvailableNodes(this.getAvailableNodesForSettlementsFor(p));
+	}
+	
+	public void buildCityWithPlayer(Player p) {
+		gui.showAvailableNodes(this.getAvailableNodesForCitiesFor(p));
+	}
+	
+	public void moveRobber() {
+		gui.showAvailableTilesForRobber();
+	}
 }
 

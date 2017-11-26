@@ -8,6 +8,7 @@ public class Road {
 	
 	public Road(Player p) {
 		player = p;
+		p.addRoad(this);
 	}
 	
 	public Player getPlayer() {

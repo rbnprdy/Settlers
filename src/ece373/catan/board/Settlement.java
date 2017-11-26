@@ -8,6 +8,7 @@ public class Settlement {
 	
 	public Settlement(Player p) {
 		player = p;
+		p.addSettlement(this);
 	}
 	
 	public Player getPlayer() {

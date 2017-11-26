@@ -33,13 +33,15 @@ public class BoardGUI extends JPanel {
 	
 	private ArrayList<JButton> buttons;
 
-	private Board b;
+	private Board board;
 
 	private ArrayList<Node> availableNodes;
 	private boolean displayAvailableNodes;
 	
 	private ArrayList<Edge> availableEdges;
 	private boolean displayAvailableEdges;
+	
+	private boolean displayAvailableTilesForRobber;
 
 	private double xIncrement;
 	private double yIncrement;
@@ -47,9 +49,10 @@ public class BoardGUI extends JPanel {
 	private ArrayList<Integer> numberTokens;
 	private ArrayList<ResourceType> resourceTokens;
 
-	public BoardGUI(Game g) {
+	public BoardGUI(Board b, Game g) {
 
 		this.game = g;
+		this.board = b;
 		
 		numberTokens = new ArrayList<Integer>(Arrays.asList(2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12));
 		Collections.shuffle(numberTokens);
@@ -76,8 +79,8 @@ public class BoardGUI extends JPanel {
 		
 		availableEdges = new ArrayList<Edge>();
 		displayAvailableEdges = false;
-
-		b = new Board();
+		
+		displayAvailableTilesForRobber = false;
 
 		xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
 		yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
@@ -92,7 +95,8 @@ public class BoardGUI extends JPanel {
 		JFrame frame = new JFrame();
 
 		Game g = new Game();
-		BoardGUI bGUI = new BoardGUI(g);
+		Board b = g.getBoard();
+		BoardGUI bGUI = b.getGUI();
 
 		frame.setContentPane(bGUI);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -100,8 +104,6 @@ public class BoardGUI extends JPanel {
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.setLayout(null);
-
-		Board b = bGUI.getBoard();
 
 		Player p = new Player("test", Color.blue);
 		g.setCurrentPlayer(p);
@@ -120,13 +122,12 @@ public class BoardGUI extends JPanel {
 		b.getEdges().get(36).setRoad(new Road(p2));
 		b.getEdges().get(44).setRoad(new Road(p2));
 
-		//bGUI.showAvailableNodes(b.getAvailableNodesForSettlementsFor(p));
-		//bGUI.showAvailableNodes(b.getAvailableNodesForCitiesFor(p));
-		bGUI.showAvailableEdges(b.getAvailableEdgesFor(p));
+		g.setCurrentPlayer(p2);
+		b.moveRobber();
 	}
 
 	public Board getBoard() {
-		return b;
+		return board;
 	}
 	
 	public void showAvailableNodes(ArrayList<Node> nodes) {
@@ -141,10 +142,15 @@ public class BoardGUI extends JPanel {
 		this.repaint();
 	}
 	
+	public void showAvailableTilesForRobber() {
+		displayAvailableTilesForRobber = true;
+		this.repaint();
+	}
+	
 	public void dealResourceCardsForRoll(int roll) {
 		for(Tile t: tiles) {
 			// if this tile is matching the roll
-			if (t.getNumber() == roll) {
+			if (t.getNumber() == roll && t.hasRobber() == false) {
 				// for each node surrounding the tile
 				for (Node n: t.getNodes()) {
 					// if a player has built on this node
@@ -203,6 +209,14 @@ public class BoardGUI extends JPanel {
 			g2d.setColor(new Color(0xead4b8));
 
 			g2d.fill(circle);
+			
+			if (t.hasRobber()) {
+				// Draw the robber
+				Ellipse2D robber = new Ellipse2D.Double(t.getCenter().getX() - tileRadius / (circleRadiusScalingFactor*2) + 5, t.getCenter().getY() - tileRadius / (circleRadiusScalingFactor*2) + 5, tileRadius / circleRadiusScalingFactor - 10, tileRadius / circleRadiusScalingFactor - 10);
+				g2d.setColor(Color.BLACK);
+
+				g2d.fill(robber);
+			}
 
 			// Draw then number
 			g2d.setFont(new Font("TimesRoman", Font.PLAIN, (int) (tileRadius / (circleRadiusScalingFactor * 2))));
@@ -263,6 +277,18 @@ public class BoardGUI extends JPanel {
 				}
 			}
 		}
+		
+		if (this.displayAvailableTilesForRobber) {
+			for (Tile t: tiles) {
+				t.setRobber(false);
+				JButton b1 = new JButton();
+				b1.setLayout(null);
+				b1.setBounds((int) t.getCenter().getX() - 10, (int) t.getCenter().getY() - 10, 20, 20);
+				b1.addActionListener(new TileButtonListener(t));
+				add(b1);
+				buttons.add(b1);
+			}
+		}
 	}
 	
 	// Gives the tiles the correct coordinates so that they can be drawn when necessary
@@ -283,6 +309,7 @@ public class BoardGUI extends JPanel {
 			// If this is the sand token, number is zero
 			if (resourceTokens.get(resourceNumber) == null) {
 				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				t.setRobber(true);
 				resourceNumber++;
 			} else {
 				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
@@ -302,6 +329,7 @@ public class BoardGUI extends JPanel {
 			// If this is the sand token, number is zero
 			if (resourceTokens.get(resourceNumber) == null) {
 				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				t.setRobber(true);
 				resourceNumber++;
 			} else {
 				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
@@ -321,6 +349,7 @@ public class BoardGUI extends JPanel {
 			// If this is the sand token, number is zero
 			if (resourceTokens.get(resourceNumber) == null) {
 				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				t.setRobber(true);
 				resourceNumber++;
 			} else {
 				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
@@ -340,6 +369,7 @@ public class BoardGUI extends JPanel {
 			// If this is the sand token, number is zero
 			if (resourceTokens.get(resourceNumber) == null) {
 				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				t.setRobber(true);
 				resourceNumber++;
 			} else {
 				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
@@ -359,6 +389,7 @@ public class BoardGUI extends JPanel {
 			// If this is the sand token, number is zero
 			if (resourceTokens.get(resourceNumber) == null) {
 				t = new Tile(origin, tileRadius, 0, resourceTokens.get(resourceNumber));
+				t.setRobber(true);
 				resourceNumber++;
 			} else {
 				t = new Tile(origin, tileRadius, numberTokens.get(tokenNumber), resourceTokens.get(resourceNumber));
@@ -380,40 +411,40 @@ public class BoardGUI extends JPanel {
 		// Row 1
 		for (int i = 0; i < 3; i++) {
 			Point p = tiles.get(i).getPoints()[0];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i).setNode(0, n.getNode());
 		}
 
 		// Row 2
 		Point p3 = tiles.get(0).getPoints()[5];
-		NodeGUI n3 = new NodeGUI(b.getNodes().get(3), p3);
+		NodeGUI n3 = new NodeGUI(board.getNodes().get(3), p3);
 		nodeGUIs.add(n3);
 		tiles.get(0).setNode(5, n3.getNode());
 		
 		for (int i = 4; i < 6; i++) {
 			Point p = tiles.get(i - 4).getPoints()[1];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 4).setNode(1, n.getNode());
 			tiles.get(i - 3).setNode(5, n.getNode());
 		}
 		
 		Point p6 = tiles.get(2).getPoints()[1];
-		NodeGUI n6 = new NodeGUI(b.getNodes().get(6), p6);
+		NodeGUI n6 = new NodeGUI(board.getNodes().get(6), p6);
 		nodeGUIs.add(n6);
 		tiles.get(2).setNode(1, n6.getNode());
 		
 		// Row 3
 		Point p7 = tiles.get(0).getPoints()[4];
-		NodeGUI n7 = new NodeGUI(b.getNodes().get(7), p7);
+		NodeGUI n7 = new NodeGUI(board.getNodes().get(7), p7);
 		nodeGUIs.add(n7);
 		tiles.get(0).setNode(4, n7.getNode());
 		tiles.get(3).setNode(0, n7.getNode());
 		
 		for (int i = 8; i < 10; i++) {
 			Point p = tiles.get(i - 8).getPoints()[2];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 8).setNode(2, n.getNode());
 			tiles.get(i - 7).setNode(4, n.getNode());
@@ -421,20 +452,20 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p10 = tiles.get(2).getPoints()[2];
-		NodeGUI n10 = new NodeGUI(b.getNodes().get(10), p10);
+		NodeGUI n10 = new NodeGUI(board.getNodes().get(10), p10);
 		nodeGUIs.add(n10);
 		tiles.get(2).setNode(2, n10.getNode());
 		tiles.get(6).setNode(0, n10.getNode());
 		
 		// Row 4
 		Point p11 = tiles.get(3).getPoints()[5];
-		NodeGUI n11 = new NodeGUI(b.getNodes().get(11), p11);
+		NodeGUI n11 = new NodeGUI(board.getNodes().get(11), p11);
 		nodeGUIs.add(n11);
 		tiles.get(3).setNode(5, n11.getNode());
 		
 		for (int i = 12; i < 15; i++) {
 			Point p = tiles.get(i - 9).getPoints()[1];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 12).setNode(3, n.getNode());
 			tiles.get(i - 9).setNode(1, n.getNode());
@@ -442,20 +473,20 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p15 = tiles.get(6).getPoints()[1];
-		NodeGUI n15 = new NodeGUI(b.getNodes().get(15), p15);
+		NodeGUI n15 = new NodeGUI(board.getNodes().get(15), p15);
 		nodeGUIs.add(n15);
 		tiles.get(6).setNode(1, n15.getNode());
 		
 		// Row 5
 		Point p16 = tiles.get(3).getPoints()[4];
-		NodeGUI n16 = new NodeGUI(b.getNodes().get(16), p16);
+		NodeGUI n16 = new NodeGUI(board.getNodes().get(16), p16);
 		nodeGUIs.add(n16);
 		tiles.get(3).setNode(4, n16.getNode());
 		tiles.get(7).setNode(0, n16.getNode());
 		
 		for (int i = 17; i < 20; i++) {
 			Point p = tiles.get(i - 14).getPoints()[2];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 14).setNode(2, n.getNode());
 			tiles.get(i - 13).setNode(4, n.getNode());
@@ -463,20 +494,20 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p20 = tiles.get(6).getPoints()[2];
-		NodeGUI n20 = new NodeGUI(b.getNodes().get(20), p20);
+		NodeGUI n20 = new NodeGUI(board.getNodes().get(20), p20);
 		nodeGUIs.add(n20);
 		tiles.get(6).setNode(2, n20.getNode());
 		tiles.get(11).setNode(0, n20.getNode());
 		
 		// Row 6
 		Point p21 = tiles.get(7).getPoints()[5];
-		NodeGUI n21 = new NodeGUI(b.getNodes().get(21), p21);
+		NodeGUI n21 = new NodeGUI(board.getNodes().get(21), p21);
 		nodeGUIs.add(n21);
 		tiles.get(7).setNode(5, n21.getNode());
 		
 		for (int i = 22; i < 26; i++) {
 			Point p = tiles.get(i - 15).getPoints()[1];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 15).setNode(1, n.getNode());
 			tiles.get(i - 14).setNode(5, n.getNode());
@@ -484,19 +515,19 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p26 = tiles.get(11).getPoints()[1];
-		NodeGUI n26 = new NodeGUI(b.getNodes().get(26), p26);
+		NodeGUI n26 = new NodeGUI(board.getNodes().get(26), p26);
 		nodeGUIs.add(n26);
 		tiles.get(11).setNode(1, n26.getNode());
 
 		// Row 7
 		Point p27 = tiles.get(7).getPoints()[4];
-		NodeGUI n27 = new NodeGUI(b.getNodes().get(27), p27);
+		NodeGUI n27 = new NodeGUI(board.getNodes().get(27), p27);
 		nodeGUIs.add(n27);
 		tiles.get(7).setNode(4, n27.getNode());
 		
 		for (int i = 28; i < 32; i++) {
 			Point p = tiles.get(i - 21).getPoints()[2];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 21).setNode(2, n.getNode());
 			tiles.get(i - 20).setNode(4, n.getNode());
@@ -504,20 +535,20 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p32 = tiles.get(11).getPoints()[2];
-		NodeGUI n32 = new NodeGUI(b.getNodes().get(32), p32);
+		NodeGUI n32 = new NodeGUI(board.getNodes().get(32), p32);
 		nodeGUIs.add(n32);
 		tiles.get(11).setNode(2, n32.getNode());
 		
 		// Row 8
 		Point p33 = tiles.get(12).getPoints()[5];
-		NodeGUI n33 = new NodeGUI(b.getNodes().get(33), p33);
+		NodeGUI n33 = new NodeGUI(board.getNodes().get(33), p33);
 		nodeGUIs.add(n33);
 		tiles.get(12).setNode(5, n33.getNode());
 		tiles.get(7).setNode(3, n33.getNode());
 		
 		for (int i = 34; i < 37; i++) {
 			Point p = tiles.get(i - 22).getPoints()[1];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 26).setNode(3, n.getNode());
 			tiles.get(i - 22).setNode(1, n.getNode());
@@ -525,20 +556,20 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p37 = tiles.get(11).getPoints()[3];
-		NodeGUI n37 = new NodeGUI(b.getNodes().get(37), p37);
+		NodeGUI n37 = new NodeGUI(board.getNodes().get(37), p37);
 		nodeGUIs.add(n37);
 		tiles.get(11).setNode(3, n37.getNode());
 		tiles.get(15).setNode(1, n37.getNode());
 		
 		// row 9
 		Point p38 = tiles.get(12).getPoints()[4];
-		NodeGUI n38 = new NodeGUI(b.getNodes().get(38), p38);
+		NodeGUI n38 = new NodeGUI(board.getNodes().get(38), p38);
 		nodeGUIs.add(n38);
 		tiles.get(11).setNode(4, n38.getNode());
 		
 		for (int i = 39; i < 42; i++) {
 			Point p = tiles.get(i - 27).getPoints()[2];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 27).setNode(2, n.getNode());
 			tiles.get(i - 26).setNode(4, n.getNode());
@@ -546,20 +577,20 @@ public class BoardGUI extends JPanel {
 		}
 
 		Point p42 = tiles.get(15).getPoints()[2];
-		NodeGUI n42 = new NodeGUI(b.getNodes().get(42), p42);
+		NodeGUI n42 = new NodeGUI(board.getNodes().get(42), p42);
 		nodeGUIs.add(n42);
 		tiles.get(15).setNode(2, n42.getNode());
 		
 		// row 10
 		Point p43 = tiles.get(12).getPoints()[3];
-		NodeGUI n43 = new NodeGUI(b.getNodes().get(43), p43);
+		NodeGUI n43 = new NodeGUI(board.getNodes().get(43), p43);
 		nodeGUIs.add(n43);
 		tiles.get(11).setNode(3, n43.getNode());
 		tiles.get(16).setNode(5, n43.getNode());
 		
 		for (int i = 44; i < 46; i++) {
 			Point p = tiles.get(i - 28).getPoints()[1];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 28).setNode(1, n.getNode());
 			tiles.get(i - 31).setNode(3, n.getNode());
@@ -567,34 +598,34 @@ public class BoardGUI extends JPanel {
 		}
 		
 		Point p46 = tiles.get(15).getPoints()[3];
-		NodeGUI n46 = new NodeGUI(b.getNodes().get(46), p46);
+		NodeGUI n46 = new NodeGUI(board.getNodes().get(46), p46);
 		nodeGUIs.add(n46);
 		tiles.get(15).setNode(3, n46.getNode());
 		tiles.get(18).setNode(1, n46.getNode());
 		
 		// row 11
 		Point p47 = tiles.get(16).getPoints()[4];
-		NodeGUI n47 = new NodeGUI(b.getNodes().get(47), p47);
+		NodeGUI n47 = new NodeGUI(board.getNodes().get(47), p47);
 		nodeGUIs.add(n47);
 		tiles.get(16).setNode(4, n47.getNode());
 		
 		for (int i = 48; i < 50; i++) {
 			Point p = tiles.get(i - 32).getPoints()[2];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 32).setNode(2, n.getNode());
 			tiles.get(i - 31).setNode(4, n.getNode());
 		}
 		
 		Point p50 = tiles.get(18).getPoints()[2];
-		NodeGUI n50 = new NodeGUI(b.getNodes().get(50), p50);
+		NodeGUI n50 = new NodeGUI(board.getNodes().get(50), p50);
 		nodeGUIs.add(n50);
 		tiles.get(18).setNode(2, n50.getNode());
 		
 		// row 12
 		for (int i = 51; i < 54; i++) {
 			Point p = tiles.get(i - 35).getPoints()[3];
-			NodeGUI n = new NodeGUI(b.getNodes().get(i), p);
+			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 35).setNode(3, n.getNode());
 		}
@@ -604,7 +635,7 @@ public class BoardGUI extends JPanel {
 	private void setupEdges() {
 		edgeGUIs.clear();
 		
-		for (Edge e: b.getEdges()) {
+		for (Edge e: board.getEdges()) {
 			EdgeGUI eg = new EdgeGUI(e, e.getNode1().getGUI().getCenter(), e.getNode2().getGUI().getCenter());
 			edgeGUIs.add(eg);
 		}
@@ -664,6 +695,32 @@ public class BoardGUI extends JPanel {
 			// clear out all the availableNodes and buttons
 			availableEdges = null;
 			displayAvailableEdges = false;
+			for (JButton b: buttons) {
+				BoardGUI.this.remove(b);
+				b = null;
+			}
+			
+			buttons.clear();
+			
+			// repaint
+			BoardGUI.this.repaint();	
+		}
+	}
+
+	private class TileButtonListener implements ActionListener {
+		
+		private final Tile tile;
+		
+		public TileButtonListener(Tile tile) {
+			this.tile = tile;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			tile.setRobber(true);
+			
+			displayAvailableTilesForRobber = false;
 			for (JButton b: buttons) {
 				BoardGUI.this.remove(b);
 				b = null;

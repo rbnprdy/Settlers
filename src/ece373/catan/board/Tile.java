@@ -12,9 +12,11 @@ public class Tile extends Polygon {
 	
 	private ResourceType resourceType;
 
-	private Point center = new Point(0,0);
+	private Point center;
 	private int radius;
 	private Integer number;
+	
+	private boolean robber;
 	
 	private Node[] nodes = new Node[6];
 	
@@ -23,8 +25,17 @@ public class Tile extends Polygon {
 		this.center = (Point) center.clone();
 		this.radius = radius;
 		this.number = number;
+		this.robber = false;
 		
 		setupPoints();
+	}
+	
+	public void setRobber(boolean r) {
+		this.robber = r;
+	}
+	
+	public boolean hasRobber() {
+		return robber;
 	}
 	
 	public Node[] getNodes() {
