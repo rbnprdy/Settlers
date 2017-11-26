@@ -5,49 +5,26 @@ import java.awt.*;
 @SuppressWarnings("serial")
 public class EdgeGUI extends Polygon {
 
-	private final int width = 4;
-	private final int padding = 25;
+	private final double numerator = 3;
+	private final double denominator = 4;
 	
 	private Point p1;
 	private Point p2;
-	
-	private int tileRadius = 90;
 	
 	private Edge e;
 	
 	public EdgeGUI(Edge e, Point p1, Point p2) {
 		
-		double xIncrement = Math.sin((60*Math.PI)/180)*tileRadius;
-		double yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
-		
 		this.e = e;
+		e.setGUI(this);
 		
-		double p1X = p1.getX();
-		double p2X = p2.getX();
-		double p1Y = p1.getY();
-		double p2Y = p2.getY();
+		// get xCoord 1/4 and 3/4 down the line
+		double p1X = numerator*p1.getX()/denominator + (denominator-numerator)*p2.getX()/denominator;
+		double p2X = (denominator-numerator)*p1.getX()/denominator + numerator*p2.getX()/denominator;
 		
-		double slope = Math.abs(p1Y-p2Y)/Math.abs(p1X-p2X);
-		//double dx = Math.sqrt(25/(1+Math.pow(slope, 2)));
-		//double dy = dx*slope;
-		double dx = xIncrement / 2;
-		double dy = yIncrement / 2;
-		
-//		if (p1X > p2X) {
-//			p1X -= dx;
-//			p2X += dx;
-//		} else if (p1X < p2X) {
-//			p1X += dx;
-//			p2X -= dx;
-//		}
-//		
-//		if (p1Y > p2Y) {
-//			p1Y -= dy;
-//			p2Y += dy;
-//		} else if (p1Y < p2Y) {
-//			p2Y += dy;
-//			p2Y -= dy;
-//		}
+		// get yCoord 1/4 and 3/4 down the line
+		double p1Y = numerator*p1.getY()/denominator + (denominator-numerator)*p2.getY()/denominator;
+		double p2Y = (denominator-numerator)*p1.getY()/denominator + numerator*p2.getY()/denominator;
 
 		this.p1 = new Point((int) p1X, (int) p1Y);
 		this.p2 = new Point((int) p2X, (int) p2Y);
@@ -59,5 +36,15 @@ public class EdgeGUI extends Polygon {
 	
 	public Point getP2() {
 		return p2;
+	}
+	
+	public Point getCenter() {
+		int x = (int) (p1.getX() + p2.getX()) / 2;
+		int y = (int) (p1.getY() + p2.getY()) / 2;
+		return new Point(x, y);
+	}
+	
+	public Edge getEdge() {
+		return e;
 	}
 }

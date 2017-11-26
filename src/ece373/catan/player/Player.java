@@ -56,6 +56,10 @@ public class Player {
 			return;
 		}
 		
+		public Color getColor() {
+			return this.color;
+		}
+		
 		public void buildRoad(Board board, int edge_index) {
 			if(board.getEdges().get(edge_index).getRoad() == null) {
 				Road new_road = new Road(this);
@@ -101,6 +105,10 @@ public class Player {
 		
 		public ArrayList<ResourceCard> getResourceCards(){
 			return resourceCards;
+		}
+		
+		public void addResourceCardOfType(ResourceType type) {
+			resourceCards.add(new ResourceCard(type));
 		}
 		
 		public ArrayList<DevelopmentCard> getDevelopmentCards(){

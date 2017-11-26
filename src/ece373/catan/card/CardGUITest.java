@@ -7,6 +7,7 @@ public class CardGUITest {
 		
 		JFrame frame = new JFrame();
 		CardGUI newGUI;
+
 		ResourceCard rc1 = new ResourceCard(ResourceType.SHEEP);		
 		
 		newGUI = new CardGUI(rc1);
