@@ -275,6 +275,15 @@ public class PlayerGUI extends JPanel {
 		}
 	}
 	
+	private class TradeListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton)(e.getSource());
+			if(source.equals(tradeCancel)) {
+				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+			}
+		}
+	}
+	
 	public void buildBuildGUI() {
 		buildFrame = new JFrame();
 		buildFrame.setSize(new Dimension(800, 500));
@@ -342,6 +351,24 @@ public class PlayerGUI extends JPanel {
 		tradeFrame = new JFrame();
 		tradeFrame.setLayout(new BoxLayout(tradeFrame, BoxLayout.Y_AXIS));
 		
+		JPanel infoPanel = new JPanel();
+		JPanel cardIconPanel = new JPanel();
 		JPanel thisPlayerPanel = new JPanel();
+		JPanel thatPlayerPanel = new JPanel();
+		
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
+		cardIconPanel.setLayout(new BoxLayout(cardIconPanel, BoxLayout.X_AXIS));
+		thisPlayerPanel.setLayout(new BoxLayout(thisPlayerPanel, BoxLayout.X_AXIS));
+		thatPlayerPanel.setLayout(new BoxLayout(thatPlayerPanel, BoxLayout.X_AXIS));
+		
+		JLabel tradeTitle = new JLabel("Trade     ");
+		tradeTitle.setFont(font1);
+		tradeCancel = new JButton("Cancel");
+		tradeCancel.setFont(font1);
+		infoPanel.add(tradeTitle);
+		infoPanel.add(tradeCancel);
+		
+		
+		
 	}
 }
