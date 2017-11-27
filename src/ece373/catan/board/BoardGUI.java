@@ -659,6 +659,7 @@ public class BoardGUI extends JPanel {
 			
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();
+				game.updatePlayerGUI();
 			} else {
 				JOptionPane.showOptionDialog(null, 
 				        "Please Build a Road.",  
@@ -723,6 +724,7 @@ public class BoardGUI extends JPanel {
 			
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();	
+				game.updatePlayerGUI();
 			} else {
 				BoardGUI.this.game.continueInitialBuilding();
 			}

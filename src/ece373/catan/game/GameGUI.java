@@ -107,16 +107,34 @@ public class GameGUI extends JFrame {
 		
 		int roll = game.rollDice();
 		
-		JOptionPane.showOptionDialog(null, 
-		        "You Rolled a " + Integer.toString(roll) + ".",  
-		        "Roll",
-		        JOptionPane.OK_OPTION, 
-		        JOptionPane.PLAIN_MESSAGE, 
-		        null, 
-		        new String[]{"Begin Turn"}, // this is the array
-		        "default");
+		if (roll == 7) {
+			JOptionPane.showOptionDialog(null, 
+			        "You Rolled a " + Integer.toString(roll) + ".",  
+			        "Roll",
+			        JOptionPane.OK_OPTION, 
+			        JOptionPane.PLAIN_MESSAGE, 
+			        null, 
+			        new String[]{"Move the Robber"}, // this is the array
+			        "default");
+			
+			game.getBoard().moveRobber();
+		} else {
+			JOptionPane.showOptionDialog(null, 
+			        "You Rolled a " + Integer.toString(roll) + ".",  
+			        "Roll",
+			        JOptionPane.OK_OPTION, 
+			        JOptionPane.PLAIN_MESSAGE, 
+			        null, 
+			        new String[]{"Begin Turn"}, // this is the array
+			        "default");
+			
+			game.getBoard().dealResourceCardsForRoll(roll);
+		}
 		
-		game.getBoard().dealResourceCardsForRoll(roll);
+		this.reloadPlayerGUI();
+	}
+	
+	public void reloadPlayerGUI() {
 		PlayerGUI pGUI = new PlayerGUI(game, game.getCurrentPlayer());
 		pGUI.setSize(this.getWidth()*window.getDividerLocation(), this.getHeight());
 		window.setLeftComponent(pGUI);
