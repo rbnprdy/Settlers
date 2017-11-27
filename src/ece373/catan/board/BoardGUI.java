@@ -52,6 +52,8 @@ public class BoardGUI extends JPanel {
 	private ArrayList<ResourceType> resourceTokens;
 
 	public BoardGUI(Board b, Game g) {
+		
+		this.setLayout(null);
 
 		this.game = g;
 		this.board = b;
