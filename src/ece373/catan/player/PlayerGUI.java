@@ -8,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.*;
 
 import javax.swing.BoxLayout;
@@ -23,6 +24,10 @@ public class PlayerGUI extends JPanel {
 	private JButton tradeButton;
 	private JButton developmentCardButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
+	
+	private JPanel topPanel;
+	private JPanel infoPanel;
+	private JPanel devCardPanel;
 	
 	//BUILD MENU ITEMS
 	private JFrame buildFrame;
@@ -51,9 +56,9 @@ public class PlayerGUI extends JPanel {
 		this.setSize((new Dimension (1000, 1600)));
 		int i = 0;
 		
-		JPanel topPanel = new JPanel();
+		topPanel = new JPanel();
 		
-		JPanel infoPanel = new JPanel();
+		infoPanel = new JPanel();
 		
 		JPanel playerNameAndColor = new JPanel();
 		playerNameAndColor.setLayout(new BoxLayout(playerNameAndColor, BoxLayout.X_AXIS));
@@ -126,7 +131,7 @@ public class PlayerGUI extends JPanel {
 		JLayeredPane stonePanel = new JLayeredPane();
 		JLayeredPane wheatPanel =  new JLayeredPane();
 		JLayeredPane woodPanel = new JLayeredPane();
-		cardPanel.setPreferredSize(new Dimension(1000, 300));
+		cardPanel.setPreferredSize(new Dimension(1000, ((int)this.getHeight() - (int)topPanel.getSize().getHeight() - (int)devCardPanel.getSize().getHeight())));
 		cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.X_AXIS));
 		
 		i = 0;
@@ -134,7 +139,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.SHEEP) {
 				CardGUI cardGUI = new CardGUI(rc);
 				sheepPanel.add(cardGUI);
-				cardGUI.setLocation(25, 200 - 50*(i));
+				cardGUI.setLocation(25, (int)cardPanel.getSize().getHeight() + 50*(i));
 				i = i + 1;
 			}
 		}
@@ -144,7 +149,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.BRICK) {
 				CardGUI cardGUI = new CardGUI(rc);
 				brickPanel.add(cardGUI);
-				cardGUI.setLocation(25, 200 - 50*(i));				
+				cardGUI.setLocation(25, (int)cardPanel.getSize().getHeight() + 50*(i));				
 				i = i + 1;
 			}
 		}
@@ -154,7 +159,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.STONE) {
 				CardGUI cardGUI = new CardGUI(rc);
 				stonePanel.add(cardGUI);
-				cardGUI.setLocation(25, 200 - 50*(i));		
+				cardGUI.setLocation(25, (int)cardPanel.getSize().getHeight() + 50*(i));		
 				i = i + 1;
 			}
 		}
@@ -164,7 +169,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.WHEAT) {
 				CardGUI cardGUI = new CardGUI(rc);
 				wheatPanel.add(cardGUI);
-				cardGUI.setLocation(25,  200 - 50*(i));		
+				cardGUI.setLocation(25, (int)cardPanel.getSize().getHeight() + 50*(i));		
 				i = i + 1;
 			}
 		}
@@ -174,7 +179,7 @@ public class PlayerGUI extends JPanel {
 			if(rc.getType() == ResourceType.WOOD) {
 				CardGUI cardGUI = new CardGUI(rc);
 				woodPanel.add(cardGUI);
-				cardGUI.setLocation(25, 200 - 50*(i));		
+				cardGUI.setLocation(25, (int)cardPanel.getSize().getHeight() + 50*(i));		
 				i = i + 1;
 			}
 		}	
@@ -190,7 +195,7 @@ public class PlayerGUI extends JPanel {
 
 	public void populateDevelopmentCards() {
 		int i;
-		JPanel devCardPanel = new JPanel();
+		devCardPanel = new JPanel();
 		JLayeredPane devCards = new JLayeredPane();
 		JPanel largestArmyPanel = new JPanel();
 		devCardPanel.setPreferredSize(new Dimension(1000, 300));
