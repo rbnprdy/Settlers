@@ -110,9 +110,8 @@ public class TitleScreenGUI {
 			    
 			    GameGUI gui = new GameGUI(g);
 			    gui.setVisible(true);
+			    TitleScreenGUI.this.frame.setVisible(false);
 			    
-			} else {
-			    System.out.println("Login canceled");
 			}
 		}
 	}
