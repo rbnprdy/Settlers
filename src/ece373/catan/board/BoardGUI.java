@@ -548,7 +548,7 @@ public class BoardGUI extends JPanel {
 		Point p38 = tiles.get(12).getPoints()[4];
 		NodeGUI n38 = new NodeGUI(board.getNodes().get(38), p38);
 		nodeGUIs.add(n38);
-		tiles.get(11).setNode(4, n38.getNode());
+		tiles.get(12).setNode(4, n38.getNode());
 		
 		for (int i = 39; i < 42; i++) {
 			Point p = tiles.get(i - 27).getPoints()[2];
@@ -568,7 +568,7 @@ public class BoardGUI extends JPanel {
 		Point p43 = tiles.get(12).getPoints()[3];
 		NodeGUI n43 = new NodeGUI(board.getNodes().get(43), p43);
 		nodeGUIs.add(n43);
-		tiles.get(11).setNode(3, n43.getNode());
+		tiles.get(12).setNode(3, n43.getNode());
 		tiles.get(16).setNode(5, n43.getNode());
 		
 		for (int i = 44; i < 46; i++) {
@@ -611,6 +611,18 @@ public class BoardGUI extends JPanel {
 			NodeGUI n = new NodeGUI(board.getNodes().get(i), p);
 			nodeGUIs.add(n);
 			tiles.get(i - 35).setNode(3, n.getNode());
+		}
+		
+		int i = 0;
+		for (Tile t: tiles) {
+			System.out.println("tile: " + Integer.toString(i + 1));
+			System.out.println("Nodes: ");
+			for (Node n: t.getNodes()) {
+				System.out.println(board.getNodes().indexOf(n) + 1);
+			}
+			
+			System.out.println("end of tile\n");
+			i++;
 		}
 	}
 
