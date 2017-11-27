@@ -71,6 +71,7 @@ public class PlayerGUI extends JPanel {
 		doneButton = new JButton("Done");
 		doneButton.setFont(font1);
 		doneButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		doneButton.addActionListener(new ButtonListener());
 		
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		infoPanel.setPreferredSize(new Dimension(1000, 200));
