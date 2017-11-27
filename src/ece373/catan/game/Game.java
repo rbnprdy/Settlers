@@ -76,13 +76,11 @@ public class Game {
 	
 	public void beginNextTurn() {
 		
-		if (playerNumber == players.size() - 1) {
+		int nextIndex = players.indexOf(currentPlayer) + 1;
+		if (nextIndex == players.size()) {
 			currentPlayer = players.get(0);
-			playerNumber = 0;
-		}
-		else {
-			playerNumber = playerNumber + 1;
-			currentPlayer = players.get(playerNumber);
+		} else {
+			currentPlayer = players.get(nextIndex);
 		}
 
 		gui.loadTurnGUI();

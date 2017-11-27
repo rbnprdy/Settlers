@@ -17,8 +17,8 @@ import java.awt.geom.Ellipse2D;
 @SuppressWarnings("serial")
 public class BoardGUI extends JPanel {
 
-	private final int WIDTH = 1200;
-	private final int HEIGHT = 800;
+//	private final int WIDTH = 1200;
+//	private final int HEIGHT = 800;
 	private final int edgeThickness = 8; 
 
 	private final int tileRadius = 90;
@@ -71,7 +71,8 @@ public class BoardGUI extends JPanel {
 				));
 		Collections.shuffle(resourceTokens);
 		
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setPreferredSize(new Dimension( (int)(screenSize.getWidth()*0.75), (int) screenSize.getHeight()));
 
 		tiles = new ArrayList<Tile>();
 		nodeGUIs = new ArrayList<NodeGUI>();
@@ -86,7 +87,7 @@ public class BoardGUI extends JPanel {
 		
 		displayAvailableTilesForRobber = false;
 		
-		takeResources = true;
+		takeResources = false;
 
 		xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
 		yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
@@ -272,12 +273,16 @@ public class BoardGUI extends JPanel {
 	// Gives the tiles the correct coordinates so that they can be drawn when necessary
 	private void setupTiles() {
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int WIDTH = (int) (0.75*screenSize.getWidth());
+		int HEIGHT = (int) (screenSize.getHeight());
 		int tokenNumber = 0;
 		int resourceNumber = 0;
 		
 		tiles.clear();
 
-		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
+		Point origin = new Point(this.getWidth() / 2, this.getHeight() / 2);
 
 		// Set up the coordinates for the tiles row by row
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
@@ -651,9 +656,16 @@ public class BoardGUI extends JPanel {
 			
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();
-				takeResources = true;
 			} else {
-				BoardGUI.this.game.continueInitialBuilding();
+				JOptionPane.showOptionDialog(null, 
+				        "Please Build a Road.",  
+				        "Build House",
+				        JOptionPane.OK_OPTION, 
+				        JOptionPane.PLAIN_MESSAGE, 
+				        null, 
+				        new String[]{"Okay"},
+				        "default");
+				board.buildRoadAtStartWithPlayer(game.getCurrentPlayer());
 			}
 			
 			// repaint
@@ -707,8 +719,7 @@ public class BoardGUI extends JPanel {
 			buttons.clear();
 			
 			if (takeResources) {
-				removeResourceCardsAfterBuilding();
-				takeResources = true;
+				removeResourceCardsAfterBuilding();	
 			} else {
 				BoardGUI.this.game.continueInitialBuilding();
 			}

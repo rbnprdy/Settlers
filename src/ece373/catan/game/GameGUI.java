@@ -33,9 +33,8 @@ public class GameGUI extends JFrame {
 		getContentPane().add(window);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	    //setBounds(0,0,screenSize.width, screenSize.height);
-	      
-		window.setSize((new Dimension (1600, 1600)));
+	    window.setBounds(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
+		//window.setSize(screenSize);
 		window.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 		
 		window.setRightComponent(board);
@@ -62,6 +61,7 @@ public class GameGUI extends JFrame {
 	public void nextInitialBuild() {
 		if (currentBuilderIndex == builders.size()) {
 			loadTurnGUI();
+			game.getBoard().doneWithInitialBuilding();
 			return;
 		}
 		game.setCurrentPlayer(builders.get(currentBuilderIndex));
