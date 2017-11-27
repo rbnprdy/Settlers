@@ -612,18 +612,6 @@ public class BoardGUI extends JPanel {
 			nodeGUIs.add(n);
 			tiles.get(i - 35).setNode(3, n.getNode());
 		}
-		
-		int i = 0;
-		for (Tile t: tiles) {
-			System.out.println("tile: " + Integer.toString(i + 1));
-			System.out.println("Nodes: ");
-			for (Node n: t.getNodes()) {
-				System.out.println(board.getNodes().indexOf(n) + 1);
-			}
-			
-			System.out.println("end of tile\n");
-			i++;
-		}
 	}
 
 	// Gives the edges the correct coordinates so that they can be drawn when necessary

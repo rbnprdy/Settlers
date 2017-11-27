@@ -34,10 +34,11 @@ public class GameGUI extends JFrame {
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    window.setBounds(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
-		//window.setSize(screenSize);
 		window.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 		
 		window.setRightComponent(board);
+		
+		window.setLeftComponent(new JLabel());
 		window.setBackground(new Color(0x00ff00));
 		window.setDividerLocation(0.25);
 		
@@ -60,8 +61,14 @@ public class GameGUI extends JFrame {
 	
 	public void nextInitialBuild() {
 		if (currentBuilderIndex == builders.size()) {
-			loadTurnGUI();
+			// deal out all the initial resources
+			for (int i = 1; i <= 12; i++) {
+				if (i != 7) {
+					game.getBoard().dealResourceCardsForRoll(i);
+				}	
+			}
 			game.getBoard().doneWithInitialBuilding();
+			loadTurnGUI();
 			return;
 		}
 		game.setCurrentPlayer(builders.get(currentBuilderIndex));
