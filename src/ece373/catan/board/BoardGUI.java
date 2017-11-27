@@ -130,7 +130,6 @@ public class BoardGUI extends JPanel {
 		b.getEdges().get(44).setRoad(new Road(p2));
 
 		g.setCurrentPlayer(p2);
-		//b.moveRobber();
 		b.buildSettlementAtStart();
 		
 	}
