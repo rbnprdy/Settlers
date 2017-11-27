@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.event.*;
 
 import javax.swing.BoxLayout;
+import java.awt.GridLayout;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
 
@@ -30,6 +31,11 @@ public class PlayerGUI extends JPanel {
 	private JButton settlementResourceLabel;
 	private JButton cityResourceLabel;
 	private JButton developmentCardResourceLabel;
+
+	//TRADE MENU ITEMS
+	private JFrame tradeFrame;
+	private JButton tradeOk;
+	private JButton tradeCancel;
 
 	
 	public PlayerGUI(Game g,Player p){
@@ -257,6 +263,15 @@ public class PlayerGUI extends JPanel {
 		}
 	}
 	
+	private class TradeListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton)(e.getSource());
+			if(source.equals(tradeCancel)) {
+				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+			}
+		}
+	}
+	
 	public void buildBuildGUI() {
 		buildFrame = new JFrame();
 		buildFrame.setSize(new Dimension(800, 500));
@@ -272,6 +287,7 @@ public class PlayerGUI extends JPanel {
 		buildName.setFont(font1);
 		buildCancelButton = new JButton("Cancel");
 		buildCancelButton.setFont(font1);
+		buildCancelButton.addActionListener(new BuildListener());
 		
 		topPanel.add(buildName);
 		topPanel.add(buildCancelButton);
@@ -285,6 +301,10 @@ public class PlayerGUI extends JPanel {
 		settlementResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
 		cityResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
 		developmentCardResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
+		roadResourceLabel.addActionListener(new BuildListener());
+		settlementResourceLabel.addActionListener(new BuildListener());
+		cityResourceLabel.addActionListener(new BuildListener());
+		developmentCardResourceLabel.addActionListener(new BuildListener());
 		
 		Image roadCosts = new ImageIcon(this.getClass().getResource("/player/roadcosts.png")).getImage();
 		Image settlementCosts = new ImageIcon(this.getClass().getResource("/player/settlementcosts.png")).getImage();
@@ -313,6 +333,77 @@ public class PlayerGUI extends JPanel {
 		buildFrame.setLocationRelativeTo(null);
 		buildFrame.setUndecorated(true);
 		buildFrame.setVisible(true);		
+	}
+	
+	public void buildTradeGUI() {
+		tradeFrame = new JFrame();
+		tradeFrame.setSize(new Dimension(500, 400));
+		tradeFrame.setLayout(new BoxLayout(tradeFrame, BoxLayout.Y_AXIS));
+		
+		JPanel infoPanel = new JPanel();
+		infoPanel.setSize(new Dimension(500, 100));
+		JPanel tradeBoxPanel = new JPanel();
+		tradeBoxPanel.setSize(new Dimension(500, 300));
+		//JPanel cardIconPanel = new JPanel();
+		//JPanel thisPlayerPanel = new JPanel();
+		//JPanel thatPlayerPanel = new JPanel();
+		
+		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
+		//cardIconPanel.setLayout(new BoxLayout(cardIconPanel, BoxLayout.X_AXIS));
+		//thisPlayerPanel.setLayout(new BoxLayout(thisPlayerPanel, BoxLayout.X_AXIS));
+		//thatPlayerPanel.setLayout(new BoxLayout(thatPlayerPanel, BoxLayout.X_AXIS));
+		tradeBoxPanel.setLayout(new GridLayout(3,5));
+		
+		JLabel tradeTitle = new JLabel("Trade     ");
+		tradeTitle.setFont(font1);
+		tradeCancel = new JButton("Cancel");
+		tradeCancel.setFont(font1);
+		infoPanel.add(tradeTitle);
+		infoPanel.add(tradeCancel);
+		
+		
+		JLabel sheepLabel = new JLabel();
+		JLabel brickLabel = new JLabel();
+		JLabel stoneLabel = new JLabel();
+		JLabel wheatLabel = new JLabel();
+		JLabel woodLabel = new JLabel();
+		
+		Image sheepIcon = new ImageIcon(this.getClass().getResource("/player/sheepicon.png")).getImage();
+		Image brickIcon = new ImageIcon(this.getClass().getResource("/player/brickicon.png")).getImage();
+		Image stoneIcon = new ImageIcon(this.getClass().getResource("/player/stoneicon.png")).getImage();
+		Image wheatIcon = new ImageIcon(this.getClass().getResource("/player/wheaticon.png")).getImage();
+		Image woodIcon = new ImageIcon(this.getClass().getResource("/player/woodicon.png")).getImage();
+		
+		Image scaledSheepIcon = sheepIcon.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image scaledBrickIcon = brickIcon.getScaledInstance(100, 100, Image.SCALE_SMOOTH);		
+		Image scaledStoneIcon = stoneIcon.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image scaledWheatIcon = wheatIcon.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		Image scaledWoodIcon = woodIcon.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+		
+		sheepLabel.setIcon(new ImageIcon(scaledSheepIcon));
+		brickLabel.setIcon(new ImageIcon(scaledBrickIcon));
+		stoneLabel.setIcon(new ImageIcon(scaledStoneIcon));
+		wheatLabel.setIcon(new ImageIcon(scaledWheatIcon));
+		woodLabel.setIcon(new ImageIcon(scaledWoodIcon));
+		
+		tradeBoxPanel.add(sheepLabel);
+		tradeBoxPanel.add(brickLabel);
+		
+		JButton p1SheepBox = new JButton();
+		JButton p1BrickBox = new JButton();
+		JButton p1StoneBox = new JButton();
+		JButton p1wheatBox = new JButton();
+		JButton p1woodBox = new JButton();
+		
+
+		JButton p2SheepBox = new JButton();
+		JButton p2BrickBox = new JButton();
+		JButton p2StoneBox = new JButton();
+		JButton p2wheatBox = new JButton();
+		JButton p2woodBox = new JButton();
+		
+		
+		
 	}
 	
 }
