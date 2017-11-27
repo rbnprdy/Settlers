@@ -197,6 +197,10 @@ public class Board {
 		return availableNodes;
 	}
 	
+	public void doneWithInitialBuilding() {
+		gui.setTakeResources(true);
+	}
+	
 	public void buildSettlementAtStart() {
 		gui.setTakeResources(false);
 		gui.showAvailableNodes(getAvailableNodesForSettlementsForStart());
