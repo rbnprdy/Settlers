@@ -119,4 +119,8 @@ public class Game {
 		
 		return sum;
 	}
+	
+	public void updatePlayerGUI() {
+		gui.reloadPlayerGUI();
+	}
 }
