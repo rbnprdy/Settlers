@@ -33,16 +33,15 @@ public class GameGUI extends JFrame {
 		getContentPane().add(window);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-	    window.setBounds(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
+		this.setMinimumSize(screenSize);
+	    window.setSize(screenSize);
 		window.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 		
 		window.setRightComponent(board);
 		
 		window.setLeftComponent(new JLabel());
 		window.setBackground(new Color(0x00ff00));
-		window.setDividerLocation(0.25);
-		
-		this.setExtendedState(MAXIMIZED_BOTH);
+		window.setDividerLocation(0.3);
 		
 		pack();
 		
@@ -119,6 +118,7 @@ public class GameGUI extends JFrame {
 		
 		game.getBoard().dealResourceCardsForRoll(roll);
 		PlayerGUI pGUI = new PlayerGUI(game, game.getCurrentPlayer());
+		pGUI.setSize(this.getWidth()*window.getDividerLocation(), this.getHeight());
 		window.setLeftComponent(pGUI);
 	}
 	

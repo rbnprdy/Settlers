@@ -54,7 +54,8 @@ public class BoardGUI extends JPanel {
 	public BoardGUI(Board b, Game g) {
 		
 		this.setLayout(null);
-
+		this.setBackground(null);
+		
 		this.game = g;
 		this.board = b;
 		
@@ -145,6 +146,8 @@ public class BoardGUI extends JPanel {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		
 		Graphics2D g2d = (Graphics2D) g;
 
 		g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));

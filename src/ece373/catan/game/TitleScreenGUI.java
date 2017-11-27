@@ -27,7 +27,6 @@ public class TitleScreenGUI {
 		frame.setTitle("Settlers of Catan");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    frame.setBounds(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
-		//frame.setBounds(100, 100, 1200, 900);
 
 		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
 
