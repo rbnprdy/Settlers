@@ -184,6 +184,29 @@ public class Board {
 		return availableNodes;
 	}
 	
+	public ArrayList<Node> getAvailableNodesForSettlementsForStart() {
+		
+		ArrayList<Node> availableNodes = new ArrayList<Node>();
+		
+		for (Node n: nodes) {
+			if (n.canBeBuiltOnAtStart()) {
+				availableNodes.add(n);
+			}
+		}
+		
+		return availableNodes;
+	}
+	
+	public void buildSettlementAtStart() {
+		gui.setTakeResources(false);
+		gui.showAvailableNodes(getAvailableNodesForSettlementsForStart());
+	}
+	
+	public void buildRoadAtStartWithPlayer(Player p) {
+		gui.setTakeResources(false);
+		gui.showAvailableEdges(this.getAvailableEdgesFor(p));
+	}
+	
 	public void buildRoadWithPlayer(Player p) {
 		gui.showAvailableEdges(this.getAvailableEdgesFor(p));
 	}
