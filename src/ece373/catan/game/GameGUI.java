@@ -9,6 +9,7 @@ import ece373.catan.card.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.util.ArrayList;
 
 public class GameGUI extends JFrame {
@@ -16,18 +17,24 @@ public class GameGUI extends JFrame {
 	private Game game;
 	private BoardGUI board;
 	private JSplitPane window;
+
+	private ArrayList<Player> builders;
+	private int currentBuilderIndex;
 	
 	public GameGUI(Game g) {
-		
+
 		game = g;
 		g.setGUI(this);
-		board = new BoardGUI(game.getBoard(),game);
+		board = game.getBoard().getGUI();
 		
 		window = new JSplitPane();
 		
 		getContentPane().setLayout(new GridLayout());
 		getContentPane().add(window);
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+	    //setBounds(0,0,screenSize.width, screenSize.height);
+	      
 		window.setSize((new Dimension (1600, 1600)));
 		window.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
 		
@@ -39,11 +46,71 @@ public class GameGUI extends JFrame {
 		
 		pack();
 		
-		loadTurnGUI();
+		builders = new ArrayList<Player>();
+		
+		for (int i = 0; i < g.getPlayers().size(); i++) {
+			builders.add(g.getPlayers().get(i));
+		}
+		for (int i = g.getPlayers().size() - 1; i >= 0; i--) {
+			builders.add(g.getPlayers().get(i));
+		}
+		
+		currentBuilderIndex = 0;
+		nextInitialBuild();
+	}
+	
+	public void nextInitialBuild() {
+		if (currentBuilderIndex == builders.size()) {
+			loadTurnGUI();
+			return;
+		}
+		game.setCurrentPlayer(builders.get(currentBuilderIndex));
+		currentBuilderIndex++;
+		
+		JOptionPane.showOptionDialog(null, 
+		        "Please Pass to " + game.getCurrentPlayer().getName() + ".",  
+		        "Turn Over",
+		        JOptionPane.OK_OPTION, 
+		        JOptionPane.PLAIN_MESSAGE, 
+		        null, 
+		        new String[]{"Okay"},
+		        "default");
+		
+		JOptionPane.showOptionDialog(null, 
+		        "Please Build a House.",  
+		        "Build House",
+		        JOptionPane.OK_OPTION, 
+		        JOptionPane.PLAIN_MESSAGE, 
+		        null, 
+		        new String[]{"Okay"},
+		        "default");
+
+		game.getBoard().buildSettlementAtStart();
 	}
 	
 	public void loadTurnGUI() {
 		
+		JOptionPane.showOptionDialog(null, 
+		        "Please Pass to " + game.getCurrentPlayer().getName() + ".",  
+		        "Turn Over",
+		        JOptionPane.OK_OPTION, 
+		        JOptionPane.PLAIN_MESSAGE, 
+		        null, 
+		        new String[]{"Roll Dice"}, // this is the array
+		        "default");
+		
+		int roll = game.rollDice();
+		
+		JOptionPane.showOptionDialog(null, 
+		        "You Rolled a " + Integer.toString(roll) + ".",  
+		        "Roll",
+		        JOptionPane.OK_OPTION, 
+		        JOptionPane.PLAIN_MESSAGE, 
+		        null, 
+		        new String[]{"Begin Turn"}, // this is the array
+		        "default");
+		
+		game.getBoard().dealResourceCardsForRoll(roll);
 		PlayerGUI pGUI = new PlayerGUI(game, game.getCurrentPlayer());
 		window.setLeftComponent(pGUI);
 	}

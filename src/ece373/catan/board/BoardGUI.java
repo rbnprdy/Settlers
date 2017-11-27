@@ -95,45 +95,6 @@ public class BoardGUI extends JPanel {
 
 	}
 
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-
-		Game g = new Game();
-		Board b = g.getBoard();
-		BoardGUI bGUI = b.getGUI();
-
-		frame.setContentPane(bGUI);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		frame.setLayout(null);
-
-		Player p = new Player("test", Color.blue);
-		g.setCurrentPlayer(p);
-		b.getNodes().get(18).setSettlement(new Settlement(p));
-		b.getNodes().get(47).setSettlement(new Settlement(p));
-		b.getNodes().get(8).setCity(new City(p));
-		b.getNodes().get(19).setSettlement(new Settlement(p));
-		b.getNodes().get(20).setCity(new City(p));
-
-		b.getEdges().get(62).setRoad(new Road(p));
-		b.getEdges().get(55).setRoad(new Road(p));
-		b.getEdges().get(50).setRoad(new Road(p));
-		
-		Player p2 = new Player("test2", Color.red);
-		p2.addResourceCardOfType(ResourceType.BRICK);
-		p2.addResourceCardOfType(ResourceType.BRICK);
-		p2.addResourceCardOfType(ResourceType.WOOD);
-		b.getNodes().get(30).setSettlement(new Settlement(p2));
-		b.getEdges().get(36).setRoad(new Road(p2));
-		b.getEdges().get(44).setRoad(new Road(p2));
-
-		g.setCurrentPlayer(p2);
-		b.buildSettlementAtStart();
-		
-	}
-
 	public Board getBoard() {
 		return board;
 	}
@@ -274,6 +235,7 @@ public class BoardGUI extends JPanel {
 					buttons.add(b1);
 				}
 			}
+			displayAvailableNodes = false;
 		}
 
 		// Display available edges if applicable
@@ -288,6 +250,7 @@ public class BoardGUI extends JPanel {
 					buttons.add(b1);
 				}
 			}
+			displayAvailableEdges = false;
 		}
 		
 		if (this.displayAvailableTilesForRobber) {
@@ -300,6 +263,7 @@ public class BoardGUI extends JPanel {
 				add(b1);
 				buttons.add(b1);
 			}
+			displayAvailableTilesForRobber = false;
 		}
 	}
 	
@@ -663,7 +627,7 @@ public class BoardGUI extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			// if there is no settlement, build a settlement
 			if (n.getSettlement() == null) {
 				n.setSettlement(new Settlement(game.getCurrentPlayer()));
@@ -686,8 +650,9 @@ public class BoardGUI extends JPanel {
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();
 				takeResources = true;
+			} else {
+				BoardGUI.this.game.continueInitialBuilding();
 			}
-			
 			
 			// repaint
 			BoardGUI.this.repaint();	
@@ -742,6 +707,8 @@ public class BoardGUI extends JPanel {
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();
 				takeResources = true;
+			} else {
+				BoardGUI.this.game.continueInitialBuilding();
 			}
 			
 			// repaint
