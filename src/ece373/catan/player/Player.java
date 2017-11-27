@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import ece373.catan.board.*;
 import ece373.catan.card.*;
+import ece373.catan.game.*;
 
 
 public class Player {
@@ -89,45 +90,27 @@ public class Player {
 		return;
 	}
 
-	public void buildRoad(Board board, int edge_index) {
-		if(board.getEdges().get(edge_index).getRoad() == null) {
-			Road new_road = new Road(this);
-			board.getEdges().get(edge_index).setRoad(new_road);
-			roads.add(new_road);
-		}
-		else {
-			System.out.println("A road is already built on this edge");
-		}
-		return;
-	}
-
-	public void buildSettlement(Board board, int node_index) {
-		if(board.getNodes().get(node_index).getSettlement() == null) {
-			Settlement new_settlement = new Settlement(this);
-			board.getNodes().get(node_index).setSettlement(new_settlement);
-			settlements.add(new_settlement);
-		}
-		else {
-			System.out.println("A Settlement is already built on this node");
-		}
-		return;
-	}
-
-	public void buildCity(Board board, int node_index) {
-		if(board.getNodes().get(node_index).getSettlement() != null) {
-			if(board.getNodes().get(node_index).getSettlement().getPlayer() == this) {
-				settlements.remove(board.getNodes().get(node_index).getSettlement());
-				City new_city = new City(this);
-				board.getNodes().get(node_index).setCity(new_city);
-				cities.add(new_city);
-			}
-			else {
-				System.out.print("This is another player's settlement");
+	public void buildDevelopmentCard(Game g) {
+		for(ResourceCard rc: resourceCards) {
+			if(rc.getType() == ResourceType.SHEEP) {
+				resourceCards.remove(rc);
+				break;
 			}
 		}
-		else {
-			System.out.print("There is no settlement at this node");
+		for(ResourceCard rc: resourceCards) {
+			if(rc.getType() == ResourceType.WHEAT) {
+				resourceCards.remove(rc);
+				break;
+			}
 		}
+		for(ResourceCard rc: resourceCards) {
+			if(rc.getType() == ResourceType.STONE) {
+				resourceCards.remove(rc);
+				break;
+			}
+		}
+		//g.drawDevelopmentCard(this);  IMPLEMENTED IN GAME CLASS
+		
 		return;
 	}
 

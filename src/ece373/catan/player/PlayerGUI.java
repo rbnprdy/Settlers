@@ -30,6 +30,11 @@ public class PlayerGUI extends JPanel {
 	private JButton settlementResourceLabel;
 	private JButton cityResourceLabel;
 	private JButton developmentCardResourceLabel;
+	
+	//TRADE MENU ITEMS
+	private JFrame tradeFrame;
+	private JButton tradeOk;
+	private JButton tradeCancel;
 
 	
 	public PlayerGUI(Game g,Player p){
@@ -77,22 +82,7 @@ public class PlayerGUI extends JPanel {
 		infoPanel.add(playerNameAndColor);
 		infoPanel.add(victoryPointsLabel);
 		infoPanel.add(doneButton);
-		
-		JPanel devCardPanel = new JPanel();
-		JLayeredPane devCards = new JLayeredPane();
-		JPanel largestArmyPanel = new JPanel();
-		devCardPanel.setPreferredSize(new Dimension(1000, 300));
-		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
-		
-		JPanel cardPanel = new JPanel();
-		JLayeredPane sheepPanel = new JLayeredPane();
-		JLayeredPane brickPanel = new JLayeredPane();
-		JLayeredPane stonePanel = new JLayeredPane();
-		JLayeredPane wheatPanel =  new JLayeredPane();
-		JLayeredPane woodPanel = new JLayeredPane();
-		cardPanel.setPreferredSize(new Dimension(1000, 300));
-		cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.X_AXIS));
-		
+				
 		Dimension buttonDim = new Dimension(200, 200);
 		buildButton = new JButton("Build");
 		tradeButton = new JButton("Trade");
@@ -117,6 +107,93 @@ public class PlayerGUI extends JPanel {
 		topPanel.add(developmentCardButton);
 		
 		
+
+		
+		this.add(topPanel);
+		this.add(infoPanel);	
+		populateDevelopmentCards();
+		populateResourceCards();
+	}
+	
+	public void populateResourceCards() {
+		int i;
+		
+		JPanel cardPanel = new JPanel();
+		JLayeredPane sheepPanel = new JLayeredPane();
+		JLayeredPane brickPanel = new JLayeredPane();
+		JLayeredPane stonePanel = new JLayeredPane();
+		JLayeredPane wheatPanel =  new JLayeredPane();
+		JLayeredPane woodPanel = new JLayeredPane();
+		cardPanel.setPreferredSize(new Dimension(1000, 300));
+		cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.X_AXIS));
+		
+		i = 0;
+		for(ResourceCard rc: player.getResourceCards()) { // POPULATING SHEEP CARDS
+			if(rc.getType() == ResourceType.SHEEP) {
+				CardGUI cardGUI = new CardGUI(rc);
+				sheepPanel.add(cardGUI);
+				cardGUI.setLocation(25, 200 - 50*(i));
+				i = i + 1;
+			}
+		}
+		i = 0;
+		
+		for(ResourceCard rc: player.getResourceCards()) { // POPULATING BRICK CARDS
+			if(rc.getType() == ResourceType.BRICK) {
+				CardGUI cardGUI = new CardGUI(rc);
+				brickPanel.add(cardGUI);
+				cardGUI.setLocation(25, 200 - 50*(i));				
+				i = i + 1;
+			}
+		}
+		i = 0;
+		
+		for(ResourceCard rc: player.getResourceCards()) { // POPULATING STONE CARDS
+			if(rc.getType() == ResourceType.STONE) {
+				CardGUI cardGUI = new CardGUI(rc);
+				stonePanel.add(cardGUI);
+				cardGUI.setLocation(25, 200 - 50*(i));		
+				i = i + 1;
+			}
+		}
+		i = 0;;
+		
+		for(ResourceCard rc: player.getResourceCards()) { // POPULATING WHEAT CARDS
+			if(rc.getType() == ResourceType.WHEAT) {
+				CardGUI cardGUI = new CardGUI(rc);
+				wheatPanel.add(cardGUI);
+				cardGUI.setLocation(25,  200 - 50*(i));		
+				i = i + 1;
+			}
+		}
+		i = 0;
+		
+		for(ResourceCard rc: player.getResourceCards()) { // POPULATING WOOD CARDS
+			if(rc.getType() == ResourceType.WOOD) {
+				CardGUI cardGUI = new CardGUI(rc);
+				woodPanel.add(cardGUI);
+				cardGUI.setLocation(25, 200 - 50*(i));		
+				i = i + 1;
+			}
+		}	
+		
+		cardPanel.add(sheepPanel);
+		cardPanel.add(brickPanel);
+		cardPanel.add(stonePanel);
+		cardPanel.add(wheatPanel);
+		cardPanel.add(woodPanel);	
+		this.add(cardPanel);
+		return;
+	}
+
+	public void populateDevelopmentCards() {
+		int i;
+		JPanel devCardPanel = new JPanel();
+		JLayeredPane devCards = new JLayeredPane();
+		JPanel largestArmyPanel = new JPanel();
+		devCardPanel.setPreferredSize(new Dimension(1000, 300));
+		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
+		
 		i = 0;
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			CardGUI cardGUI = new CardGUI(dc);
@@ -130,68 +207,10 @@ public class PlayerGUI extends JPanel {
 			CardGUI cardGUI = new CardGUI(player.getLargestArmyCard());
 			largestArmyPanel.add(cardGUI);
 		}
-		i = 0;
-		for(ResourceCard rc: player.getResourceCards()) { // POPULATING SHEEP CARDS
-			if(rc.getType() == ResourceType.SHEEP) {
-				CardGUI cardGUI = new CardGUI(rc);
-				sheepPanel.add(cardGUI);
-				cardGUI.setLocation(25, 0 - 50*(i));
-				i = i + 1;
-			}
-		}
-		i = 0;
-		
-		for(ResourceCard rc: player.getResourceCards()) { // POPULATING BRICK CARDS
-			if(rc.getType() == ResourceType.BRICK) {
-				CardGUI cardGUI = new CardGUI(rc);
-				brickPanel.add(cardGUI);
-				cardGUI.setLocation(25, 0 - 50*(i));				
-				i = i + 1;
-			}
-		}
-		i = 0;
-		
-		for(ResourceCard rc: player.getResourceCards()) { // POPULATING STONE CARDS
-			if(rc.getType() == ResourceType.STONE) {
-				CardGUI cardGUI = new CardGUI(rc);
-				stonePanel.add(cardGUI);
-				cardGUI.setLocation(25, 0 - 50*(i));		
-				i = i + 1;
-			}
-		}
-		i = 0;;
-		
-		for(ResourceCard rc: player.getResourceCards()) { // POPULATING WHEAT CARDS
-			if(rc.getType() == ResourceType.WHEAT) {
-				CardGUI cardGUI = new CardGUI(rc);
-				wheatPanel.add(cardGUI);
-				cardGUI.setLocation(25,  0 - 50*(i));		
-				i = i + 1;
-			}
-		}
-		i = 0;
-		
-		for(ResourceCard rc: player.getResourceCards()) { // POPULATING WOOD CARDS
-			if(rc.getType() == ResourceType.WOOD) {
-				CardGUI cardGUI = new CardGUI(rc);
-				woodPanel.add(cardGUI);
-				cardGUI.setLocation(25, 0 - 50*(i));		
-				i = i + 1;
-			}
-		}	
-		
-		cardPanel.add(sheepPanel);
-		cardPanel.add(brickPanel);
-		cardPanel.add(stonePanel);
-		cardPanel.add(wheatPanel);
-		cardPanel.add(woodPanel);
+
 		devCardPanel.add(devCards);
 		devCardPanel.add(largestArmyPanel);
-		
-		this.add(topPanel);
-		this.add(infoPanel);	
 		this.add(devCardPanel);
-		this.add(cardPanel);
 	}
 	
 	private class ButtonListener implements ActionListener
@@ -238,19 +257,19 @@ public class PlayerGUI extends JPanel {
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 			if(source.equals(roadResourceLabel)) {
-				//game.getBoard().buildRoadWithPlayer(player);
+				game.getBoard().buildRoadWithPlayer(player);
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 			if(source.equals(settlementResourceLabel)) {
-				//game.getBoard().buildSettlementWithPlayer(player);
+				game.getBoard().buildSettlementWithPlayer(player);
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 			if(source.equals(cityResourceLabel)) {
-				//game.getBoard().buildCityWithPlayer(player);
+				game.getBoard().buildCityWithPlayer(player);
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 			if(source.equals(developmentCardResourceLabel)) {
-				//player.buildDevelopmentCard();
+				player.buildDevelopmentCard(game);
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 		}
@@ -271,6 +290,7 @@ public class PlayerGUI extends JPanel {
 		buildName.setFont(font1);
 		buildCancelButton = new JButton("Cancel");
 		buildCancelButton.setFont(font1);
+		buildCancelButton.addActionListener(new BuildListener());
 		
 		topPanel.add(buildName);
 		topPanel.add(buildCancelButton);
@@ -284,6 +304,10 @@ public class PlayerGUI extends JPanel {
 		settlementResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
 		cityResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
 		developmentCardResourceLabel.setAlignmentX(CENTER_ALIGNMENT);
+		roadResourceLabel.addActionListener(new BuildListener());
+		settlementResourceLabel.addActionListener(new BuildListener());
+		cityResourceLabel.addActionListener(new BuildListener());
+		developmentCardResourceLabel.addActionListener(new BuildListener());
 		
 		Image roadCosts = new ImageIcon(this.getClass().getResource("/player/roadcosts.png")).getImage();
 		Image settlementCosts = new ImageIcon(this.getClass().getResource("/player/settlementcosts.png")).getImage();
@@ -314,4 +338,10 @@ public class PlayerGUI extends JPanel {
 		buildFrame.setVisible(true);		
 	}
 	
+	public void buildTradeGUI() {
+		tradeFrame = new JFrame();
+		tradeFrame.setLayout(new BoxLayout(tradeFrame, BoxLayout.Y_AXIS));
+		
+		JPanel thisPlayerPanel = new JPanel();
+	}
 }
