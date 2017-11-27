@@ -7,6 +7,9 @@ import ece373.catan.card.*;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
 import java.util.Random;
 
 public class Game {
@@ -15,7 +18,6 @@ public class Game {
 	private Board board;
 	private ArrayList<DevelopmentCard> developmentCards;
 	private Player currentPlayer;
-	private Integer playerNumber;
 	private GameGUI gui;
 	
 
@@ -24,7 +26,6 @@ public class Game {
 		board = new Board(this);
 		developmentCards = new ArrayList<DevelopmentCard>();
 		currentPlayer = null;
-		playerNumber = 0;
 		this.gui = null;
 	}
 	
@@ -65,9 +66,14 @@ public class Game {
 	}
 	
 	public Player checkForWinner() { //needs to be made
-		Player winner = new Player("temp", Color.black);
 		
-		return winner;
+		for (Player p: players) {
+			if (p.getVictoryPoints() >= 10) {
+				return p;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void continueInitialBuilding() {
@@ -75,6 +81,21 @@ public class Game {
 	}
 	
 	public void beginNextTurn() {
+		
+		// Check for winner
+		Player winner = checkForWinner();
+		if (winner != null) {
+			JOptionPane.showOptionDialog(null, 
+			        winner.getName() + " won!",  
+			        "Game Over",
+			        JOptionPane.OK_OPTION, 
+			        JOptionPane.PLAIN_MESSAGE, 
+			        null, 
+			        new String[]{"Exit"}, // this is the array
+			        "default");
+			
+			System.exit(0);
+		}
 		
 		int nextIndex = players.indexOf(currentPlayer) + 1;
 		if (nextIndex == players.size()) {
@@ -97,13 +118,5 @@ public class Game {
 		sum = dieOne + dieTwo;
 		
 		return sum;
-	}
-	
-	public Integer getPlayerNumber() {
-		return this.playerNumber;
-	}
-	
-	public void setPlayerNumber() {
-		playerNumber = 0;
 	}
 }
