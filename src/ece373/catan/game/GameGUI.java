@@ -16,17 +16,12 @@ public class GameGUI extends JFrame {
 	private Game game;
 	private BoardGUI board;
 	private JSplitPane window;
-	private ArrayList<PlayerGUI> players;
 	
 	public GameGUI(Game g) {
-		int i;
-		PlayerGUI temp;
 		
 		game = g;
-		players = new ArrayList<PlayerGUI>();
+		g.setGUI(this);
 		board = new BoardGUI(game.getBoard(),game);
-		
-		temp = new PlayerGUI(game, game.getCurrentPlayer());
 		
 		window = new JSplitPane();
 		
@@ -35,12 +30,22 @@ public class GameGUI extends JFrame {
 		
 		window.setSize((new Dimension (1600, 1600)));
 		window.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
-		window.setLeftComponent(temp);
+		
 		window.setRightComponent(board);
 		window.setBackground(new Color(0x00ff00));
-		window.setDividerLocation(0.5);
+		window.setDividerLocation(0.25);
+		
+		this.setExtendedState(MAXIMIZED_BOTH);
 		
 		pack();
+		
+		loadTurnGUI();
+	}
+	
+	public void loadTurnGUI() {
+		
+		PlayerGUI pGUI = new PlayerGUI(game, game.getCurrentPlayer());
+		window.setLeftComponent(pGUI);
 	}
 	
 	public static void main(String[] args) {

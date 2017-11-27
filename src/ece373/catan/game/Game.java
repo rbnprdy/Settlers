@@ -17,6 +17,7 @@ public class Game {
 	private Player currentPlayer;
 	private Integer playerNumber;
 	private Integer numPlayers;
+	private GameGUI gui;
 	
 
 	public Game() {
@@ -26,6 +27,11 @@ public class Game {
 		currentPlayer = null;
 		playerNumber = 0;
 		numPlayers = 0;
+		this.gui = null;
+	}
+	
+	public void setGUI(GameGUI g) {
+		this.gui = g;
 	}
 	
 	public ArrayList<Player> getPlayers() {
@@ -34,6 +40,7 @@ public class Game {
 	
 	public void addPlayer(Player newPlay) { //adds a player to the game 
 		players.add(newPlay);
+		numPlayers++;
 	}
 	
 	public Board getBoard() {// returns the game board
@@ -67,119 +74,17 @@ public class Game {
 	}
 	
 	public void beginNextTurn() {
-		int i, number;
-		String action, cont;
-		Boolean flag, endTurn;
-		ArrayList<Edge> availableEdges = new ArrayList<Edge>();
-		ArrayList<Node> availableForCity, availableForSettlement;
-		Scanner scan = new Scanner(System.in);
 		
-		availableForCity = new ArrayList<Node>();
-		availableForSettlement = new ArrayList<Node>();
-		endTurn = false;
-		
-		if (playerNumber == numPlayers) {
+		if (playerNumber == numPlayers - 1) {
 			currentPlayer = players.get(0);
 			playerNumber = 0;
 		}
 		else {
-			currentPlayer = players.get(playerNumber);
 			playerNumber = playerNumber + 1;
+			currentPlayer = players.get(playerNumber);
 		}
-		
-		while (!endTurn) {
-			flag = false;
-			System.out.println("Enter one of the following to choose the action: R to build road, S to build settlement, C to build city: ");
-			action = scan.next();
-		
-			if (action.equals("R")) {
-				while(!flag) {
-					availableEdges = board.getAvailableEdgesFor(currentPlayer);
-					
-					System.out.println("Enter number of preffered edge: ");
-					number = scan.nextInt();
-					
-					for (i=0; i<board.getAvailableEdgesFor(currentPlayer).size();i++) {
-						if (board.getEdges().get(number)==availableEdges.get(i)) {
-							currentPlayer.buildRoad(board, number);
-							flag = true;
-							break;
-						}
-					}
-					
-					if (!flag) {
-						System.out.println("That edge is not available, would you like to select another? Y/N:");
-						cont = scan.next();
-						
-						if (cont.equals("N")) {
-							flag = true;
-						}
-					}
-					
-				}
-			}
-			
-			else if (action.equals("S")) {
-				while(!flag) {
-					availableForSettlement = board.getAvailableNodesForSettlementsFor(currentPlayer);
-					
-					System.out.println("Enter number of preffered node: ");
-					number = scan.nextInt();
-					
-					for (i=0; i<board.getAvailableNodesForSettlementsFor(currentPlayer).size();i++) {
-						if (board.getNodes().get(number)==availableForSettlement.get(i)) {
-							currentPlayer.buildSettlement(board, number);
-							flag = true;
-							break;
-						}
-					}
-					
-					if (!flag) {
-						System.out.println("That node is not available, would you like to select another? Y/N:");
-						cont = scan.next();
-						
-						if (cont.equals("N")) {
-							flag = true;
-						}
-					}
-					
-					
-				}
-			}
-			
-			else if (action.equals("C")) {
-				while(!flag) {
-					availableForCity = board.getAvailableNodesForCitiesFor(currentPlayer);
-					
-					System.out.println("Enter number of preffered node: ");
-					number = scan.nextInt();
-					
-					for (i=0; i<board.getAvailableNodesForCitiesFor(currentPlayer).size();i++) {
-						if (board.getNodes().get(number-1)==availableForCity.get(i)) {
-							currentPlayer.buildCity(board, number);
-							flag = true;
-							break;
-						}
-					}
-					if (!flag) {
-						System.out.println("That node is not available, would you like to select another? Y/N:");
-						cont = scan.next();
-						
-						if (cont.equals("N")) {
-							flag = true;
-						}
-					}
-					
-				}
-			}
-			
-			System.out.println("Would you like to end your turn? Y/N: ");
-			cont = scan.next();
-			if (cont.equals("Y")) {
-				endTurn = true;
-			}
-		}
-		
+
+		gui.loadTurnGUI();
 	}
 	
 	public Integer rollDice() {
