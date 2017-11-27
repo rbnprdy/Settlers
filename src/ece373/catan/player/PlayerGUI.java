@@ -16,7 +16,11 @@ import java.awt.GridLayout;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
 
+
 public class PlayerGUI extends JPanel {
+	
+	public static Toolkit toolkit = Toolkit.getDefaultToolkit();
+	public static Dimension size = toolkit.getScreenSize();
 	private Game game;
 	private Player player;	
 	private JButton doneButton;
@@ -24,8 +28,9 @@ public class PlayerGUI extends JPanel {
 	private JButton tradeButton;
 	private JButton developmentCardButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
-	private int screenHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	private int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int screenHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static int playerGUIWidth = screenWidth/3;
 	
 	private JPanel topPanel;
 	private JPanel infoPanel;
@@ -53,7 +58,6 @@ public class PlayerGUI extends JPanel {
 		buildGUI();
 		setVisible(true);
 	}
-	
 	
 	public void buildGUI() {
 		this.setSize((new Dimension (screenWidth/3, screenHeight)));
@@ -123,6 +127,7 @@ public class PlayerGUI extends JPanel {
 		populateDevelopmentCards();
 		populateResourceCards();
 	}
+	
 	
 	public void populateResourceCards() {
 		int i;
@@ -423,8 +428,6 @@ public class PlayerGUI extends JPanel {
 		JButton p2StoneBox = new JButton();
 		JButton p2wheatBox = new JButton();
 		JButton p2woodBox = new JButton();
-		
-		
 		
 	}
 	

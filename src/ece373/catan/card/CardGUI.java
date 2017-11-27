@@ -2,14 +2,15 @@ package ece373.catan.card;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.Image;
 import javax.swing.*;
+
+import ece373.catan.player.*;
 
 public class CardGUI extends JPanel {
 	private Card card;
 	private JLabel faceImageLabel;
-	private Dimension cardSize = new Dimension(150, 230);
+	private Dimension cardSize = new Dimension((PlayerGUI.playerGUIWidth/6), (int)((PlayerGUI.playerGUIWidth/6)*1.5));
 	
 	public CardGUI(Card new_card) {
 		card = new_card;
