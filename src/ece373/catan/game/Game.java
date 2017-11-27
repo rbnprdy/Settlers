@@ -16,7 +16,6 @@ public class Game {
 	private ArrayList<DevelopmentCard> developmentCards;
 	private Player currentPlayer;
 	private Integer playerNumber;
-	private Integer numPlayers;
 	private GameGUI gui;
 	
 
@@ -26,7 +25,6 @@ public class Game {
 		developmentCards = new ArrayList<DevelopmentCard>();
 		currentPlayer = null;
 		playerNumber = 0;
-		numPlayers = 0;
 		this.gui = null;
 	}
 	
@@ -40,7 +38,6 @@ public class Game {
 	
 	public void addPlayer(Player newPlay) { //adds a player to the game 
 		players.add(newPlay);
-		numPlayers++;
 	}
 	
 	public Board getBoard() {// returns the game board
@@ -73,9 +70,13 @@ public class Game {
 		return winner;
 	}
 	
+	public void continueInitialBuilding() {
+		gui.nextInitialBuild();
+	}
+	
 	public void beginNextTurn() {
 		
-		if (playerNumber == numPlayers - 1) {
+		if (playerNumber == players.size() - 1) {
 			currentPlayer = players.get(0);
 			playerNumber = 0;
 		}
@@ -107,13 +108,4 @@ public class Game {
 	public void setPlayerNumber() {
 		playerNumber = 0;
 	}
-	
-	public void setNumberPlayers(Integer numPlay) {
-		numPlayers = numPlay;
-	}
-	
-	public Integer getNumberPlayers() {
-		return this.numPlayers;
-	}
-	
 }

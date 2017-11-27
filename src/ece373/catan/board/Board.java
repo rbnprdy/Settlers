@@ -222,5 +222,9 @@ public class Board {
 	public void moveRobber() {
 		gui.showAvailableTilesForRobber();
 	}
+	
+	public void dealResourceCardsForRoll(int roll) {
+		gui.dealResourceCardsForRoll(roll);
+	}
 }
 
