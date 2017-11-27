@@ -24,6 +24,8 @@ public class PlayerGUI extends JPanel {
 	private JButton tradeButton;
 	private JButton developmentCardButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
+	private int screenHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	private int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	
 	private JPanel topPanel;
 	private JPanel infoPanel;
@@ -52,9 +54,9 @@ public class PlayerGUI extends JPanel {
 		setVisible(true);
 	}
 	
+	
 	public void buildGUI() {
-		this.setSize((new Dimension (1000, 1600)));
-		int i = 0;
+		this.setSize((new Dimension (screenWidth/3, screenHeight)));
 		
 		topPanel = new JPanel();
 		
@@ -85,12 +87,12 @@ public class PlayerGUI extends JPanel {
 		doneButton.addActionListener(new ButtonListener());
 		
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-		infoPanel.setPreferredSize(new Dimension(1000, 200));
+		infoPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)this.getSize().getHeight()/5));
 		infoPanel.add(playerNameAndColor);
 		infoPanel.add(victoryPointsLabel);
 		infoPanel.add(doneButton);
 				
-		Dimension buttonDim = new Dimension(200, 200);
+		Dimension buttonDim = new Dimension((int)(this.getSize().getWidth()/4), (int)(this.getSize().getWidth()/4));
 		buildButton = new JButton("Build");
 		tradeButton = new JButton("Trade");
 		buildButton.setFont(font1);
@@ -106,7 +108,7 @@ public class PlayerGUI extends JPanel {
 		tradeButton.addActionListener(new ButtonListener());
 		developmentCardButton.addActionListener(new ButtonListener());
 		
-		topPanel.setPreferredSize(new Dimension(1000,400));
+		topPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)(this.getSize().getHeight()/4)));
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		topPanel.add(buildButton);
@@ -198,7 +200,7 @@ public class PlayerGUI extends JPanel {
 		devCardPanel = new JPanel();
 		JLayeredPane devCards = new JLayeredPane();
 		JPanel largestArmyPanel = new JPanel();
-		devCardPanel.setPreferredSize(new Dimension(1000, 300));
+		devCardPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)this.getSize().getHeight()/4));
 		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
 		
 		i = 0;
