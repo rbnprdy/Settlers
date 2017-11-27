@@ -197,6 +197,10 @@ public class Board {
 		return availableNodes;
 	}
 	
+	public void doneWithInitialBuilding() {
+		gui.setTakeResources(true);
+	}
+	
 	public void buildSettlementAtStart() {
 		gui.setTakeResources(false);
 		gui.showAvailableNodes(getAvailableNodesForSettlementsForStart());
@@ -221,6 +225,10 @@ public class Board {
 	
 	public void moveRobber() {
 		gui.showAvailableTilesForRobber();
+	}
+	
+	public void dealResourceCardsForRoll(int roll) {
+		gui.dealResourceCardsForRoll(roll);
 	}
 }
 

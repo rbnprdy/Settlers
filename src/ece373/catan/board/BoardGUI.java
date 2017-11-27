@@ -17,8 +17,8 @@ import java.awt.geom.Ellipse2D;
 @SuppressWarnings("serial")
 public class BoardGUI extends JPanel {
 
-	private final int WIDTH = 1200;
-	private final int HEIGHT = 800;
+//	private final int WIDTH = 1200;
+//	private final int HEIGHT = 800;
 	private final int edgeThickness = 8; 
 
 	private final int tileRadius = 90;
@@ -52,6 +52,8 @@ public class BoardGUI extends JPanel {
 	private ArrayList<ResourceType> resourceTokens;
 
 	public BoardGUI(Board b, Game g) {
+		
+		this.setLayout(null);
 
 		this.game = g;
 		this.board = b;
@@ -69,7 +71,8 @@ public class BoardGUI extends JPanel {
 				));
 		Collections.shuffle(resourceTokens);
 		
-		setPreferredSize(new Dimension(WIDTH, HEIGHT));
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setPreferredSize(new Dimension( (int)(screenSize.getWidth()*0.75), (int) screenSize.getHeight()));
 
 		tiles = new ArrayList<Tile>();
 		nodeGUIs = new ArrayList<NodeGUI>();
@@ -84,7 +87,7 @@ public class BoardGUI extends JPanel {
 		
 		displayAvailableTilesForRobber = false;
 		
-		takeResources = true;
+		takeResources = false;
 
 		xIncrement = Math.sin((60*Math.PI)/180)*tileRadius - 0.5;
 		yIncrement = Math.cos((60*Math.PI)/180)*tileRadius;
@@ -93,46 +96,6 @@ public class BoardGUI extends JPanel {
 		setupNodes();
 		setupEdges();
 
-	}
-
-	public static void main(String[] args) {
-		JFrame frame = new JFrame();
-
-		Game g = new Game();
-		Board b = g.getBoard();
-		BoardGUI bGUI = b.getGUI();
-
-		frame.setContentPane(bGUI);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		frame.setLayout(null);
-
-		Player p = new Player("test", Color.blue);
-		g.setCurrentPlayer(p);
-		b.getNodes().get(18).setSettlement(new Settlement(p));
-		b.getNodes().get(47).setSettlement(new Settlement(p));
-		b.getNodes().get(8).setCity(new City(p));
-		b.getNodes().get(19).setSettlement(new Settlement(p));
-		b.getNodes().get(20).setCity(new City(p));
-
-		b.getEdges().get(62).setRoad(new Road(p));
-		b.getEdges().get(55).setRoad(new Road(p));
-		b.getEdges().get(50).setRoad(new Road(p));
-		
-		Player p2 = new Player("test2", Color.red);
-		p2.addResourceCardOfType(ResourceType.BRICK);
-		p2.addResourceCardOfType(ResourceType.BRICK);
-		p2.addResourceCardOfType(ResourceType.WOOD);
-		b.getNodes().get(30).setSettlement(new Settlement(p2));
-		b.getEdges().get(36).setRoad(new Road(p2));
-		b.getEdges().get(44).setRoad(new Road(p2));
-
-		g.setCurrentPlayer(p2);
-		//b.moveRobber();
-		b.buildSettlementAtStart();
-		
 	}
 
 	public Board getBoard() {
@@ -275,6 +238,7 @@ public class BoardGUI extends JPanel {
 					buttons.add(b1);
 				}
 			}
+			displayAvailableNodes = false;
 		}
 
 		// Display available edges if applicable
@@ -289,6 +253,7 @@ public class BoardGUI extends JPanel {
 					buttons.add(b1);
 				}
 			}
+			displayAvailableEdges = false;
 		}
 		
 		if (this.displayAvailableTilesForRobber) {
@@ -301,18 +266,23 @@ public class BoardGUI extends JPanel {
 				add(b1);
 				buttons.add(b1);
 			}
+			displayAvailableTilesForRobber = false;
 		}
 	}
 	
 	// Gives the tiles the correct coordinates so that they can be drawn when necessary
 	private void setupTiles() {
 		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		int WIDTH = (int) (0.75*screenSize.getWidth());
+		int HEIGHT = (int) (screenSize.getHeight());
 		int tokenNumber = 0;
 		int resourceNumber = 0;
 		
 		tiles.clear();
 
-		Point origin = new Point(WIDTH / 2, HEIGHT / 2);
+		Point origin = new Point(this.getWidth() / 2, this.getHeight() / 2);
 
 		// Set up the coordinates for the tiles row by row
 		origin.setLocation(WIDTH / 2 - 2*xIncrement, HEIGHT / 2 - 6*yIncrement);
@@ -578,7 +548,7 @@ public class BoardGUI extends JPanel {
 		Point p38 = tiles.get(12).getPoints()[4];
 		NodeGUI n38 = new NodeGUI(board.getNodes().get(38), p38);
 		nodeGUIs.add(n38);
-		tiles.get(11).setNode(4, n38.getNode());
+		tiles.get(12).setNode(4, n38.getNode());
 		
 		for (int i = 39; i < 42; i++) {
 			Point p = tiles.get(i - 27).getPoints()[2];
@@ -598,7 +568,7 @@ public class BoardGUI extends JPanel {
 		Point p43 = tiles.get(12).getPoints()[3];
 		NodeGUI n43 = new NodeGUI(board.getNodes().get(43), p43);
 		nodeGUIs.add(n43);
-		tiles.get(11).setNode(3, n43.getNode());
+		tiles.get(12).setNode(3, n43.getNode());
 		tiles.get(16).setNode(5, n43.getNode());
 		
 		for (int i = 44; i < 46; i++) {
@@ -664,7 +634,7 @@ public class BoardGUI extends JPanel {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			// if there is no settlement, build a settlement
 			if (n.getSettlement() == null) {
 				n.setSettlement(new Settlement(game.getCurrentPlayer()));
@@ -686,9 +656,17 @@ public class BoardGUI extends JPanel {
 			
 			if (takeResources) {
 				removeResourceCardsAfterBuilding();
-				takeResources = true;
+			} else {
+				JOptionPane.showOptionDialog(null, 
+				        "Please Build a Road.",  
+				        "Build House",
+				        JOptionPane.OK_OPTION, 
+				        JOptionPane.PLAIN_MESSAGE, 
+				        null, 
+				        new String[]{"Okay"},
+				        "default");
+				board.buildRoadAtStartWithPlayer(game.getCurrentPlayer());
 			}
-			
 			
 			// repaint
 			BoardGUI.this.repaint();	
@@ -741,8 +719,9 @@ public class BoardGUI extends JPanel {
 			buttons.clear();
 			
 			if (takeResources) {
-				removeResourceCardsAfterBuilding();
-				takeResources = true;
+				removeResourceCardsAfterBuilding();	
+			} else {
+				BoardGUI.this.game.continueInitialBuilding();
 			}
 			
 			// repaint
