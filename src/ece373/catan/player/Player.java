@@ -90,29 +90,6 @@ public class Player {
 		return;
 	}
 
-	public void buildDevelopmentCard(Game g) {
-		for(ResourceCard rc: resourceCards) {
-			if(rc.getType() == ResourceType.SHEEP) {
-				resourceCards.remove(rc);
-				break;
-			}
-		}
-		for(ResourceCard rc: resourceCards) {
-			if(rc.getType() == ResourceType.WHEAT) {
-				resourceCards.remove(rc);
-				break;
-			}
-		}
-		for(ResourceCard rc: resourceCards) {
-			if(rc.getType() == ResourceType.STONE) {
-				resourceCards.remove(rc);
-				break;
-			}
-		}
-		//g.drawDevelopmentCard(this);  IMPLEMENTED IN GAME CLASS
-		
-		return;
-	}
 
 	public void proposeTrade(Player player) {
 
@@ -171,23 +148,12 @@ public class Player {
 		return victoryPoints;
 	}
 
-	public void makeTrade(Player player, ArrayList<ResourceCard> my_offered_cards, ArrayList<ResourceCard> their_offered_cards) {
-		for(ResourceCard my_offered_card: my_offered_cards) {	//Go through my offered cards
-			for(ResourceCard user_card: resourceCards) {	//Go through my cards
-				if(user_card.getType().equals(my_offered_card.getType())){	//if equal, swap with player
-					player.getResourceCards().add(my_offered_card);
-					this.getResourceCards().remove(my_offered_card);
-				}
-			}
-		}
-		for(ResourceCard their_offered_card: their_offered_cards) {
-			for(ResourceCard other_user_card: player.getResourceCards()) {
-				if(other_user_card.getType().equals(their_offered_card.getType())) {
-					this.getResourceCards().add(their_offered_card);
-					player.getResourceCards().remove(their_offered_card);
-				}
-			}
-		}
+	public void makeTrade(Player player, ResourceType my_offered_card, ResourceType their_offered_card) {
+		this.removeResourceCardOfType(my_offered_card);
+		player.addCard(new ResourceCard(my_offered_card));
+		
+		player.removeResourceCardOfType(their_offered_card);
+		this.addCard(new ResourceCard(their_offered_card));
 
 		return;
 	}
@@ -200,5 +166,15 @@ public class Player {
 			}
 		}
 		return army_size;
+	}
+	
+	public boolean hasCard(ResourceType rt) {
+		for(ResourceCard rc: resourceCards) {
+			if (rc.getType().equals(rt)) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }

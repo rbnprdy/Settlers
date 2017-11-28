@@ -40,6 +40,8 @@ public class PlayerGUITest {
 		p1.addCard(vCard);
 		p1.addCard(lac);
 		
+		p2.addCard(stonecard);
+		
 		newGUI = new PlayerGUI(g1, p1);
 		frame.add(newGUI);
 		frame.setSize(newGUI.getWidth(), newGUI.getHeight());
