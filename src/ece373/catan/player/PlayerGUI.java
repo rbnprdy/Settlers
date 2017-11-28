@@ -50,19 +50,19 @@ public class PlayerGUI extends JPanel {
 	private JButton tradeOk;
 	private JButton tradeCancel;
 	
-	private ArrayList<JButton> p1SlotButtons;
-	private JButton p1SheepBox;
-	private JButton p1BrickBox;
-	private JButton p1StoneBox;
-	private JButton p1WheatBox;
-	private JButton p1WoodBox;
+	private ArrayList<SlotButton> p1SlotButtons;
+	private SlotButton p1SheepBox;
+	private SlotButton p1BrickBox;
+	private SlotButton p1StoneBox;
+	private SlotButton p1WheatBox;
+	private SlotButton p1WoodBox;
 
-	private ArrayList<JButton> p2SlotButtons;
-	private JButton p2SheepBox;
-	private JButton p2BrickBox;
-	private JButton p2StoneBox;
-	private JButton p2WheatBox;
-	private JButton p2WoodBox;
+	private ArrayList<SlotButton> p2SlotButtons;
+	private SlotButton p2SheepBox;
+	private SlotButton p2BrickBox;
+	private SlotButton p2StoneBox;
+	private SlotButton p2WheatBox;
+	private SlotButton p2WoodBox;
 	
 	private PlayerTradeButton p1Button;
 	private PlayerTradeButton p2Button;
@@ -394,6 +394,18 @@ public class PlayerGUI extends JPanel {
 		
 	}
 	
+	private class SlotButton extends JButton{
+		private ResourceType buttonType;
+		
+		public SlotButton(ResourceType rt){
+			buttonType = rt;
+		}
+		
+		public ResourceType getButtonType() {
+			return buttonType;
+		}
+	}
+	
 	public void buildTradeGUI() {
 		int numPlayers = game.getPlayers().size();
 		int i;
@@ -456,19 +468,19 @@ public class PlayerGUI extends JPanel {
 		tradeBoxPanel.add(wheatLabel);
 		tradeBoxPanel.add(woodLabel);
 		
-		p1SlotButtons = new ArrayList<JButton>();
-		p2SlotButtons = new ArrayList<JButton>();
+		p1SlotButtons = new ArrayList<SlotButton>();
+		p2SlotButtons = new ArrayList<SlotButton>();
 		
-		p1SheepBox = new JButton(); 
-		p1BrickBox = new JButton();
-		p1StoneBox = new JButton();
-		p1WheatBox = new JButton();
-		p1WoodBox = new JButton();
-		p2SheepBox = new JButton();
-		p2BrickBox = new JButton();
-		p2StoneBox = new JButton();
-		p2WheatBox = new JButton();
-		p2WoodBox = new JButton();
+		p1SheepBox = new SlotButton(ResourceType.SHEEP); 
+		p1BrickBox = new SlotButton(ResourceType.BRICK);
+		p1StoneBox = new SlotButton(ResourceType.STONE);
+		p1WheatBox = new SlotButton(ResourceType.WHEAT);
+		p1WoodBox = new SlotButton(ResourceType.WOOD);
+		p2SheepBox = new SlotButton(ResourceType.SHEEP);
+		p2BrickBox = new SlotButton(ResourceType.BRICK);
+		p2StoneBox = new SlotButton(ResourceType.STONE);
+		p2WheatBox = new SlotButton(ResourceType.WHEAT);
+		p2WoodBox = new SlotButton(ResourceType.WOOD);
 		
 		p1SlotButtons.add(p1SheepBox);
 		p1SlotButtons.add(p1BrickBox);
@@ -589,6 +601,46 @@ public class PlayerGUI extends JPanel {
 						slotButton.setBackground(Color.WHITE);
 					}
 				}
+			}
+		}
+	}
+	
+	private class TradeSendListener implements ActionListener{
+		
+		ResourceType p1ResourceType;
+		ResourceType p2ResourceType;
+
+		public void actionPerformed(ActionEvent e) {
+			
+			for(SlotButton slotButton: p1SlotButtons) {
+				if(slotButton.getBackground().equals(Color.BLACK)) {
+					p1ResourceType = slotButton.getButtonType();
+				}
+			}
+			
+			if (p1ResourceType == null) {
+				JOptionPane.showMessageDialog(null, "Please Select a Card for Pl");
+				return;
+			}
+			
+			for(SlotButton slotButton: p2SlotButtons) {
+				if(slotButton.getBackground().equals(Color.BLACK)) {
+					p2ResourceType = slotButton.getButtonType();
+				}
+			}
+			
+			if (p2ResourceType == null) {
+				JOptionPane.showMessageDialog(null, "Please Select a Card for P2");
+			}
+			
+			PlayerTradeButton source = (PlayerTradeButton)(e.getSource());
+			
+			if(source.equals(p1Button)) {
+				if(!player.hasCard(p1ResourceType){
+					
+					//return
+				}
+				p1Button.getPlayer()
 			}
 		}
 	}
