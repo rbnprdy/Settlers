@@ -23,6 +23,12 @@ public class PlayerGUITest {
 		JFrame frame = new JFrame();
 		PlayerGUI newGUI;
 		Player p1 = new Player("Ruben", new Color(0xFF0000));
+		Player p2 = new Player("Tofu", new Color(0x00FF00));
+		Player p3 = new Player("Kray", new Color(0x0000FF));
+		
+		g1.addPlayer(p1);
+		g1.addPlayer(p2);
+		g1.addPlayer(p3);
 		
 		p1.addCard(sheepcard1);
 		p1.addCard(sheepcard2);
@@ -33,6 +39,8 @@ public class PlayerGUITest {
 		p1.addCard(yopCard);
 		p1.addCard(vCard);
 		p1.addCard(lac);
+		
+		p2.addCard(stonecard);
 		
 		newGUI = new PlayerGUI(g1, p1);
 		frame.add(newGUI);

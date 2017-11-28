@@ -10,13 +10,18 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
 
+
 public class PlayerGUI extends JPanel {
+	
+	public static Toolkit toolkit = Toolkit.getDefaultToolkit();
+	public static Dimension size = toolkit.getScreenSize();
 	private Game game;
 	private Player player;	
 	private JButton doneButton;
@@ -24,10 +29,13 @@ public class PlayerGUI extends JPanel {
 	private JButton tradeButton;
 	private JButton developmentCardButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
-	private int screenHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	private int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	private Font font2 = new Font("SansSerif", Font.PLAIN, 30);
+	public static int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
+	public static int screenHeight = (int)Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+	public static int playerGUIWidth = screenWidth/3;
 	
 	private JPanel topPanel;
+	private JPanel cardPanel;
 	private JPanel infoPanel;
 	private JPanel devCardPanel;
 	
@@ -40,9 +48,36 @@ public class PlayerGUI extends JPanel {
 	private JButton developmentCardResourceLabel;
 	
 	//TRADE MENU ITEMS
+	private Player tradePlayer;
+	private ResourceType p1ResourceType;
+	private ResourceType p2ResourceType;
 	private JFrame tradeFrame;
-	private JButton tradeOk;
-	private JButton tradeCancel;
+
+
+	
+	private ArrayList<SlotButton> p1SlotButtons;
+	private SlotButton p1SheepBox;
+	private SlotButton p1BrickBox;
+	private SlotButton p1StoneBox;
+	private SlotButton p1WheatBox;
+	private SlotButton p1WoodBox;
+
+	private ArrayList<SlotButton> p2SlotButtons;
+	private SlotButton p2SheepBox;
+	private SlotButton p2BrickBox;
+	private SlotButton p2StoneBox;
+	private SlotButton p2WheatBox;
+	private SlotButton p2WoodBox;
+
+	private PlayerTradeButton tradeCancel;
+	private PlayerTradeButton p1Button;
+	private PlayerTradeButton p2Button;
+	private PlayerTradeButton p3Button;
+	
+	//TRADE PROPOSITION PANEL ITEMS
+	private JButton acceptButton;
+	private JButton declineButton;
+	private JFrame tradePropositionPanel;
 
 	
 	public PlayerGUI(Game g,Player p){
@@ -53,7 +88,6 @@ public class PlayerGUI extends JPanel {
 		buildGUI();
 		setVisible(true);
 	}
-	
 	
 	public void buildGUI() {
 		this.setSize((new Dimension (screenWidth/3, screenHeight)));
@@ -124,10 +158,13 @@ public class PlayerGUI extends JPanel {
 		populateResourceCards();
 	}
 	
+	
 	public void populateResourceCards() {
 		int i;
-		
-		JPanel cardPanel = new JPanel();
+		if(cardPanel != null) {
+			cardPanel = null;
+		}
+		cardPanel = new JPanel();
 		JLayeredPane sheepPanel = new JLayeredPane();
 		JLayeredPane brickPanel = new JLayeredPane();
 		JLayeredPane stonePanel = new JLayeredPane();
@@ -250,7 +287,7 @@ public class PlayerGUI extends JPanel {
 		}
 		
 		public void handleTrade() {
-			//buildTradeGUI();
+			buildTradeGUI();
 		}
 		
 		public void handleDevelopmentCard() {
@@ -266,32 +303,85 @@ public class PlayerGUI extends JPanel {
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 			}
 			if(source.equals(roadResourceLabel)) {
-				game.getBoard().buildRoadWithPlayer(player);
-				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+				if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK)) {
+					player.removeResourceCardOfType(ResourceType.WOOD);
+					player.removeResourceCardOfType(ResourceType.BRICK);
+					game.getBoard().buildRoadWithPlayer(player);
+					game.updatePlayerGUI();
+					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					return;
+				}
+
 			}
 			if(source.equals(settlementResourceLabel)) {
-				game.getBoard().buildSettlementWithPlayer(player);
-				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+				if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK) && player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.SHEEP)) {
+					player.removeResourceCardOfType(ResourceType.WOOD);
+					player.removeResourceCardOfType(ResourceType.BRICK);
+					player.removeResourceCardOfType(ResourceType.WHEAT);
+					player.removeResourceCardOfType(ResourceType.SHEEP);
+					game.getBoard().buildSettlementWithPlayer(player);
+					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					return;
+				}
 			}
 			if(source.equals(cityResourceLabel)) {
-				game.getBoard().buildCityWithPlayer(player);
-				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+				if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { //CHECK FIRST WHEAT AND STONE
+					player.removeResourceCardOfType(ResourceType.WHEAT);
+					player.removeResourceCardOfType(ResourceType.STONE);
+					if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { // CHECK SECOND WHEAT AND STONE
+						player.removeResourceCardOfType(ResourceType.WHEAT);
+						player.removeResourceCardOfType(ResourceType.STONE);
+						if(player.hasCard(ResourceType.STONE)) { 									//CHECKING FINAL STONE
+							player.removeResourceCardOfType(ResourceType.STONE);
+							game.getBoard().buildCityWithPlayer(player);
+							buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+						}
+						else {
+							JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+							player.addCard(new ResourceCard(ResourceType.WHEAT));
+							player.addCard(new ResourceCard(ResourceType.WHEAT));
+							player.addCard(new ResourceCard(ResourceType.STONE));
+							player.addCard(new ResourceCard(ResourceType.STONE));
+							return;
+						}
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+						player.addCard(new ResourceCard(ResourceType.WHEAT));
+						player.addCard(new ResourceCard(ResourceType.STONE));						
+					}
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					return;
+				}
 			}
 			if(source.equals(developmentCardResourceLabel)) {
-				player.buildDevelopmentCard(game);
-				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+				if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE) && player.hasCard(ResourceType.SHEEP)) {
+					player.removeResourceCardOfType(ResourceType.WHEAT);
+					player.removeResourceCardOfType(ResourceType.STONE);
+					player.removeResourceCardOfType(ResourceType.SHEEP);
+					//game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
+					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+					return;
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					return;
+				}
 			}
+			return;
 		}
 	}
 	
-	private class TradeListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			JButton source = (JButton)(e.getSource());
-			if(source.equals(tradeCancel)) {
-				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
-			}
-		}
-	}
 	
 	public void buildBuildGUI() {
 		buildFrame = new JFrame();
@@ -356,30 +446,56 @@ public class PlayerGUI extends JPanel {
 		buildFrame.setVisible(true);		
 	}
 	
+	private class PlayerTradeButton extends JButton{
+		private Player buttonPlayer;
+		
+		public PlayerTradeButton(String title, Player p) {
+			setText(title);
+			buttonPlayer = p;
+		}
+		
+		public Player getPlayer() {
+			return buttonPlayer;
+		}
+		
+	}
+	
+	private class SlotButton extends JButton{
+		private ResourceType buttonType;
+		
+		public SlotButton(ResourceType rt){
+			buttonType = rt;
+		}
+		
+		public ResourceType getButtonType() {
+			return buttonType;
+		}
+	}
+	
 	public void buildTradeGUI() {
+		int numPlayers = game.getPlayers().size();
+		int i;
+		
 		tradeFrame = new JFrame();
+		Dimension slotButtonDim = new Dimension(100,100);
 
-		tradeFrame.setSize(new Dimension(500, 400));
-		tradeFrame.setLayout(new BoxLayout(tradeFrame, BoxLayout.Y_AXIS));
+		tradeFrame.setSize(new Dimension(500, 500));
+		tradeFrame.setLayout(new BoxLayout(tradeFrame.getContentPane(), BoxLayout.Y_AXIS));
 		
 		JPanel infoPanel = new JPanel();
 		infoPanel.setSize(new Dimension(500, 100));
 		JPanel tradeBoxPanel = new JPanel();
 		tradeBoxPanel.setSize(new Dimension(500, 300));
-		//JPanel cardIconPanel = new JPanel();
-		//JPanel thisPlayerPanel = new JPanel();
-		//JPanel thatPlayerPanel = new JPanel();
 		
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.X_AXIS));
-		//cardIconPanel.setLayout(new BoxLayout(cardIconPanel, BoxLayout.X_AXIS));
-		//thisPlayerPanel.setLayout(new BoxLayout(thisPlayerPanel, BoxLayout.X_AXIS));
-		//thatPlayerPanel.setLayout(new BoxLayout(thatPlayerPanel, BoxLayout.X_AXIS));
+
 		tradeBoxPanel.setLayout(new GridLayout(3,5));
 		
 		JLabel tradeTitle = new JLabel("Trade     ");
 		tradeTitle.setFont(font1);
-		tradeCancel = new JButton("Cancel");
+		tradeCancel = new PlayerTradeButton("Cancel", null);
 		tradeCancel.setFont(font1);
+		tradeCancel.addActionListener(new TradeSendListener());
 		infoPanel.add(tradeTitle);
 		infoPanel.add(tradeCancel);
 		
@@ -392,7 +508,7 @@ public class PlayerGUI extends JPanel {
 		
 		Image sheepIcon = new ImageIcon(this.getClass().getResource("/player/sheepicon.png")).getImage();
 		Image brickIcon = new ImageIcon(this.getClass().getResource("/player/brickicon.png")).getImage();
-		Image stoneIcon = new ImageIcon(this.getClass().getResource("/player/stoneicon.png")).getImage();
+		Image stoneIcon = new ImageIcon(this.getClass().getResource("/player/rockicon.png")).getImage();
 		Image wheatIcon = new ImageIcon(this.getClass().getResource("/player/wheaticon.png")).getImage();
 		Image woodIcon = new ImageIcon(this.getClass().getResource("/player/woodicon.png")).getImage();
 		
@@ -410,22 +526,257 @@ public class PlayerGUI extends JPanel {
 		
 		tradeBoxPanel.add(sheepLabel);
 		tradeBoxPanel.add(brickLabel);
+		tradeBoxPanel.add(stoneLabel);
+		tradeBoxPanel.add(wheatLabel);
+		tradeBoxPanel.add(woodLabel);
 		
-		JButton p1SheepBox = new JButton();
-		JButton p1BrickBox = new JButton();
-		JButton p1StoneBox = new JButton();
-		JButton p1wheatBox = new JButton();
-		JButton p1woodBox = new JButton();
+		p1SlotButtons = new ArrayList<SlotButton>();
+		p2SlotButtons = new ArrayList<SlotButton>();
 		
+		p1SheepBox = new SlotButton(ResourceType.SHEEP); 
+		p1BrickBox = new SlotButton(ResourceType.BRICK);
+		p1StoneBox = new SlotButton(ResourceType.STONE);
+		p1WheatBox = new SlotButton(ResourceType.WHEAT);
+		p1WoodBox = new SlotButton(ResourceType.WOOD);
+		p2SheepBox = new SlotButton(ResourceType.SHEEP);
+		p2BrickBox = new SlotButton(ResourceType.BRICK);
+		p2StoneBox = new SlotButton(ResourceType.STONE);
+		p2WheatBox = new SlotButton(ResourceType.WHEAT);
+		p2WoodBox = new SlotButton(ResourceType.WOOD);
+		
+		p1SlotButtons.add(p1SheepBox);
+		p1SlotButtons.add(p1BrickBox);
+		p1SlotButtons.add(p1StoneBox);
+		p1SlotButtons.add(p1WheatBox);
+		p1SlotButtons.add(p1WoodBox);
+		
+		for(JButton slotButton: p1SlotButtons) {
+			slotButton.addActionListener(new TradeSlotListener());
+		}
+		
+		p2SlotButtons.add(p2SheepBox);
+		p2SlotButtons.add(p2BrickBox);
+		p2SlotButtons.add(p2StoneBox);
+		p2SlotButtons.add(p2WheatBox);
+		p2SlotButtons.add(p2WoodBox);
+		
+		for(JButton slotButton: p2SlotButtons) {
+			slotButton.addActionListener(new TradeSlotListener());
+		}
+		
+		tradeBoxPanel.add(p1SheepBox);
+		tradeBoxPanel.add(p1BrickBox);
+		tradeBoxPanel.add(p1StoneBox);
+		tradeBoxPanel.add(p1WheatBox);
+		tradeBoxPanel.add(p1WoodBox);
+		tradeBoxPanel.add(p2SheepBox);
+		tradeBoxPanel.add(p2BrickBox);
+		tradeBoxPanel.add(p2StoneBox);
+		tradeBoxPanel.add(p2WheatBox);
+		tradeBoxPanel.add(p2WoodBox);
+		
+		
+		
+		p1SheepBox.setBackground(Color.WHITE);
+		p1BrickBox.setBackground(Color.WHITE);
+		p1StoneBox.setBackground(Color.WHITE);
+		p1WheatBox.setBackground(Color.WHITE);
+		p1WoodBox.setBackground(Color.WHITE);
+		p2SheepBox.setBackground(Color.WHITE);
+		p2BrickBox.setBackground(Color.WHITE);
+		p2StoneBox.setBackground(Color.WHITE);
+		p2WheatBox.setBackground(Color.WHITE);
+		p2WoodBox.setBackground(Color.WHITE);
+		
+		
+		p1SheepBox.setSize(slotButtonDim);
+		
+		JPanel playerSelectPanel = new JPanel();
+		playerSelectPanel.setSize(new Dimension(500,100));
+		playerSelectPanel.setLayout(new BoxLayout(playerSelectPanel, BoxLayout.X_AXIS));
+		
+		for(i = 0; i<numPlayers; ++i) {
+			if (p1Button == null) {
+				if(!game.getPlayers().get(i).equals(player)) {
+					p1Button = new PlayerTradeButton(game.getPlayers().get(i).getName(), game.getPlayers().get(i));
+				}
+			}
+			else if (p2Button == null) {
+				if(!game.getPlayers().get(i).equals(player) && !game.getPlayers().get(i).equals(p1Button.getPlayer())) {
+					p2Button = new PlayerTradeButton(game.getPlayers().get(i).getName(), game.getPlayers().get(i));
+				}
+			}
+			else if (p3Button == null && !game.getPlayers().get(i).equals(p1Button.getPlayer()) && !game.getPlayers().get(i).equals(p2Button.getPlayer())) {
+				if(!game.getPlayers().get(i).equals(player)) {
+					p3Button = new PlayerTradeButton(game.getPlayers().get(i).getName(), game.getPlayers().get(i));
+				}
+			}
+		}
+				
+		if(p1Button != null) {
+			p1Button.setSize(slotButtonDim);
+			p1Button.setFont(font1);
+			p1Button.addActionListener(new TradeSendListener());
+			playerSelectPanel.add(p1Button);
+		}
+		if(p2Button != null) {
+			p2Button.setSize(slotButtonDim);
+			p2Button.setFont(font1);
+			p2Button.addActionListener(new TradeSendListener());
+			playerSelectPanel.add(p2Button);
+		}
+		if(p3Button != null) {
+			p3Button.setSize(slotButtonDim);
+			p3Button.setFont(font1);
+			p3Button.addActionListener(new TradeSendListener());
+			playerSelectPanel.add(p3Button);
+		}
+		
+		
+		tradeFrame.add(infoPanel);
+		tradeFrame.add(tradeBoxPanel);
+		tradeFrame.add(playerSelectPanel);
+		
+		tradeFrame.setLocationRelativeTo(null);
+		tradeFrame.setUndecorated(true);
+		tradeFrame.setVisible(true);
+		
+	}
+	
+	private class TradeSlotListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton)(e.getSource());
+			
+			if(p1SlotButtons.contains(source)) {
+				for(JButton slotButton: p1SlotButtons) {
+						if(source.equals(slotButton)) {
+							slotButton.setBackground(Color.BLACK);
+						}
+						else {
+							slotButton.setBackground(Color.WHITE);
+						}
+				}
+			}
+			else if(p2SlotButtons.contains(source)) {
+				for(JButton slotButton: p2SlotButtons) {
+					if(source.equals(slotButton)) {
+						slotButton.setBackground(Color.BLACK);
+					}
+					else {
+						slotButton.setBackground(Color.WHITE);
+					}
+				}
+			}
+		}
+	}
+	
+	private class TradeSendListener implements ActionListener{
 
-		JButton p2SheepBox = new JButton();
-		JButton p2BrickBox = new JButton();
-		JButton p2StoneBox = new JButton();
-		JButton p2wheatBox = new JButton();
-		JButton p2woodBox = new JButton();
+		public void actionPerformed(ActionEvent e) {
+			PlayerTradeButton source = (PlayerTradeButton)(e.getSource());
+			
+			if(source.equals(tradeCancel)) {
+				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				return;
+			}
+			
+			for(SlotButton slotButton: p1SlotButtons) {
+				if(slotButton.getBackground().equals(Color.BLACK)) {
+					p1ResourceType = slotButton.getButtonType();
+				}
+			}
+			
+			if (p1ResourceType == null) {
+				JOptionPane.showMessageDialog(null, "Please select a card to trade to the other player");
+				return;
+			}
+			
+			for(SlotButton slotButton: p2SlotButtons) {
+				if(slotButton.getBackground().equals(Color.BLACK)) {
+					p2ResourceType = slotButton.getButtonType();
+				}
+			}
+			
+			if (p2ResourceType == null) {
+				JOptionPane.showMessageDialog(null, "Please select a card to receive from the other player");
+				return;
+			}
+			
+			if(!player.hasCard(p1ResourceType)){
+				JOptionPane.showMessageDialog(null, "You do not have a card of this type");					
+				return;
+			}
+			
+			
+			if(!source.getPlayer().hasCard(p2ResourceType)) {
+				JOptionPane.showMessageDialog(null, "They do not have a card of this type");	
+				return;
+			}
+			
+			int input = JOptionPane.showOptionDialog(null, "Please Pass to " + source.getPlayer().getName(), "Trade Proposed", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			if(input == JOptionPane.OK_OPTION)
+			{
+				tradePlayer = source.getPlayer();
+				handleTradeProposition(p1ResourceType, p2ResourceType);
+			}
+
+			return;
+		}
+	}
+	
+	private class TradeProposalListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			JButton source = (JButton)(e.getSource());
+			
+			if(source.equals(acceptButton)) {
+				player.makeTrade(tradePlayer, p1ResourceType, p2ResourceType);
+				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				JOptionPane.showMessageDialog(null, "Trade Completed! Please pass back to " + player.getName());
+			}
+			if(source.equals(declineButton)) {
+				tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				JOptionPane.showMessageDialog(null, "Trade Declined. Please pass back to " + player.getName());		
+			}
+		}
+	}
+	
+	
+	public void handleTradeProposition(ResourceType p1Type, ResourceType p2Type) {
 		
+		if (tradePropositionPanel != null) {
+			tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+		}
+		tradePropositionPanel = new JFrame();
+		tradePropositionPanel.setLayout(new BoxLayout(tradePropositionPanel.getContentPane(), BoxLayout.Y_AXIS));
+		tradePropositionPanel.setSize(new Dimension(800, 200));
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setSize(new Dimension((int)(tradePropositionPanel.getSize().getWidth()/3), (int)(tradePropositionPanel.getSize().getWidth()/3)));
+		JLabel tradePropositionLabel = new JLabel(player.getName() + " wants to trade their " + p1Type.toString().toLowerCase() + " card for your " +
+				p2Type.toString().toLowerCase() + "card.");
+		tradePropositionLabel.setFont(font2);
+		tradePropositionLabel.setAlignmentX(CENTER_ALIGNMENT);
+		acceptButton = new JButton("Accept");
+		declineButton = new JButton("Decline");
 		
+		acceptButton.setFont(font2);
+		declineButton.setFont(font2);
+		acceptButton.addActionListener(new TradeProposalListener());
+		declineButton.addActionListener(new TradeProposalListener());
+		
+		tradePropositionPanel.add(tradePropositionLabel);
+		buttonPanel.add(acceptButton);
+		buttonPanel.add(declineButton);
+		buttonPanel.setAlignmentX(CENTER_ALIGNMENT);
+		tradePropositionPanel.add(buttonPanel);
+		
+		tradePropositionPanel.setLocationRelativeTo(null);
+		tradePropositionPanel.setUndecorated(true);
+		tradePropositionPanel.setVisible(true);
+			
 	}
 	
 }
