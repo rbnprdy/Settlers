@@ -82,6 +82,9 @@ public class Game {
 	
 	public void beginNextTurn() {
 		
+		this.checkForLongestRoad();
+		this.checkForLargestArmy();
+		
 		// Check for winner
 		Player winner = checkForWinner();
 		if (winner != null) {
@@ -122,5 +125,72 @@ public class Game {
 	
 	public void updatePlayerGUI() {
 		gui.reloadPlayerGUI();
+	}
+	
+	public void checkForLongestRoad() {
+		int maxCount = 4;
+		Player currentMax = null;
+		
+		for (Player p: players) {
+			if (p.getLongestRoadCard() != null) {
+				maxCount = p.getRoads().size();
+				currentMax = p;
+			}
+		}
+		
+//		Player a = players.get(1);
+//		a.setLongestRoadCard(new LongestRoadCard());
+		
+		for (Player p: players) {
+		if (p != currentMax && p.getRoads().size() > maxCount) {
+			currentMax.setLargestArmyCard(null);
+			p.setLongestRoadCard(new LongestRoadCard());
+			
+			JOptionPane.showOptionDialog(null, 
+			        p.getName() + " now has the longest road!",  
+			        "Longest Road",
+			        JOptionPane.OK_OPTION, 
+			        JOptionPane.PLAIN_MESSAGE, 
+			        null, 
+			        new String[]{"Okay"}, // this is the array
+			        "default");
+			
+			return;
+		}
+	}
+		
+	}
+	
+	public void checkForLargestArmy() {
+		int maxCount = 2;
+		Player currentMax = null;
+		
+		for (Player p: players) {
+			if (p.getLargestArmyCard() != null) {
+				maxCount = p.getArmySize();
+				currentMax = p;
+			}
+		}
+		
+//		Player a = players.get(0);
+//		a.setLargestArmyCard(new LargestArmyCard());
+		
+		for (Player p: players) {
+			if (p != currentMax && p.getArmySize() > maxCount) {
+				currentMax.setLargestArmyCard(null);
+				p.setLargestArmyCard(new LargestArmyCard());
+				
+				JOptionPane.showOptionDialog(null, 
+				        p.getName() + " now has the largest army!",  
+				        "Largest Army",
+				        JOptionPane.OK_OPTION, 
+				        JOptionPane.PLAIN_MESSAGE, 
+				        null, 
+				        new String[]{"Okay"}, // this is the array
+				        "default");
+				
+				return;
+			}
+		}
 	}
 }

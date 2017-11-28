@@ -106,7 +106,7 @@ public class GameGUI extends JFrame {
 		        "default");
 		
 		int roll = game.rollDice();
-		
+
 		if (roll == 7) {
 			JOptionPane.showOptionDialog(null, 
 			        "You Rolled a " + Integer.toString(roll) + ".",  
