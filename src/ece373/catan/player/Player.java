@@ -134,11 +134,19 @@ public class Player {
 	public LongestRoadCard getLongestRoadCard() {
 		return longestRoadCard;
 	}
+	
+	public void setLongestRoadCard(LongestRoadCard c) {
+		this.longestRoadCard = c;
+	}
 
 	public LargestArmyCard getLargestArmyCard() {
 		return largestArmyCard;
 	}
 
+	public void setLargestArmyCard(LargestArmyCard c) {
+		this.largestArmyCard = c;
+	}
+	
 	public void addSettlement(Settlement newSettle) {
 		settlements.add(newSettle);
 	}

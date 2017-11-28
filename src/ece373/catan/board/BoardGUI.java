@@ -9,6 +9,7 @@ import ece373.catan.player.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Random;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -757,6 +758,52 @@ public class BoardGUI extends JPanel {
 			for (JButton b: buttons) {
 				BoardGUI.this.remove(b);
 				b = null;
+			}
+			
+			// Steal card
+			ArrayList<Node> nodesWithPlayers = new ArrayList<Node>();
+			for (Node n: tile.getNodes()) {
+				if (n.getPlayer() != null && n.getPlayer() != game.getCurrentPlayer() && !n.getPlayer().getResourceCards().isEmpty()) {
+					nodesWithPlayers.add(n);
+				}
+			}
+			
+			if (!nodesWithPlayers.isEmpty()) {
+				Random rand = new Random();
+				Player p = nodesWithPlayers.get(rand.nextInt(nodesWithPlayers.size())).getPlayer();
+				ArrayList<ResourceCard> cards = p.getResourceCards();
+				int cardNum = rand.nextInt(cards.size());
+				ResourceCard card = cards.get(cardNum);
+				cards.remove(cardNum);
+				game.getCurrentPlayer().addCard(card);
+				
+				String resourceType = "";
+				switch (card.getType()) {
+					case BRICK: resourceType = "brick";
+								break;
+					case SHEEP: resourceType = "sheep";
+								break;
+					case STONE: resourceType = "stone";
+								break;
+					case WHEAT: resourceType = "wheat";
+								break;
+					case WOOD: resourceType = "wood";
+								break;
+					default:
+								break;	
+					
+				}
+				
+				JOptionPane.showOptionDialog(null, 
+				        "You stole a " + resourceType + " from " + p.getName() + ".",  
+				        "Resource Stolen",
+				        JOptionPane.OK_OPTION, 
+				        JOptionPane.PLAIN_MESSAGE, 
+				        null, 
+				        new String[]{"Start turn"}, // this is the array
+				        "default");
+				
+				game.updatePlayerGUI();
 			}
 			
 			buttons.clear();
