@@ -661,6 +661,7 @@ public class BoardGUI extends JPanel {
 			if (takeResources) {
 				//removeResourceCardsAfterBuilding();
 				game.updatePlayerGUI();
+				game.getCurrentPlayer().enableButtons();
 			} else {
 				JOptionPane.showOptionDialog(null, 
 				        "Please Build a Road.",  
@@ -726,6 +727,7 @@ public class BoardGUI extends JPanel {
 			if (takeResources) {
 				//removeResourceCardsAfterBuilding();	
 				game.updatePlayerGUI();
+				game.getCurrentPlayer().enableButtons();
 			} else {
 				BoardGUI.this.game.continueInitialBuilding();
 			}
@@ -807,6 +809,8 @@ public class BoardGUI extends JPanel {
 			}
 			
 			buttons.clear();
+			
+			game.getCurrentPlayer().enableButtons();
 			
 			// repaint
 			BoardGUI.this.repaint();	
