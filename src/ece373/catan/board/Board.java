@@ -212,18 +212,22 @@ public class Board {
 	}
 	
 	public void buildRoadWithPlayer(Player p) {
+		game.getCurrentPlayer().disableButtons();
 		gui.showAvailableEdges(this.getAvailableEdgesFor(p));
 	}
 	
 	public void buildSettlementWithPlayer(Player p) {
+		game.getCurrentPlayer().disableButtons();
 		gui.showAvailableNodes(this.getAvailableNodesForSettlementsFor(p));
 	}
 	
 	public void buildCityWithPlayer(Player p) {
+		game.getCurrentPlayer().disableButtons();
 		gui.showAvailableNodes(this.getAvailableNodesForCitiesFor(p));
 	}
 	
 	public void moveRobber() {
+		game.getCurrentPlayer().disableButtons();
 		gui.showAvailableTilesForRobber();
 	}
 	
