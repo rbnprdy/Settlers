@@ -659,7 +659,7 @@ public class BoardGUI extends JPanel {
 			buttons.clear();
 			
 			if (takeResources) {
-				removeResourceCardsAfterBuilding();
+				//removeResourceCardsAfterBuilding();
 				game.updatePlayerGUI();
 			} else {
 				JOptionPane.showOptionDialog(null, 
@@ -724,7 +724,7 @@ public class BoardGUI extends JPanel {
 			buttons.clear();
 			
 			if (takeResources) {
-				removeResourceCardsAfterBuilding();	
+				//removeResourceCardsAfterBuilding();	
 				game.updatePlayerGUI();
 			} else {
 				BoardGUI.this.game.continueInitialBuilding();
