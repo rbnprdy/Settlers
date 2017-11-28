@@ -10,6 +10,7 @@ import ece373.catan.game.*;
 
 public class Player {
 	private String playerName;
+	private boolean buttonsDisabled;
 	private ArrayList<ResourceCard> resourceCards;
 	private ArrayList<DevelopmentCard> developmentCards;
 	private LargestArmyCard largestArmyCard;
@@ -31,6 +32,18 @@ public class Player {
 		cities = new ArrayList<City>();
 		roads = new ArrayList<Road>();
 		victoryPoints = 0;
+	}
+	
+	public void disableButtons() {
+		buttonsDisabled = true;
+	}
+	
+	public void enableButtons() {
+		buttonsDisabled = false;
+	}
+	
+	public boolean areButtonsDisabled() {
+		return buttonsDisabled;
 	}
 
 	public Color getColor() {

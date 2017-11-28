@@ -264,6 +264,10 @@ public class PlayerGUI extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			JButton source = (JButton)(e.getSource());
 			
+			if(player.areButtonsDisabled() == true) {
+				return;
+			}
+			
 			if(source.equals(doneButton)) {
 				handleDone();
 			}
