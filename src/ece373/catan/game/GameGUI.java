@@ -41,6 +41,7 @@ public class GameGUI extends JFrame {
 		
 		window.setLeftComponent(new JLabel());
 		window.setBackground(new Color(0x00ff00));
+		window.setResizeWeight(.25);
 		window.setDividerLocation(0.3);
 		
 		pack();
