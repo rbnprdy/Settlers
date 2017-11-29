@@ -383,7 +383,6 @@ public class PlayerGUI extends JPanel {
 	public void buildBuildGUI() {
 		buildFrame = new JFrame();
 		buildFrame.setSize(new Dimension(800, 500));
-		buildFrame.setAlwaysOnTop(true);
 		
 		JPanel buildPanel = new JPanel();
 		buildPanel.setSize(new Dimension(800, 500));
