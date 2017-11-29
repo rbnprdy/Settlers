@@ -22,6 +22,7 @@ public class Player {
 	private Color color;
 
 	public Player(String new_player_name, Color color) {
+		buttonsDisabled = false;
 		playerName = new_player_name;
 		this.color = color;
 		resourceCards = new ArrayList<ResourceCard>();

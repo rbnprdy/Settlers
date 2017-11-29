@@ -20,6 +20,7 @@ public class PlayerGUITest {
 		LargestArmyCard lac = new LargestArmyCard();
 		
 		Game g1 = new Game();
+
 		JFrame frame = new JFrame();
 		PlayerGUI newGUI;
 		Player p1 = new Player("Ruben", new Color(0xFF0000));

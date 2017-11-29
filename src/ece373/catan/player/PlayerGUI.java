@@ -27,7 +27,6 @@ public class PlayerGUI extends JPanel {
 	private JButton doneButton;
 	private JButton buildButton;
 	private JButton tradeButton;
-	private JButton developmentCardButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
 	private Font font2 = new Font("SansSerif", Font.PLAIN, 30);
 	public static int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -92,6 +91,7 @@ public class PlayerGUI extends JPanel {
 	public void buildGUI() {
 		this.setSize((new Dimension (screenWidth/3, screenHeight)));
 		
+		player.calculateVictoryPoints();
 		topPanel = new JPanel();
 		
 		infoPanel = new JPanel();
@@ -131,23 +131,17 @@ public class PlayerGUI extends JPanel {
 		tradeButton = new JButton("Trade");
 		buildButton.setFont(font1);
 		tradeButton.setFont(font1);
-		developmentCardButton = new JButton();
-		ImageIcon devImg = new ImageIcon(this.getClass().getResource("/player/devicon.png"));
-		developmentCardButton.setIcon(devImg);
 		buildButton.setPreferredSize(buttonDim);
 		tradeButton.setPreferredSize(buttonDim);
-		developmentCardButton.setPreferredSize(buttonDim);
 		
 		buildButton.addActionListener(new ButtonListener());
 		tradeButton.addActionListener(new ButtonListener());
-		developmentCardButton.addActionListener(new ButtonListener());
 		
 		topPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)(this.getSize().getHeight()/4)));
 		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		topPanel.add(buildButton);
 		topPanel.add(tradeButton);
-		topPanel.add(developmentCardButton);
 		
 		
 
@@ -277,9 +271,6 @@ public class PlayerGUI extends JPanel {
 			if(source.equals(tradeButton)) {
 				handleTrade();
 			}
-			if(source.equals(developmentCardButton)) {
-				//handleDevelopmentCard;
-			}
 		}
 		
 		public void handleDone(){
@@ -294,9 +285,6 @@ public class PlayerGUI extends JPanel {
 			buildTradeGUI();
 		}
 		
-		public void handleDevelopmentCard() {
-			//buildDevelopmentCardGUI();
-		}
 	}
 	
 	private class BuildListener implements ActionListener {
@@ -305,6 +293,7 @@ public class PlayerGUI extends JPanel {
 			
 			if(source.equals(buildCancelButton)) {
 				buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+				return;
 			}
 			if(source.equals(roadResourceLabel)) {
 				if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK)) {
@@ -328,6 +317,7 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.WHEAT);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
 					game.getBoard().buildSettlementWithPlayer(player);
+					game.updatePlayerGUI();
 					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					return;
 				}
@@ -346,6 +336,7 @@ public class PlayerGUI extends JPanel {
 						if(player.hasCard(ResourceType.STONE)) { 									//CHECKING FINAL STONE
 							player.removeResourceCardOfType(ResourceType.STONE);
 							game.getBoard().buildCityWithPlayer(player);
+							game.updatePlayerGUI();
 							buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 						}
 						else {
@@ -374,7 +365,9 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
 					//game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
+					player.addCard(new VictoryPointCard());
 					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+					game.updatePlayerGUI();
 					return;
 				}
 				else {
@@ -390,6 +383,7 @@ public class PlayerGUI extends JPanel {
 	public void buildBuildGUI() {
 		buildFrame = new JFrame();
 		buildFrame.setSize(new Dimension(800, 500));
+		buildFrame.setAlwaysOnTop(true);
 		
 		JPanel buildPanel = new JPanel();
 		buildPanel.setSize(new Dimension(800, 500));
@@ -481,6 +475,7 @@ public class PlayerGUI extends JPanel {
 		int i;
 		
 		tradeFrame = new JFrame();
+		//tradeFrame.setAlwaysOnTop(true);
 		Dimension slotButtonDim = new Dimension(100,100);
 
 		tradeFrame.setSize(new Dimension(500, 500));
@@ -716,13 +711,14 @@ public class PlayerGUI extends JPanel {
 				JOptionPane.showMessageDialog(null, "They do not have a card of this type");	
 				return;
 			}
-			
-			int input = JOptionPane.showOptionDialog(null, "Please Pass to " + source.getPlayer().getName(), "Trade Proposed", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			int input = JOptionPane.showOptionDialog(null, "Please pass to " + source.getPlayer().getName(), "Trade Proposed", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 			if(input == JOptionPane.OK_OPTION)
 			{
 				tradePlayer = source.getPlayer();
 				handleTradeProposition(p1ResourceType, p2ResourceType);
+				game.updatePlayerGUI();
 			}
 
 			return;
@@ -737,6 +733,7 @@ public class PlayerGUI extends JPanel {
 				player.makeTrade(tradePlayer, p1ResourceType, p2ResourceType);
 				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
 				tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				game.updatePlayerGUI();
 				JOptionPane.showMessageDialog(null, "Trade Completed! Please pass back to " + player.getName());
 			}
 			if(source.equals(declineButton)) {
@@ -753,6 +750,7 @@ public class PlayerGUI extends JPanel {
 			tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
 		}
 		tradePropositionPanel = new JFrame();
+		tradePropositionPanel.setAlwaysOnTop(true);
 		tradePropositionPanel.setLayout(new BoxLayout(tradePropositionPanel.getContentPane(), BoxLayout.Y_AXIS));
 		tradePropositionPanel.setSize(new Dimension(800, 200));
 		
@@ -760,7 +758,7 @@ public class PlayerGUI extends JPanel {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.setSize(new Dimension((int)(tradePropositionPanel.getSize().getWidth()/3), (int)(tradePropositionPanel.getSize().getWidth()/3)));
 		JLabel tradePropositionLabel = new JLabel(player.getName() + " wants to trade their " + p1Type.toString().toLowerCase() + " card for your " +
-				p2Type.toString().toLowerCase() + "card.");
+				p2Type.toString().toLowerCase() + " card");
 		tradePropositionLabel.setFont(font2);
 		tradePropositionLabel.setAlignmentX(CENTER_ALIGNMENT);
 		acceptButton = new JButton("Accept");
