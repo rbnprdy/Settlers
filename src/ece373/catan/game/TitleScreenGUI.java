@@ -23,6 +23,7 @@ public class TitleScreenGUI {
 	JComboBox<Integer> numPlayersBox;
 
 	public TitleScreenGUI() {
+		Font titleFont = new Font("SansSerif", Font.PLAIN, 40);
 		frame = new JFrame();
 		frame.setTitle("Settlers of Catan");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -32,6 +33,7 @@ public class TitleScreenGUI {
 
 		JPanel titlePanel = new JPanel();
 		JLabel titleLabel = new JLabel("Settlers of Catan");
+		titleLabel.setFont(titleFont);
 		titleLabel.setFont(titleLabel.getFont().deriveFont(94.0f));
 
 		titlePanel.add(titleLabel);
@@ -42,15 +44,19 @@ public class TitleScreenGUI {
 		numPlayersPanel = new JPanel();	
 
 		JLabel numLabel = new JLabel("Enter Number of Players:");
+		numLabel.setFont(titleFont);
 		numPlayersPanel.add(numLabel);
 
 		numPlayersBox = new JComboBox<Integer>(numPlayers);
 		numPlayersBox.setSelectedIndex(0);
-
+		numPlayersBox.setFont(titleFont);
+		numPlayersPanel.add(Box.createRigidArea(new Dimension (20, 0)));
 		numPlayersPanel.add(numPlayersBox);
 
 		JButton beginButton = new JButton("Begin");
+		beginButton.setFont(titleFont);
 		beginButton.addActionListener(new ButtonListener(numPlayersBox));
+		numPlayersPanel.add(Box.createRigidArea(new Dimension (20, 0)));
 		numPlayersPanel.add(beginButton);
 
 		numPlayersPanel.setVisible(true);
