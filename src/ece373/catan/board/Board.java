@@ -148,6 +148,18 @@ public class Board {
 		return edges;
 	}
 	
+	public boolean canBuildRoads(Player player) {
+		return !this.getAvailableEdgesFor(player).isEmpty();
+	}
+	
+	public boolean canBuildSettlements(Player player) {
+		return !this.getAvailableNodesForSettlementsFor(player).isEmpty();
+	}
+	
+	public boolean canBuildCities(Player player) {
+		return !this.getAvailableNodesForCitiesFor(player).isEmpty();
+	}
+	
 	public ArrayList<Edge> getAvailableEdgesFor(Player player) {
 		ArrayList<Edge> availableEdges = new ArrayList<Edge>();
 		
