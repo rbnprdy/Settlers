@@ -21,9 +21,11 @@ public class TitleScreenGUI {
 
 	private Integer[] numPlayers = {2, 3, 4};
 	JComboBox<Integer> numPlayersBox;
+	private Font titleFont = new Font("SansSerif", Font.PLAIN, 40);
+	private Font smallFont = new Font("SansSerif", Font.PLAIN, 30);
 
 	public TitleScreenGUI() {
-		Font titleFont = new Font("SansSerif", Font.PLAIN, 40);
+
 		frame = new JFrame();
 		frame.setTitle("Settlers of Catan");
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -80,7 +82,7 @@ public class TitleScreenGUI {
 		public void actionPerformed(ActionEvent e) {
 			int numPlayers = (int) comboBox.getSelectedItem();
 			
-			Object[] message = new Object[numPlayers];
+			JLabel[] message = new JLabel[numPlayers];
 			
 			Object[] messagesAndFields = new Object[numPlayers*2];
 			
@@ -88,10 +90,12 @@ public class TitleScreenGUI {
 			
 			int j = 0;
 			for (int i = 0; i < numPlayers; i++) {
-				message[i] = "Player " + Integer.toString(i + 1) + ":";
+				message[i] = new JLabel("Player " + Integer.toString(i + 1) + ":");
+				message[i].setFont(smallFont);
 				messagesAndFields[j] =  message[i];
 				j++;
 				textFields[i] = new JTextField();
+				textFields[i].setFont(smallFont);
 				messagesAndFields[j] = textFields[i];
 				j++;
 			}
