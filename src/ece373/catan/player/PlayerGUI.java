@@ -296,66 +296,85 @@ public class PlayerGUI extends JPanel {
 				return;
 			}
 			if(source.equals(roadResourceLabel)) {
-				if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK)) {
-					player.removeResourceCardOfType(ResourceType.WOOD);
-					player.removeResourceCardOfType(ResourceType.BRICK);
-					game.getBoard().buildRoadWithPlayer(player);
-					game.updatePlayerGUI();
-					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
-					return;
+				if(game.getBoard().canBuildRoads(player)) {
+					if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK)) {
+						player.removeResourceCardOfType(ResourceType.WOOD);
+						player.removeResourceCardOfType(ResourceType.BRICK);
+						game.getBoard().buildRoadWithPlayer(player);
+						game.updatePlayerGUI();
+						buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+						return;
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+						return;
+					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					JOptionPane.showMessageDialog(null, "You have no available spaces to build a road.");
 					return;
 				}
 
 			}
 			if(source.equals(settlementResourceLabel)) {
-				if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK) && player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.SHEEP)) {
-					player.removeResourceCardOfType(ResourceType.WOOD);
-					player.removeResourceCardOfType(ResourceType.BRICK);
-					player.removeResourceCardOfType(ResourceType.WHEAT);
-					player.removeResourceCardOfType(ResourceType.SHEEP);
-					game.getBoard().buildSettlementWithPlayer(player);
-					game.updatePlayerGUI();
-					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
-					return;
+				if (game.getBoard().canBuildSettlements(player)){
+					if(player.hasCard(ResourceType.WOOD) && player.hasCard(ResourceType.BRICK) && player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.SHEEP)) {
+						player.removeResourceCardOfType(ResourceType.WOOD);
+						player.removeResourceCardOfType(ResourceType.BRICK);
+						player.removeResourceCardOfType(ResourceType.WHEAT);
+						player.removeResourceCardOfType(ResourceType.SHEEP);
+						game.getBoard().buildSettlementWithPlayer(player);
+						game.updatePlayerGUI();
+						buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+						return;
+					}
+					else {
+						JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+						return;
+					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					JOptionPane.showMessageDialog(null, "You have no available spaces to build a settlement.");
 					return;
 				}
+
 			}
 			if(source.equals(cityResourceLabel)) {
-				if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { //CHECK FIRST WHEAT AND STONE
-					player.removeResourceCardOfType(ResourceType.WHEAT);
-					player.removeResourceCardOfType(ResourceType.STONE);
-					if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { // CHECK SECOND WHEAT AND STONE
+				if(game.getBoard().canBuildCities(player)) {
+					if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { //CHECK FIRST WHEAT AND STONE
 						player.removeResourceCardOfType(ResourceType.WHEAT);
 						player.removeResourceCardOfType(ResourceType.STONE);
-						if(player.hasCard(ResourceType.STONE)) { 									//CHECKING FINAL STONE
+						if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE)) { // CHECK SECOND WHEAT AND STONE
+							player.removeResourceCardOfType(ResourceType.WHEAT);
 							player.removeResourceCardOfType(ResourceType.STONE);
-							game.getBoard().buildCityWithPlayer(player);
-							game.updatePlayerGUI();
-							buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+							if(player.hasCard(ResourceType.STONE)) { 									//CHECKING FINAL STONE
+								player.removeResourceCardOfType(ResourceType.STONE);
+								game.getBoard().buildCityWithPlayer(player);
+								game.updatePlayerGUI();
+								buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
+							}
+							else {
+								JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+								player.addCard(new ResourceCard(ResourceType.WHEAT));
+								player.addCard(new ResourceCard(ResourceType.WHEAT));
+								player.addCard(new ResourceCard(ResourceType.STONE));
+								player.addCard(new ResourceCard(ResourceType.STONE));
+								return;
+							}
 						}
 						else {
 							JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
 							player.addCard(new ResourceCard(ResourceType.WHEAT));
-							player.addCard(new ResourceCard(ResourceType.WHEAT));
-							player.addCard(new ResourceCard(ResourceType.STONE));
-							player.addCard(new ResourceCard(ResourceType.STONE));
-							return;
+							player.addCard(new ResourceCard(ResourceType.STONE));						
 						}
 					}
 					else {
 						JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
-						player.addCard(new ResourceCard(ResourceType.WHEAT));
-						player.addCard(new ResourceCard(ResourceType.STONE));						
+						return;
 					}
 				}
 				else {
-					JOptionPane.showMessageDialog(null, "You do not have the proper materials.");
+					JOptionPane.showMessageDialog(null, "You do not have a settlement to build on.");
 					return;
 				}
 			}
