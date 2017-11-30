@@ -462,7 +462,7 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.WHEAT);
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
-					//game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
+					game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
 					player.addCard(new VictoryPointCard());
 					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					game.updatePlayerGUI();

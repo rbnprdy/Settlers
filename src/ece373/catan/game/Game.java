@@ -6,6 +6,7 @@ import ece373.catan.card.*;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 import javax.swing.JOptionPane;
@@ -28,6 +29,7 @@ public class Game {
 		currentPlayer = null;
 		this.gui = null;
 	}
+	
 	
 	public void setGUI(GameGUI g) {
 		this.gui = g;
@@ -192,5 +194,35 @@ public class Game {
 				return;
 			}
 		}
+	}
+	
+	public void buildDevelopmentCardDeck() {  //Builds and Shuffles Dev Cards
+		int i = 0;
+		
+		developmentCards = new ArrayList<DevelopmentCard>();
+		
+		for(i = 0; i<14; ++i) {
+			developmentCards.add(new KnightCard());
+		}
+		
+		for(i = 0; i<5; ++i) {
+			developmentCards.add(new VictoryPointCard());
+		}
+		
+		for(i = 0; i<2; ++i) {
+			developmentCards.add(new RoadBuildingCard());
+		}
+		for(i= 0; i <2; ++i) {
+			developmentCards.add(new YearOfPlentyCard());
+		}
+		
+		Collections.shuffle(developmentCards);
+		return;
+	}
+	
+	public void drawDevelopmentCard(Player p){
+		p.addCard(developmentCards.get(0));
+		developmentCards.remove(0);
+		return;
 	}
 }
