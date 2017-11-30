@@ -15,7 +15,10 @@ public class PlayerGUITest {
 		ResourceCard stonecard = new ResourceCard(ResourceType.STONE);
 		ResourceCard wheatcard = new ResourceCard(ResourceType.WHEAT);
 		ResourceCard  woodcard = new  ResourceCard(ResourceType.WOOD);
-		VictoryPointCard vCard = new VictoryPointCard();
+		KnightCard kCard1 = new KnightCard();
+		KnightCard kCard2 = new KnightCard();
+		VictoryPointCard vCard1 = new VictoryPointCard();
+		VictoryPointCard vCard2 = new VictoryPointCard();
 		YearOfPlentyCard yopCard = new YearOfPlentyCard();
 		LargestArmyCard lac = new LargestArmyCard();
 		
@@ -38,8 +41,11 @@ public class PlayerGUITest {
 		p1.addCard(wheatcard);
 		p1.addCard(woodcard);
 		p1.addCard(yopCard);
-		p1.addCard(vCard);
+		p1.addCard(vCard1);
+		p1.addCard(vCard2);
 		p1.addCard(lac);
+		p1.addCard(kCard1);
+		p1.addCard(kCard2);
 		
 		p2.addCard(stonecard);
 		

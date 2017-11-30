@@ -57,7 +57,7 @@ public class Player {
 			newVictoryPoints++;
 		}
 		for(City c: cities) {
-			newVictoryPoints = newVictoryPoints + 2;
+			newVictoryPoints = newVictoryPoints + 1;
 		}
 		for(DevelopmentCard d: developmentCards) {
 			if(d instanceof VictoryPointCard) {

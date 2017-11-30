@@ -11,8 +11,5 @@ public class YearOfPlentyCard extends DevelopmentCard{
 		title = "Year of Plenty Card";
 		description = "Take any 2 resource cards from the bank and add them to your hand.";
 	}
-	public void playCard(Game g, Player p) {
-		
-		return;
-	}
+
 }

@@ -6,18 +6,21 @@ import ece373.catan.game.*;
 public class KnightCard extends DevelopmentCard{
 	private String title;
 	private String description;
-	private boolean been_played;
+	private boolean beenPlayed;
 	
 	public KnightCard(){
 		title = "Knight";
 		description = "Move the robber. Steal 1 resource card from the owner "
 				+ "of an adjacent settlement or city";
-		been_played = false;
+		beenPlayed = false;
 	}
 	
-	public void playCard(Game g,Player p) {
-		g.getBoard().moveRobber();
-		been_played = true;
+	public void setBeenPlayed(boolean x) {
+		beenPlayed = x;
 		return;
+	}
+	
+	public boolean getBeenPlayed() {
+		return beenPlayed;
 	}
 }

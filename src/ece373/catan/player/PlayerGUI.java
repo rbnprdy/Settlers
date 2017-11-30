@@ -27,6 +27,9 @@ public class PlayerGUI extends JPanel {
 	private JButton doneButton;
 	private JButton buildButton;
 	private JButton tradeButton;
+	private JButton knightButton;
+	private JButton roadBuildingButton;
+	private JButton yearOfPlentyButton;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
 	private Font font2 = new Font("SansSerif", Font.PLAIN, 30);
 	public static int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -229,26 +232,74 @@ public class PlayerGUI extends JPanel {
 	public void populateDevelopmentCards() {
 		int i;
 		devCardPanel = new JPanel();
-		JLayeredPane devCards = new JLayeredPane();
+		JLayeredPane knightCards = new JLayeredPane();
+		JLayeredPane roadBuildingCards = new JLayeredPane();
+		JLayeredPane victoryPointCards = new JLayeredPane();
+		JLayeredPane yearOfPlentyCards = new JLayeredPane();
+		
 		JPanel largestArmyPanel = new JPanel();
-		devCardPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)this.getSize().getHeight()/4));
+		devCardPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)this.getSize().getHeight()/2));
 		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
 		
 		i = 0;
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
-			CardGUI cardGUI = new CardGUI(dc);
-			devCards.add(cardGUI);
-			cardGUI.setLocation(0 + i*150, 0);
-			i = i + 1;
-			
+			if(dc instanceof KnightCard) {
+				CardGUI cardGUI = new CardGUI(dc);
+				if(i==0) {
+					knightButton = new JButton();
+					knightButton.add(cardGUI);
+					knightCards.add(knightButton);
+					knightButton.addActionListener(new ButtonListener());
+					knightButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				else {
+					knightCards.add(cardGUI);
+					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				i = i + 1;
+			}
 		}
+		
+		i=0;
+		for(DevelopmentCard dc: player.getDevelopmentCards()) {
+			if(dc instanceof RoadBuildingCard) {
+				CardGUI cardGUI = new CardGUI(dc);
+				roadBuildingCards.add(cardGUI);
+				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				i = i + 1;
+			}
+		}
+		
+		i=0;
+		for(DevelopmentCard dc: player.getDevelopmentCards()) {
+			if(dc instanceof VictoryPointCard) {
+				CardGUI cardGUI = new CardGUI(dc);
+				victoryPointCards.add(cardGUI);
+				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				i = i + 1;
+			}
+		}
+		
+		i=0;
+		for(DevelopmentCard dc: player.getDevelopmentCards()) {
+			if(dc instanceof YearOfPlentyCard) {
+				CardGUI cardGUI = new CardGUI(dc);
+				yearOfPlentyCards.add(cardGUI);
+				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				i = i + 1;
+			}
+		}
+		
 		
 		if(player.getLargestArmyCard() != null) {
 			CardGUI cardGUI = new CardGUI(player.getLargestArmyCard());
 			largestArmyPanel.add(cardGUI);
 		}
 
-		devCardPanel.add(devCards);
+		devCardPanel.add(knightCards);
+		devCardPanel.add(victoryPointCards);
+		devCardPanel.add(roadBuildingCards);
+		devCardPanel.add(yearOfPlentyCards);
 		devCardPanel.add(largestArmyPanel);
 		this.add(devCardPanel);
 	}
@@ -271,6 +322,9 @@ public class PlayerGUI extends JPanel {
 			if(source.equals(tradeButton)) {
 				handleTrade();
 			}
+			if(source.equals(knightButton)) {
+				handleKnight();
+			}
 		}
 		
 		public void handleDone(){
@@ -283,6 +337,31 @@ public class PlayerGUI extends JPanel {
 		
 		public void handleTrade() {
 			buildTradeGUI();
+		}
+		
+		public void handleKnight() {
+			int input = JOptionPane.showOptionDialog(null, "Press OK to move the robber. Each knight card can only be used once.", "Knight Card", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			if(input == JOptionPane.OK_OPTION)
+			{
+				for(DevelopmentCard dc: player.getDevelopmentCards()) {
+					if(dc instanceof KnightCard) {
+						if(((KnightCard) dc).getBeenPlayed() == false){
+							game.getBoard().moveRobber();
+							return;
+						}
+					}
+				}
+				JOptionPane.showMessageDialog(null, "You have no unused Knight cards.");
+			}
+
+		}
+		
+		public void handleRoadBuilding() {
+			
+		}
+		public void handleYearOfPlenty() {
+			
 		}
 		
 	}
@@ -493,7 +572,6 @@ public class PlayerGUI extends JPanel {
 		int i;
 		
 		tradeFrame = new JFrame();
-		//tradeFrame.setAlwaysOnTop(true);
 		Dimension slotButtonDim = new Dimension(100,100);
 
 		tradeFrame.setSize(new Dimension(500, 500));
@@ -750,7 +828,7 @@ public class PlayerGUI extends JPanel {
 			if(source.equals(acceptButton)) {
 				player.makeTrade(tradePlayer, p1ResourceType, p2ResourceType);
 				tradeFrame.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
-				tradePropositionPanel.dispatchEvent(new WindowEvent(tradeFrame, WindowEvent.WINDOW_CLOSING));
+				tradePropositionPanel.dispatchEvent(new WindowEvent(tradePropositionPanel, WindowEvent.WINDOW_CLOSING));
 				game.updatePlayerGUI();
 				JOptionPane.showMessageDialog(null, "Trade Completed! Please pass back to " + player.getName());
 			}

@@ -12,9 +12,5 @@ public class VictoryPointCard extends DevelopmentCard {
 		description = "This card gives you one extra victory point";
 	}
 	
-	public void playCard(Game g, Player player) {
-		
-		return;
-	}
 
 }
