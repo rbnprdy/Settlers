@@ -3,8 +3,13 @@ package ece373.catan.game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
+import javax.imageio.*;
 import javax.swing.*;
 
 import ece373.catan.board.BoardGUI;
@@ -31,27 +36,36 @@ public class TitleScreenGUI {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	    frame.setBounds(0, 0, (int) screenSize.getWidth(), (int) screenSize.getHeight());
 
-		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-
+		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS)); 
+		
+		BackgroundImagePanel p = new BackgroundImagePanel(new ImageIcon(this.getClass().getResource("/game/title.jpg")));
+		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+		frame.add(p);
+		
 		JPanel titlePanel = new JPanel();
+		titlePanel.setOpaque(false);
+		
 		JLabel titleLabel = new JLabel("Settlers of Catan");
 		titleLabel.setFont(titleFont);
-		titleLabel.setFont(titleLabel.getFont().deriveFont(94.0f));
+		titleLabel.setOpaque(false);
+		titleLabel.setFont(titleLabel.getFont().deriveFont(150.0f));
 
 		titlePanel.add(titleLabel);
 
 		titlePanel.setVisible(true);
-		frame.add(titlePanel);
+		p.add(titlePanel);
 
 		numPlayersPanel = new JPanel();	
+		numPlayersPanel.setOpaque(false);
 
 		JLabel numLabel = new JLabel("Enter Number of Players:");
+		numLabel.setOpaque(false);
 		numLabel.setFont(titleFont);
 		numPlayersPanel.add(numLabel);
 
 		numPlayersBox = new JComboBox<Integer>(numPlayers);
 		numPlayersBox.setSelectedIndex(0);
-		numPlayersBox.setFont(titleFont);
+		numPlayersBox.setOpaque(false);
 		numPlayersPanel.add(Box.createRigidArea(new Dimension (20, 0)));
 		numPlayersPanel.add(numPlayersBox);
 
@@ -62,8 +76,8 @@ public class TitleScreenGUI {
 		numPlayersPanel.add(beginButton);
 
 		numPlayersPanel.setVisible(true);
-		frame.add(numPlayersPanel);
-
+		p.add(numPlayersPanel);
+		
 		frame.setVisible(true);
 	}
 
@@ -123,6 +137,23 @@ public class TitleScreenGUI {
 			    gui.setVisible(true);
 			    TitleScreenGUI.this.frame.setVisible(false);
 			    
+			}
+		}
+	}
+	
+	private class BackgroundImagePanel extends JPanel {
+		
+		Image image;
+		
+		public BackgroundImagePanel(ImageIcon i) {
+			this.image = i.getImage();
+		}
+		
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if (image != null) {
+				g.drawImage(image, 0, 0, null);
 			}
 		}
 	}
