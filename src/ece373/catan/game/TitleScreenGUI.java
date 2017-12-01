@@ -38,7 +38,7 @@ public class TitleScreenGUI {
 
 		frame.setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS)); 
 		
-		BackgroundImagePanel p = new BackgroundImagePanel(new ImageIcon(this.getClass().getResource("/game/title.jpg")));
+		BackgroundImagePanel p = new BackgroundImagePanel(new ImageIcon(this.getClass().getResource("/game/strategies.jpg")));
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		frame.add(p);
 		
@@ -137,23 +137,6 @@ public class TitleScreenGUI {
 			    gui.setVisible(true);
 			    TitleScreenGUI.this.frame.setVisible(false);
 			    
-			}
-		}
-	}
-	
-	private class BackgroundImagePanel extends JPanel {
-		
-		Image image;
-		
-		public BackgroundImagePanel(ImageIcon i) {
-			this.image = i.getImage();
-		}
-		
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			if (image != null) {
-				g.drawImage(image, 0, 0, null);
 			}
 		}
 	}

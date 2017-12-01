@@ -22,6 +22,10 @@ public class GameGUI extends JFrame {
 	private int currentBuilderIndex;
 	
 	public GameGUI(Game g) {
+		
+		BackgroundImagePanel p = new BackgroundImagePanel(new ImageIcon(this.getClass().getResource("/game/ocean.jpg")));
+		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+		add(p);
 
 		game = g;
 		g.setGUI(this);
@@ -30,7 +34,8 @@ public class GameGUI extends JFrame {
 		window = new JSplitPane();
 		
 		getContentPane().setLayout(new GridLayout());
-		getContentPane().add(window);
+		p.add(window);
+		getContentPane().add(p);
 		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setMinimumSize(screenSize);
@@ -40,7 +45,7 @@ public class GameGUI extends JFrame {
 		window.setRightComponent(board);
 		
 		window.setLeftComponent(new JLabel());
-		window.setBackground(new Color(0x00ff00));
+		window.setOpaque(false);
 		window.setResizeWeight(.25);
 		window.setDividerLocation(0.3);
 		

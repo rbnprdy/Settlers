@@ -56,6 +56,7 @@ public class BoardGUI extends JPanel {
 		
 		this.setLayout(null);
 		this.setBackground(null);
+		this.setOpaque(false);
 		
 		this.game = g;
 		this.board = b;

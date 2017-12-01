@@ -83,6 +83,8 @@ public class PlayerGUI extends JPanel {
 
 	
 	public PlayerGUI(Game g,Player p){
+		
+		//this.setOpaque(false);
 		player = p;
 		game = g;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -96,13 +98,18 @@ public class PlayerGUI extends JPanel {
 		
 		player.calculateVictoryPoints();
 		topPanel = new JPanel();
+		topPanel.setOpaque(false);
 		
 		infoPanel = new JPanel();
+		infoPanel.setOpaque(false);
 		
 		JPanel playerNameAndColor = new JPanel();
+		playerNameAndColor.setOpaque(false);
 		playerNameAndColor.setLayout(new BoxLayout(playerNameAndColor, BoxLayout.X_AXIS));
 		JLabel playerNameLabel = new JLabel(player.getName() + " ");
+		playerNameLabel.setOpaque(false);
 		JLabel playerColorLabel = new JLabel("     ");
+		playerColorLabel.setOpaque(false);
 		playerColorLabel.setBackground(player.getColor());
 		playerColorLabel.setAlignmentX(CENTER_ALIGNMENT);
 		playerColorLabel.setMinimumSize(new Dimension(200,20));
@@ -115,6 +122,7 @@ public class PlayerGUI extends JPanel {
 		playerNameAndColor.add(playerColorLabel);
 		
 		JLabel victoryPointsLabel = new JLabel("Victory Points: " + player.getVictoryPoints());
+		victoryPointsLabel.setOpaque(false);
 		victoryPointsLabel.setFont(font1);
 		victoryPointsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -162,6 +170,7 @@ public class PlayerGUI extends JPanel {
 			cardPanel = null;
 		}
 		cardPanel = new JPanel();
+		cardPanel.setOpaque(false);
 		JLayeredPane sheepPanel = new JLayeredPane();
 		JLayeredPane brickPanel = new JLayeredPane();
 		JLayeredPane stonePanel = new JLayeredPane();
@@ -232,6 +241,7 @@ public class PlayerGUI extends JPanel {
 	public void populateDevelopmentCards() {
 		int i;
 		devCardPanel = new JPanel();
+		devCardPanel.setOpaque(false);
 		JLayeredPane knightCards = new JLayeredPane();
 		JLayeredPane roadBuildingCards = new JLayeredPane();
 		JLayeredPane victoryPointCards = new JLayeredPane();
