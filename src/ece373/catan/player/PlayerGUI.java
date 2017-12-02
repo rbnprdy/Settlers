@@ -11,8 +11,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.ArrayList;
-
-import javax.swing.BoxLayout;
 import java.awt.GridLayout;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
@@ -30,6 +28,9 @@ public class PlayerGUI extends JPanel {
 	private JButton knightButton;
 	private JButton roadBuildingButton;
 	private JButton yearOfPlentyButton;
+	private Image scaledKnightImage;
+	private Image scaledRoadBuildingImage;
+	private Image scaledYearOfPlentyImage;
 	private Font font1 = new Font("SansSerif", Font.BOLD,40);
 	private Font font2 = new Font("SansSerif", Font.PLAIN, 30);
 	public static int screenWidth = (int)Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -237,7 +238,8 @@ public class PlayerGUI extends JPanel {
 		JLayeredPane victoryPointCards = new JLayeredPane();
 		JLayeredPane yearOfPlentyCards = new JLayeredPane();
 		
-		JPanel largestArmyPanel = new JPanel();
+		JLayeredPane largestArmyPanel = new JLayeredPane();
+		JLayeredPane longestRoadPanel = new JLayeredPane();
 		devCardPanel.setPreferredSize(new Dimension((int)this.getSize().getWidth(), (int)this.getSize().getHeight()/2));
 		devCardPanel.setLayout(new BoxLayout(devCardPanel, BoxLayout.X_AXIS));
 		
@@ -247,7 +249,10 @@ public class PlayerGUI extends JPanel {
 				CardGUI cardGUI = new CardGUI(dc);
 				if(i==0) {
 					knightButton = new JButton();
-					knightButton.add(cardGUI);
+					knightButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
+					scaledKnightImage = new ImageIcon(this.getClass().getResource("/card/knightcard.png")).getImage();
+					scaledKnightImage = scaledKnightImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
+					knightButton.setIcon(new ImageIcon(scaledKnightImage));
 					knightCards.add(knightButton);
 					knightButton.addActionListener(new ButtonListener());
 					knightButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
@@ -295,12 +300,24 @@ public class PlayerGUI extends JPanel {
 			CardGUI cardGUI = new CardGUI(player.getLargestArmyCard());
 			largestArmyPanel.add(cardGUI);
 		}
-
+		
+		if(player.getLongestRoadCard() != null) {
+			CardGUI cardGUI = new CardGUI(player.getLongestRoadCard());
+			longestRoadPanel.add(cardGUI);
+		}
+		
+		knightCards.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
+		victoryPointCards.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
+		roadBuildingCards.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
+		yearOfPlentyCards.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
+		largestArmyPanel.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
+		longestRoadPanel.setSize((int)(devCardPanel.getSize().getWidth()/6),(int)(devCardPanel.getSize().getHeight()));
 		devCardPanel.add(knightCards);
 		devCardPanel.add(victoryPointCards);
 		devCardPanel.add(roadBuildingCards);
 		devCardPanel.add(yearOfPlentyCards);
 		devCardPanel.add(largestArmyPanel);
+		devCardPanel.add(longestRoadPanel);
 		this.add(devCardPanel);
 	}
 	
@@ -358,10 +375,10 @@ public class PlayerGUI extends JPanel {
 		}
 		
 		public void handleRoadBuilding() {
-			
+			return;
 		}
 		public void handleYearOfPlenty() {
-			
+			return;
 		}
 		
 	}

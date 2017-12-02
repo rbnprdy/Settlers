@@ -21,6 +21,7 @@ public class PlayerGUITest {
 		VictoryPointCard vCard2 = new VictoryPointCard();
 		YearOfPlentyCard yopCard = new YearOfPlentyCard();
 		LargestArmyCard lac = new LargestArmyCard();
+		LongestRoadCard lrc = new LongestRoadCard();
 		
 		Game g1 = new Game();
 
@@ -46,6 +47,7 @@ public class PlayerGUITest {
 		p1.addCard(lac);
 		p1.addCard(kCard1);
 		p1.addCard(kCard2);
+		p1.addCard(lrc);
 		
 		p2.addCard(stonecard);
 		
