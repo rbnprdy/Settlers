@@ -301,22 +301,10 @@ public class PlayerGUI extends JPanel {
 		i=0;
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			if(dc instanceof VictoryPointCard) {
-				CardGUI cardGUI = new CardGUI(dc);
-				if (i==0) {
-					yearOfPlentyButton = new JButton();
-					yearOfPlentyButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
-					scaledYearOfPlentyImage = new ImageIcon(this.getClass().getResource("/card/yearofplentycard.png")).getImage();
-					scaledYearOfPlentyImage = scaledYearOfPlentyImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
-					yearOfPlentyButton.setIcon(new ImageIcon(scaledYearOfPlentyImage));
-					yearOfPlentyButton.add(yearOfPlentyButton);
-					yearOfPlentyButton.addActionListener(new ButtonListener());
-					yearOfPlentyButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
-				}
-				else {
+					CardGUI cardGUI = new CardGUI(dc);
 					victoryPointCards.add(cardGUI);
 					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
-				}
-				i = i + 1;
+					i = i + 1;
 			}
 		}
 		
