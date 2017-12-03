@@ -433,11 +433,33 @@ public class PlayerGUI extends JPanel {
 
 			if(input == JOptionPane.OK_OPTION)
 			{
-				player.drawRandomResourceCard();
-				player.drawRandomResourceCard();
+				Random rand = new Random();
+				ResourceType rt;
+				int randInt;
+				for(int i = 0; i<2;i++) {
+					randInt = rand.nextInt(5);
+					if(randInt == 0) {
+						rt = ResourceType.SHEEP;
+					}
+					else if(randInt == 1) {
+						rt = ResourceType.BRICK;
+					}
+					else if(randInt == 2) {
+						rt = ResourceType.STONE;
+					}
+					else if(randInt == 3) {
+						rt = ResourceType.WHEAT;
+					}
+					else if(randInt == 4) {
+						rt = ResourceType.WOOD;
+					}
+					else rt = ResourceType.SHEEP;
+					player.addResourceCardOfType(rt);
+				}
 				player.removeYearOfPlentyCard();
 				game.updatePlayerGUI();
 			}
+			
 			return;
 		}
 		
