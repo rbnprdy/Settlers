@@ -183,7 +183,10 @@ public class Game {
 		
 		for (Player p: players) {
 			if (p != currentMax && p.getArmySize() > maxCount) {
-				currentMax.setLargestArmyCard(null);
+				if (currentMax != null) {
+					currentMax.setLargestArmyCard(null);
+				}
+				
 				p.setLargestArmyCard(new LargestArmyCard());
 				
 				JOptionPane.showOptionDialog(null, 
