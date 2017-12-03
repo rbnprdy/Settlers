@@ -147,7 +147,7 @@ public class Game {
 		for (Player p: players) {
 		if (p != currentMax && p.getRoads().size() > maxCount) {
 			if (currentMax != null) {
-				currentMax.setLargestArmyCard(null);
+				currentMax.setLongestRoadCard(null);
 			}
 			
 			p.setLongestRoadCard(new LongestRoadCard());

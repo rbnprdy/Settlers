@@ -69,7 +69,9 @@ public class Player {
 		if(largestArmyCard != null) {
 			newVictoryPoints = newVictoryPoints + 2;
 		}
-
+		if(longestRoadCard != null) {
+			newVictoryPoints = newVictoryPoints + 2;
+		}
 		victoryPoints = newVictoryPoints;
 		return;
 	}
