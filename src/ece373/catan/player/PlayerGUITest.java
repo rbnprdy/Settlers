@@ -17,6 +17,7 @@ public class PlayerGUITest {
 		ResourceCard  woodcard = new  ResourceCard(ResourceType.WOOD);
 		KnightCard kCard1 = new KnightCard();
 		KnightCard kCard2 = new KnightCard();
+		RoadBuildingCard rbc = new RoadBuildingCard();
 		VictoryPointCard vCard1 = new VictoryPointCard();
 		VictoryPointCard vCard2 = new VictoryPointCard();
 		YearOfPlentyCard yopCard = new YearOfPlentyCard();
@@ -48,6 +49,7 @@ public class PlayerGUITest {
 		p1.addCard(kCard1);
 		p1.addCard(kCard2);
 		p1.addCard(lrc);
+		p1.addCard(rbc);
 		
 		p2.addCard(stonecard);
 		

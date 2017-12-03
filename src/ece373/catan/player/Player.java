@@ -3,6 +3,8 @@ package ece373.catan.player;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Random;
+
 import ece373.catan.board.*;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
@@ -87,6 +89,39 @@ public class Player {
 		}
 		
 		resourceCards.remove(index);
+	}
+	
+	public void removeRoadBuildingCard() {
+		for(DevelopmentCard dc: developmentCards) {
+			if(dc instanceof RoadBuildingCard) {
+				developmentCards.remove(dc);
+				break;
+			}
+		}
+		return;
+	}
+	
+	public void removeYearOfPlentyCard() {
+		for(DevelopmentCard dc: developmentCards) {
+			if(dc instanceof YearOfPlentyCard) {
+				developmentCards.remove(dc);
+				break;
+			}
+		}
+		return;
+	}
+	
+	public void drawRandomResourceCard() {
+		Random rand = new Random();
+		int n = rand.nextInt(5);
+		switch(n) {
+		case(0): resourceCards.add(new ResourceCard(ResourceType.SHEEP));
+		case(1): resourceCards.add(new ResourceCard(ResourceType.BRICK));
+		case(2): resourceCards.add(new ResourceCard(ResourceType.STONE));
+		case(3): resourceCards.add(new ResourceCard(ResourceType.WHEAT));
+		case(4): resourceCards.add(new ResourceCard(ResourceType.WOOD));
+		}
+		return;
 	}
 
 	public void addCard(DevelopmentCard dc) {

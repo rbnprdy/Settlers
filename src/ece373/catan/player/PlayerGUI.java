@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Random;
 import java.awt.GridLayout;
 import ece373.catan.card.*;
 import ece373.catan.game.*;
@@ -279,8 +280,20 @@ public class PlayerGUI extends JPanel {
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			if(dc instanceof RoadBuildingCard) {
 				CardGUI cardGUI = new CardGUI(dc);
-				roadBuildingCards.add(cardGUI);
-				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				if(i==0) {
+					roadBuildingButton = new JButton();
+					roadBuildingButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
+					scaledRoadBuildingImage = new ImageIcon(this.getClass().getResource("/card/roadbuildingcard.png")).getImage();
+					scaledRoadBuildingImage = scaledRoadBuildingImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
+					roadBuildingButton.setIcon(new ImageIcon(scaledRoadBuildingImage));
+					roadBuildingCards.add(roadBuildingButton);
+					roadBuildingButton.addActionListener(new ButtonListener());
+					roadBuildingButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				else {
+					roadBuildingCards.add(cardGUI);
+					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
 				i = i + 1;
 			}
 		}
@@ -299,8 +312,20 @@ public class PlayerGUI extends JPanel {
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			if(dc instanceof YearOfPlentyCard) {
 				CardGUI cardGUI = new CardGUI(dc);
-				yearOfPlentyCards.add(cardGUI);
-				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				if(i==0) {
+					yearOfPlentyButton = new JButton();
+					yearOfPlentyButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
+					scaledYearOfPlentyImage = new ImageIcon(this.getClass().getResource("/card/yearofplentycard.png")).getImage();
+					scaledYearOfPlentyImage = scaledYearOfPlentyImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
+					yearOfPlentyButton.setIcon(new ImageIcon(scaledYearOfPlentyImage));
+					yearOfPlentyCards.add(yearOfPlentyButton);
+					yearOfPlentyButton.addActionListener(new ButtonListener());
+					yearOfPlentyButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				else {
+					yearOfPlentyCards.add(cardGUI);
+					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
 				i = i + 1;
 			}
 		}
@@ -352,6 +377,12 @@ public class PlayerGUI extends JPanel {
 			if(source.equals(knightButton)) {
 				handleKnight();
 			}
+			if(source.equals(roadBuildingButton)) {
+				handleRoadBuilding();
+			}
+			if(source.equals(yearOfPlentyButton)) {
+				handleYearOfPlenty();
+			}
 		}
 		
 		public void handleDone(){
@@ -382,13 +413,31 @@ public class PlayerGUI extends JPanel {
 				}
 				JOptionPane.showMessageDialog(null, "You have no unused Knight cards.");
 			}
-
+			game.updatePlayerGUI();
+			return;
 		}
 		
 		public void handleRoadBuilding() {
+			int input = JOptionPane.showOptionDialog(null, "Press OK to build a road. Can be used only once.", "Road Building Card", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			if(input == JOptionPane.OK_OPTION)
+			{
+				game.getBoard().buildRoadWithPlayer(player);
+				player.removeRoadBuildingCard();
+				game.updatePlayerGUI();
+			}
 			return;
 		}
 		public void handleYearOfPlenty() {
+			int input = JOptionPane.showOptionDialog(null, "Press OK to draw 2 resource cards at random. Can be used only once.", "Year of Plenty Card", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+
+			if(input == JOptionPane.OK_OPTION)
+			{
+				player.drawRandomResourceCard();
+				player.drawRandomResourceCard();
+				player.removeYearOfPlentyCard();
+				game.updatePlayerGUI();
+			}
 			return;
 		}
 		
@@ -490,7 +539,8 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.WHEAT);
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
-					game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
+					player.addCard(new YearOfPlentyCard()); //ADDED FOR TESTING, REMOVE
+					//game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
 					game.updatePlayerGUI();
 					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					return;
