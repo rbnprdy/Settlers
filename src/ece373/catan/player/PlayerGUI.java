@@ -375,6 +375,7 @@ public class PlayerGUI extends JPanel {
 					if(dc instanceof KnightCard) {
 						if(((KnightCard) dc).getBeenPlayed() == false){
 							game.getBoard().moveRobber();
+							((KnightCard) dc).setBeenPlayed(true);
 							return;
 						}
 					}
@@ -490,9 +491,8 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
 					game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
-					player.addCard(new VictoryPointCard());
-					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					game.updatePlayerGUI();
+					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					return;
 				}
 				else {

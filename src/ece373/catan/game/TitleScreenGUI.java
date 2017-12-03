@@ -126,7 +126,7 @@ public class TitleScreenGUI {
 			    }
 			    
 			    Game g = new Game();
-			    
+			    g.buildDevelopmentCardDeck();
 			    for (Player p: players) {
 			    		g.addPlayer(p);
 			    }
