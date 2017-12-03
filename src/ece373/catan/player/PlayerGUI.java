@@ -279,8 +279,20 @@ public class PlayerGUI extends JPanel {
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			if(dc instanceof RoadBuildingCard) {
 				CardGUI cardGUI = new CardGUI(dc);
-				roadBuildingCards.add(cardGUI);
-				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				if (i==0) {
+					roadBuildingButton = new JButton();
+					roadBuildingButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
+					scaledRoadBuildingImage = new ImageIcon(this.getClass().getResource("/card/roadbuildingcard.png")).getImage();
+					scaledRoadBuildingImage = scaledRoadBuildingImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
+					roadBuildingButton.setIcon(new ImageIcon(scaledRoadBuildingImage));
+					roadBuildingButton.add(roadBuildingButton);
+					roadBuildingButton.addActionListener(new ButtonListener());
+					roadBuildingButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				else {
+					roadBuildingCards.add(cardGUI);
+					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
 				i = i + 1;
 			}
 		}
@@ -289,8 +301,20 @@ public class PlayerGUI extends JPanel {
 		for(DevelopmentCard dc: player.getDevelopmentCards()) {
 			if(dc instanceof VictoryPointCard) {
 				CardGUI cardGUI = new CardGUI(dc);
-				victoryPointCards.add(cardGUI);
-				cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				if (i==0) {
+					yearOfPlentyButton = new JButton();
+					yearOfPlentyButton.setSize(new Dimension(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5)));
+					scaledYearOfPlentyImage = new ImageIcon(this.getClass().getResource("/card/yearofplentycard.png")).getImage();
+					scaledYearOfPlentyImage = scaledYearOfPlentyImage.getScaledInstance(playerGUIWidth/6, (int)((playerGUIWidth/6)*1.5), Image.SCALE_SMOOTH);
+					yearOfPlentyButton.setIcon(new ImageIcon(scaledYearOfPlentyImage));
+					yearOfPlentyButton.add(yearOfPlentyButton);
+					yearOfPlentyButton.addActionListener(new ButtonListener());
+					yearOfPlentyButton.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
+				else {
+					victoryPointCards.add(cardGUI);
+					cardGUI.setLocation(0, (int)devCardPanel.getSize().getHeight() + 50*(i));
+				}
 				i = i + 1;
 			}
 		}
@@ -386,9 +410,70 @@ public class PlayerGUI extends JPanel {
 		}
 		
 		public void handleRoadBuilding() {
+			int input = JOptionPane.showOptionDialog(null, "This card allows you to build two roads immediately without using any resources. It can only be used once, press OK to use now!", "Road Builder", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+			
+			if (input == JOptionPane.OK_OPTION) {
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.BRICK);
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.BRICK);
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.WOOD);
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.WOOD);
+				
+				game.getBoard().buildRoadWithPlayer(game.getCurrentPlayer());
+				game.getBoard().buildRoadWithPlayer(game.getCurrentPlayer());
+			}
 			return;
 		}
+		
 		public void handleYearOfPlenty() {
+			String input1 = "";
+			String input2 = "";
+			
+			while (!(input1.toLowerCase().equals("sheep")||input1.toLowerCase().equals("wood")||input1.toLowerCase().equals("brick")||input1.toLowerCase().equals("wheat")||input1.toLowerCase().equals("stone"))){
+				input1 = JOptionPane.showInputDialog(null, "This card allows you to select 2 resources of any kind, please enter your choice for the first resource you wish to recieve.", "Year of Plenty", JOptionPane.INFORMATION_MESSAGE);
+			}
+			while (!(input2.toLowerCase().equals("sheep")||input2.toLowerCase().equals("wood")||input2.toLowerCase().equals("brick")||input2.toLowerCase().equals("wheat")||input2.toLowerCase().equals("stone"))){
+				input1 = JOptionPane.showInputDialog(null, "This card allows you to select 2 resources of any kind, please enter your choice for the first resource you wish to recieve.", "Year of Plenty", JOptionPane.INFORMATION_MESSAGE);
+			}
+			
+			input1 = input1.toLowerCase();
+			input2 = input2.toLowerCase();
+			
+			switch (input1) {
+				case "sheep":
+					game.getCurrentPlayer().addResourceCardOfType(ResourceType.SHEEP);
+					break;
+				case "brick":
+					game.getCurrentPlayer().addResourceCardOfType(ResourceType.BRICK);
+					break;
+				case "stone":
+					game.getCurrentPlayer().addResourceCardOfType(ResourceType.STONE);
+					break;
+				case "wheat":
+					game.getCurrentPlayer().addResourceCardOfType(ResourceType.WHEAT);
+					break;
+				case "wood": 
+					game.getCurrentPlayer().addResourceCardOfType(ResourceType.WOOD);
+					break;
+			}
+			
+			switch (input2) {
+			case "sheep":
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.SHEEP);
+				break;
+			case "brick":
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.BRICK);
+				break;
+			case "stone":
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.STONE);
+				break;
+			case "wheat":
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.WHEAT);
+				break;
+			case "wood": 
+				game.getCurrentPlayer().addResourceCardOfType(ResourceType.WOOD);
+				break;
+		}
+			
 			return;
 		}
 		
