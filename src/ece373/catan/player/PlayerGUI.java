@@ -455,7 +455,7 @@ public class PlayerGUI extends JPanel {
 		}
 		
 		public void handleYearOfPlenty() {
-/*			
+			
 			int input = JOptionPane.showOptionDialog(null, "Press OK to draw 2 resource cards at random. Can be used only once.", "Year of Plenty Card", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
 
 			if(input == JOptionPane.OK_OPTION)
@@ -486,7 +486,8 @@ public class PlayerGUI extends JPanel {
 				player.removeYearOfPlentyCard();
 				game.updatePlayerGUI();
 			}
-*/
+
+			/*
 			String input1 = "";
 			String input2 = "";
 			
@@ -535,7 +536,7 @@ public class PlayerGUI extends JPanel {
 				game.getCurrentPlayer().addResourceCardOfType(ResourceType.WOOD);
 				break;
 		}
-			
+			*/
 			return;
 		}
 		
@@ -637,8 +638,7 @@ public class PlayerGUI extends JPanel {
 					player.removeResourceCardOfType(ResourceType.WHEAT);
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
-					player.addCard(new YearOfPlentyCard()); //ADDED FOR TESTING, REMOVE
-					//game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
+					game.drawDevelopmentCard(player);  //IMPLEMENTED IN GAME CLASS
 					game.updatePlayerGUI();
 					buildFrame.dispatchEvent(new WindowEvent(buildFrame, WindowEvent.WINDOW_CLOSING));
 					return;
