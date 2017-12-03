@@ -26,6 +26,7 @@ public class Game {
 		players = new ArrayList<Player>();
 		board = new Board(this);
 		developmentCards = new ArrayList<DevelopmentCard>();
+		buildDevelopmentCardDeck();
 		currentPlayer = null;
 		this.gui = null;
 	}
@@ -145,7 +146,10 @@ public class Game {
 		
 		for (Player p: players) {
 		if (p != currentMax && p.getRoads().size() > maxCount) {
-			currentMax.setLargestArmyCard(null);
+			if (currentMax != null) {
+				currentMax.setLargestArmyCard(null);
+			}
+			
 			p.setLongestRoadCard(new LongestRoadCard());
 			
 			JOptionPane.showOptionDialog(null, 
