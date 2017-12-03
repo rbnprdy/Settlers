@@ -622,7 +622,11 @@ public class PlayerGUI extends JPanel {
 				}
 			}
 			if(source.equals(developmentCardResourceLabel)) {
-				if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE) && player.hasCard(ResourceType.SHEEP)) {
+				if (game.getDevelopmentCards().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "There are no development cards left.");
+					return;
+				}
+				else if(player.hasCard(ResourceType.WHEAT) && player.hasCard(ResourceType.STONE) && player.hasCard(ResourceType.SHEEP)) {
 					player.removeResourceCardOfType(ResourceType.WHEAT);
 					player.removeResourceCardOfType(ResourceType.STONE);
 					player.removeResourceCardOfType(ResourceType.SHEEP);
@@ -909,22 +913,31 @@ public class PlayerGUI extends JPanel {
 				for(JButton slotButton: p1SlotButtons) {
 						if(source.equals(slotButton)) {
 							slotButton.setBackground(Color.BLACK);
+							slotButton.setText("Selected");
 						}
 						else {
 							slotButton.setBackground(Color.WHITE);
+							slotButton.setText(null);
 						}
+						slotButton.validate();
+						
 				}
 			}
 			else if(p2SlotButtons.contains(source)) {
 				for(JButton slotButton: p2SlotButtons) {
 					if(source.equals(slotButton)) {
 						slotButton.setBackground(Color.BLACK);
+						slotButton.setText("Selected");
 					}
 					else {
 						slotButton.setBackground(Color.WHITE);
+						slotButton.setText(null);
 					}
+					slotButton.validate();
 				}
 			}
+			
+			
 		}
 	}
 	
